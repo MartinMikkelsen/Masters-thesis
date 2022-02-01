@@ -1,0 +1,12 @@
+*.log
+**/logs
+*.aux
+*.key
+*.nav
+*.snm
+*.toc
+*.bbl
+*.blg
+*.DS_Store
+.DS_Store
+*.gz
