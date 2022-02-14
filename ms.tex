@@ -1,0 +1,43 @@
+\input{preamble.tex}
+\begin{document}
+
+	\author{Martin Mikkelsen  \\
+		--201706771-- \\ }
+	\title{A brief introduction to the exponential function}
+	\maketitle
+
+	%\addcontentsline{toc}{section}{Resumé}
+
+
+	\thispagestyle{firststyle}
+
+This is a brief introduction to the exponential function. In mathematics, an exponential function is a function of the form
+\begin{equation} \label{def}
+  f(x)=ab^x,
+\end{equation}
+where $b$ is a positive real number, and the argument $x$  occurs as the exponent. The real exponential function $\exp:\R \rightarrow \R$ can be characterized in a variety of equivalent ways. It is commonly defined by the following power series
+\begin{equation}
+  \exp{x} = \sum_{k=0}^{\infty} \frac{x^k}{k!}
+\end{equation}
+A quick and dirty implementation of the exponential function could be
+\begin{lstlisting}
+double ex(double x){
+if(x<0)return 1/ex(-x);
+if(x>1./8)return pow(ex(x/2),2);
+return 1+x*(1+x/2*(1+x/3*(1+x/4*(1+x/5*(1+x/6*(1+x/7*(1+x/8*(1+x/9*(1+x/10)))))))));
+\end{lstlisting}
+This implementation makes use of the Taylor expansion of the exponential function. The third line makes use of a trick that effectively increases the step size and raising the function to the same exponent will return the original function.
+In figure \ref{Expo} is a plot of the exponential function using the implementation above.
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[width=0.75\textwidth]{expo.pdf}
+%  \caption{The exponential function using the code above}
+%  \label{Expo}
+%\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{expo}
+  \caption{The exponential function using the code above}
+  \label{Expo}
+\end{figure}
+\end{document}

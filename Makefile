@@ -1,14 +1,7 @@
-.PHONEY:default
+.PHONY: clean
 
-default: ms.pdf
+build:
+	latexmk
 
-ms.pdf: ms.tex
-	pdflatex $<
-	pdflatex $<
-#	bibtex $<
-#	pdflatex $<
-
-
-.PHONEY:clean
 clean:
-	$(RM) main *.o *.txt *.ppl *.pdf *.png
+	latexmk -c
