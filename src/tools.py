@@ -5,12 +5,17 @@ import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from scipy.integrate import cumulative_trapezoid
 
+
 R = smp.symbols('R', real=True)
 k = smp.symbols('k')
+r = smp.symbols('r')
 x = smp.symbols('x', real=True)
-bessel1 = smp.besselj(1,x)
-#f1 = smp.exp(-x)*x/(k*k)*bessel1
-#smp.integrate(f1, x)
+S = smp.symbols('S', real=True)
+b = smp.symbols('b', real=True)
+#f1 = smp.besselj(1,k*r)*r**3*smp.exp(-k*r)/r
+#smp.integrate(f1, (r,0,smp.oo))
 
-f = lambda x: np.exp(-x)*x*sp.special.spherical_jn(1,x)
-sp.integrate.quad(f,0,10000)
+f = lambda r: np.exp(-k*r)*r**2*sp.special.spherical_jn(1,k*r)
+k = 10
+sp.integrate.quad(f,2,smp.oo)
+print(np.pi/3*1/137*)
