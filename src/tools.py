@@ -4,18 +4,17 @@ import sympy as smp
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from scipy.integrate import cumulative_trapezoid
-
-
-R = smp.symbols('R', real=True)
-k = smp.symbols('k')
-r = smp.symbols('r')
+from sympy.physics.quantum.dagger import Dagger
+from sympy.physics.quantum import InnerProduct
+from sympy.physics.quantum.state import Ket, Bra
+pi1 = smp.symbols('pi1')
+pi2 = smp.symbols('pi2')
+pi3 = smp.symbols('pi3')
 x = smp.symbols('x', real=True)
-S = smp.symbols('S', real=True)
-b = smp.symbols('b', real=True)
-#f1 = smp.besselj(1,k*r)*r**3*smp.exp(-k*r)/r
-#smp.integrate(f1, (r,0,smp.oo))
+y = smp.symbols('y', real=True)
+z = smp.symbols('z', real=True)
 
-f = lambda r: np.exp(-k*r)*r**2*sp.special.spherical_jn(1,k*r)
-k = 10
-sp.integrate.quad(f,2,smp.oo)
-print(np.pi/3*1/137*)
+a = smp.Matrix([[pi3,pi1-1j*pi2],[pi1+1j*pi2, -pi3]])
+b = smp.Matrix([[z,x-1j*y],[x+1j*y, -z]])
+
+Dagger(a)*a
