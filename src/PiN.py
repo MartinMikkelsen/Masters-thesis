@@ -3,10 +3,11 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from scipy.integrate import trapz
 from scipy.optimize import root
+from scipy.special import spherical_jn
 
 b = 1     #fm
 S = 10    #MeV
-m = 135   #MeV
+m = 139   #MeV
 mn = 939.5  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = 1/(2*mu)
@@ -29,10 +30,13 @@ E_true = root(phi_fun, -13).x
 
 rs = np.linspace(1e-5,10,1000)
 ys = odeint(lambda phi,r: diff(phi,r,E_true), phi0, rs)
+ys2 = odeint(lambda phi,r: diff(phi,r,E_true), [1,0], rs)
 
 phi_true = ys[:,0]
+phi_true2 = ys2[:,0]
 
 plt.plot(rs, phi_true)
+plt.plot(rs, phi_true2)
 print("Minimum found at E =",E_true)
 
 plt.title("$\phi(r)$")
