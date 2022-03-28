@@ -15,13 +15,13 @@ m=135   #MeV
 mn = 0#939.5  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 
-g = (2*mu)
+factor = (2*mu)
 
 def f(r): #form factor
     return S*np.exp(-r**2/b**2)
 
 def diff(phi,r,E):
-    return (phi[1],(-E+m)*phi[0]-2/r*phi[1]+f(r))
+    return (phi[1],factor*(-E+m)*phi[0]-2/r*phi[1]+factor*f(r))
 
 phi0 = [b/m,b/m] #Initial
 
@@ -31,23 +31,11 @@ def phi_fun(E):
     integral = 12*np.pi*trapz(ys[:,0]*f(rs)*rs**4,rs)
     return integral - E
 
-E_true = root(phi_fun, -2).x
+Eintervals = np.linspace(0,500,100)
 
-rs = np.linspace(1e-5,50,1000)
-ys = odeint(lambda phi,r: diff(phi,r,E_true), phi0, rs)
+g = []
+for i in Eintervals:
+    g.append(phi_fun(i))
 
-phi_true = ys[:,0]
-
-plt.plot(rs, phi_true,linewidth=2,label=r'$\phi(r)$')
-plt.plot(rs, 2.1*spherical_jn(1,2.4*rs),label=r'$2j_1(kr)$')
-print("Minimum found at E =",E_true)
-
-plt.title("Numerical solution",fontsize=14)
-plt.xlabel("r [fm]",fontsize=14)
-#plt.xticks([0,2,4,6,8,10],fontsize=14)
-#plt.yticks([-0.2,0,0.2,0.4,0.6,0.8,1],fontsize=14)
-plt.legend(loc=0,fontsize=14)
-plt.figure(figsize=(10,6))
-plt.savefig("phi.png")
+plt.plot(Eintervals,g,'--')
 plt.show()
-print(E_true-m)
