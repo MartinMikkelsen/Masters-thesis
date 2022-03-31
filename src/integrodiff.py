@@ -14,12 +14,12 @@ def f(r): #form factor
     return S*np.exp(-r**2/b**2)
 
 solver = IDESolver(
-            x=np.linspace(1e-7, 10, 100),
-            y_0=[0, 1/10],
+            x=np.linspace(1e-7, 100, 100),
+            y_0=[1, 1/10],
             c=lambda x, y: [y[1],-2/x*y[1]-2*mu*(m+S*np.exp(-x**2/b**2))],
-            d=lambda x, y: [0,-2*mu*12*np.pi],
+            d=lambda x: [0,-2*mu*12*np.pi],
             k = lambda x, y: [0,S*np.exp(-x**2/b**2)*x**4],
-            f=lambda x, y: [0, y[0]],
+            f=lambda y: [0, y[0]],
             lower_bound=lambda x: 0,
             upper_bound=lambda x: np.infty,
 )
