@@ -15,29 +15,26 @@ S = 10    #MeV
 m = 139.570   #MeV
 mn = 939.5  #MeV
 mu = m*mn/(mn+m) #Reduced mass
-hbar = 197.326
 #hbar = 6.582*10**(-22) #MeV s
-g = (2*mu)/(hbar**2)
-
-factor = 100#(m/hbar)**(5)
+g = (2*mu)
 
 def f(r): #form factor
     return S*np.exp(-r**2/b**2)
 
 def diff(phi,r,E):
-    return (phi[1],m*phi[0]-2/r*phi[1]+f(r))
+    return (phi[1],-(E-m)*phi[0]-2/r*phi[1]+f(r))
 
-phi0 = [0,0] #Initial
+phi0 = [b/m,b/m] #Initial
 
 def phi_fun(E):
-    rs = np.linspace(1e-5,20,10000)
+    rs = np.linspace(1e-5,50,10000)
     ys = odeint(lambda phi,r: diff(phi,r,E), phi0, rs)
     integral = 12*np.pi*trapz(ys[:,0]*f(rs)*rs**4,rs)
     return integral - E
 
 E_true = root(phi_fun, 20).x
 
-rs = np.linspace(1e-5,20,10000)
+rs = np.linspace(1e-5,50,10000)
 ys = odeint(lambda phi,r: diff(phi,r,E_true), phi0, rs)
 
 phi_true = ys[:,0]
