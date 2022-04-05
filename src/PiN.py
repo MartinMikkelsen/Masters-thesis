@@ -5,10 +5,9 @@ from scipy.integrate import trapz
 from scipy.optimize import root
 from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
-sns.set_style("dark")
-sns.set(font_scale=1)
-sns.set_style("ticks")
 
 
 b = 1     #fm
@@ -34,14 +33,22 @@ def bc(ua, ub,E):
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
 r = np.logspace(-5,0,20)*5
-u = [0*r,0*r,E*r/r[-1]]
 E = -2
+
+u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
 print(res.message,", E: ",res.p[0])
 
-plt.plot(res.x,res.y.T,'--',linewidth=2.5);
-plt.title("Numerical solution")
-plt.grid(); plt.legend(r"$\phi$ $\phi'$ $I$".split());
+
+fig, ax = plt.subplots()
+plt.plot(res.x,res.y.T,'-',linewidth=2.5);
+plt.title("Numerical solution",size=15)
+plt.grid(); plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
 plt.xlabel("r [fm]")
+axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
+plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
+plt.xticks(visible=False)
+plt.yticks(visible=False)
+mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
+plt.draw()
 plt.savefig("Integralplot.pdf", format="pdf", bbox_inches="tight")
-plt.show()
