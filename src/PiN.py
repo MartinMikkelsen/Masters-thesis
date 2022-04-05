@@ -8,7 +8,29 @@ from scipy.integrate import solve_bvp
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
+import os
 
+PROJECT_ROOT_DIR = "Results"
+FIGURE_ID = "Results/FigureFiles"
+DATA_ID = "DataFiles/"
+
+if not os.path.exists(PROJECT_ROOT_DIR):
+    os.mkdir(PROJECT_ROOT_DIR)
+
+if not os.path.exists(FIGURE_ID):
+    os.makedirs(FIGURE_ID)
+
+if not os.path.exists(DATA_ID):
+    os.makedirs(DATA_ID)
+
+def image_path(fig_id):
+    return os.path.join(FIGURE_ID, fig_id)
+
+def data_path(dat_id):
+    return os.path.join(DATA_ID, dat_id)
+
+def save_fig(fig_id):
+    plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 b = 1     #fm
 S = 10    #MeV
@@ -39,16 +61,19 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
 print(res.message,", E: ",res.p[0])
 
+def inplot():
+    axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
+    plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
+    plt.xticks(visible=False)
+    plt.yticks(visible=False)
+    mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
+    plt.draw()
 
 fig, ax = plt.subplots()
 plt.plot(res.x,res.y.T,'-',linewidth=2.5);
+
 plt.title("Numerical solution",size=15)
 plt.grid(); plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
 plt.xlabel("r [fm]")
-axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
-plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
-plt.xticks(visible=False)
-plt.yticks(visible=False)
-mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
-plt.draw()
-plt.savefig("Integralplot.pdf", format="pdf", bbox_inches="tight")
+plt.savefig("Integralplot.pdf", format="pdf", )
+save_fig("Integralplot")
