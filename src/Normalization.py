@@ -5,8 +5,6 @@ from scipy.integrate import trapz
 from scipy.optimize import root
 from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
 import os
 
@@ -61,20 +59,16 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
 print(res.message,", E: ",res.p[0])
 
-def inplot():
-    axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
-    plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
-    plt.xticks(visible=False)
-    plt.yticks(visible=False)
-    mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
-    plt.draw()
+def plots():
+    fig, ax = plt.subplots()
+    plt.plot(res.x,res.y.T,'-',linewidth=2.5);
+    plt.title("Numerical solution",size=15)
+    plt.grid(); plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
+    plt.xlabel("r [fm]")
+    plt.show()
 
-fig, ax = plt.subplots()
-plt.plot(res.x,res.y.T,'-',linewidth=2.5);
+Integral = 12*np.pi*np.trapz(res.y.T[:,0]**2*res.x**4)
 
-plt.title("Numerical solution",size=15)
-plt.grid(); plt.legend(r"$\phi$ $\phi'$ $E$".split(),loc=0);
-plt.xlabel("r [fm]")
-inplot()
-plt.savefig("Integralplot.pdf", format="pdf", )
-save_fig("Integralplot")
+psi0 = np.sqrt(3/(4*np.pi*(1+Integral)))
+
+print("The normalization constant, phi_0 =",psi0)
