@@ -26,6 +26,7 @@ if not os.path.exists(DATA_ID):
 def image_path(fig_id):
     return os.path.join(FIGURE_ID, fig_id)
 
+
 def data_path(dat_id):
     return os.path.join(DATA_ID, dat_id)
 
