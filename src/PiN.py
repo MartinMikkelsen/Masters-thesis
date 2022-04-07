@@ -59,7 +59,7 @@ r = np.logspace(-5,0,20)*5
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
-res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
 print(res.message,", E: ",res.p[0])
 
 def inplot():
@@ -72,10 +72,12 @@ def inplot():
 
 fig, ax = plt.subplots()
 plt.plot(res.x,res.y.T,'-',linewidth=2.5);
-
 plt.title("Numerical solution",size=15)
 plt.grid(); plt.legend(r"$\phi$ $\phi'$ $E$".split(),loc=0);
 plt.xlabel("r [fm]")
-inplot()
-plt.savefig("Integralplot.pdf", format="pdf", )
-save_fig("Integralplot")
+rs = np.linspace(0,5,np.size(res.x))
+factors = np.exp(-(0.045*(m+0.08))**0.5*rs)
+plt.plot(rs,factors)
+plt.ylim([-0.10,0.07])
+#plt.savefig("Integralplot.pdf", format="pdf")
+#save_fig("Integralplot")
