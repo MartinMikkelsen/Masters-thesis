@@ -46,7 +46,7 @@ def f(r): #form factor
 def sys(r,u,E):
     y,v,I = u
     dy = v
-    dv = g*(-E+m)*y-2/r*v+g*f(r)
+    dv = g*(-E+m)*y-4/r*v+g*f(r)
     dI = f(r)*r**4*y
     return dy,dv,dI
 
@@ -76,8 +76,4 @@ plt.title("Numerical solution",size=15)
 plt.grid(); plt.legend(r"$\phi$ $\phi'$ $E$".split(),loc=0);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
-factors = np.exp(-(0.045*(m+0.08))**0.5*rs)
-plt.plot(rs,factors)
-plt.ylim([-0.10,0.07])
-#plt.savefig("Integralplot.pdf", format="pdf")
-#save_fig("Integralplot")
+save_fig("Integralplot")

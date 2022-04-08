@@ -67,8 +67,41 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
-Integral = 12*np.pi*np.trapz(res.y.T[:,0]**2*res.x**4)
+V = 1
+Integral = 12*np.pi*V*np.trapz(res.y.T[:,0]**2*res.x**4)
 
-psi0 = np.sqrt(3/(4*np.pi*(1+Integral)))
+psi0 = 1*np.sqrt(V)*1/(np.sqrt(1+Integral))
 
 print("The normalization constant, phi_0 =",psi0)
+factors = psi0*np.sqrt(3/(4*np.pi))*np.sqrt(2)*np.sqrt(1/(4*np.pi))
+gamma = np.linspace(m+0.01,140,160)
+q = np.sqrt(2*mu/(gamma-m))
+
+def matrixelement(q):
+    Q = factors*np.trapz(spherical_jn(0,q*res.x)*(-1)*res.y.T[:,0]*res.x)
+    return Q
+
+print("The matrix element = ", Q)
+fig, ax = plt.subplots()
+plt.plot(res.x,(-1)*res.y.T[:,0]*res.x,'-',linewidth=2.5);
+plt.plot(res.x,factors*spherical_jn(0,q*res.x),linewidth=2.5)
+plt.title("Numerical solution",size=15)
+plt.grid(); plt.legend(r"$-\phi(r)$r $j_0(qr)$ $E$".split(),loc=0);
+plt.xlabel("r [fm]");
+
+plt.figure()
+
+def matrixsquared(i):
+    I = abs(factors*np.trapz(spherical_jn(0,i*res.x)*(-1)*res.y.T[:,0]*res.x))**2
+    return I
+
+M = []
+for i in range(0,160):
+    M.append(matrixsquared(q[i]))
+
+plt.plot(q,M,'-',linewidth=2.5);
+plt.xlabel('q [MeV]');
+plt.grid();
+plt.ylabel(r'$\sigma$ [Arb. Units]');
+plt.title(r'Cross section, $E_\gamma=140$',size=15);
+save_fig("Cross140")
