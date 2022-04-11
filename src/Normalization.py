@@ -73,18 +73,19 @@ Integral = 12*np.pi*V*np.trapz(res.y.T[:,0]**2*res.x**4)
 psi0 = 1*np.sqrt(V)*1/(np.sqrt(1+Integral))
 
 print("The normalization constant, phi_0 =",psi0)
-factors = psi0*np.sqrt(3/(4*np.pi))*np.sqrt(2)*np.sqrt(1/(4*np.pi))
+factors = psi0*2*np.sqrt(6)*np.pi**(3/2)
 gamma = np.linspace(m+0.01,140,160)
 q = np.sqrt(2*mu/(gamma-m))
 
 def matrixelement(q):
-    Q = factors*np.trapz(spherical_jn(0,q*res.x)*(-1)*res.y.T[:,0]*res.x)
+    Q = factors*np.trapz(spherical_jn(0,q*res.x)*(-1)*res.y.T[:,0]*res.x**3)
     return Q
 
-print("The matrix element = ", Q)
+print("The matrix element = ", matrixelement(q))
 fig, ax = plt.subplots()
-plt.plot(res.x,(-1)*res.y.T[:,0]*res.x,'-',linewidth=2.5);
-plt.plot(res.x,factors*spherical_jn(0,q*res.x),linewidth=2.5)
+plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**3,'-',linewidth=2.5);
+plt.plot(res.x,spherical_jn(0,q*res.x),linewidth=2.5)
+plt.ylim(-0.25, 0.25)
 plt.title("Numerical solution",size=15)
 plt.grid(); plt.legend(r"$-\phi(r)$r $j_0(qr)$ $E$".split(),loc=0);
 plt.xlabel("r [fm]");
@@ -92,7 +93,7 @@ plt.xlabel("r [fm]");
 plt.figure()
 
 def matrixsquared(i):
-    I = abs(factors*np.trapz(spherical_jn(0,i*res.x)*(-1)*res.y.T[:,0]*res.x))**2
+    I = abs(factors*np.trapz(spherical_jn(0,i*res.x)*(-1)*res.y.T[:,0]*res.x**3))**2
     return I
 
 M = []
