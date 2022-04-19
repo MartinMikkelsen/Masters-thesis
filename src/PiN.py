@@ -62,6 +62,7 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
 print(res.message,", E: ",res.p[0])
 
+
 def inplot():
     axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
     plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
@@ -71,9 +72,19 @@ def inplot():
     plt.draw()
 
 fig, ax = plt.subplots()
-plt.plot(res.x,res.y.T,'-',linewidth=2.5);
-plt.title("Numerical solution",size=15)
-plt.grid(); plt.legend(r"$\phi$ $\phi'$ $E$".split(),loc=0);
+plt.plot(res.x,res.y.T[:,2],'-',linewidth=2.5);
+plt.plot(res.x,res.y.T[:,1],'-',linewidth=2.5);
+plt.plot(res.x,res.y.T[:,0],'-',linewidth=2.5);
+#plt.title("Numerical solution",size=15)
+plt.grid(); plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
-save_fig("Integralplot")
+#save_fig("Integralplot")
+
+def rms_residuals():
+    plt.figure()
+    plt.plot(res.x[0:283],res.rms_residuals,linewidth=2.5)
+    plt.grid(); plt.legend(r"RMS".split(),loc=0);
+    save_fig("rms_residuals")
+
+    

@@ -8,6 +8,10 @@ from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
 
+#sns.set_style("dark", {"axes.facecolor": "0.9"})
+#sns.set_context("paper", font_scale=1.5, rc={"lines.linewidth": 2.5})
+#sns.color_palette("muted")
+
 PROJECT_ROOT_DIR = "Results"
 FIGURE_ID = "Results/FigureFiles"
 DATA_ID = "DataFiles/"
@@ -57,7 +61,6 @@ E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
-print(res.message,", E: ",res.p[0])
 
 def plots():
     fig, ax = plt.subplots()
@@ -74,7 +77,7 @@ psi0 = 1*np.sqrt(V)*1/(np.sqrt(1+Integral))
 
 print("The normalization constant, phi_0 =",psi0)
 factors = psi0*2*np.sqrt(6)*np.pi**(3/2)
-gamma = np.linspace(m+0.01,140,160)
+gamma = np.linspace(m+0.001,139.9,160)
 q = np.sqrt(2*mu/(gamma-m))
 
 def matrixelement(q):
@@ -82,27 +85,11 @@ def matrixelement(q):
     return Q
 
 print("The matrix element = ", matrixelement(q))
-fig, ax = plt.subplots()
-plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**3,'-',linewidth=2.5);
-plt.plot(res.x,spherical_jn(0,q*res.x),linewidth=2.5)
-plt.ylim(-0.25, 0.25)
-plt.title("Numerical solution",size=15)
+X = plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**3,'-',linewidth=2.5);
+Y = plt.plot(res.x,spherical_jn(0,q*res.x),linewidth=2.5);
+plt.ylim(-0.2, 0.2);
+#plt.title("Numerical solution",size=15)
 plt.grid(); plt.legend(r"$-\phi(r)$r $j_0(qr)$ $E$".split(),loc=0);
 plt.xlabel("r [fm]");
-
-plt.figure()
-
-def matrixsquared(i):
-    I = abs(factors*np.trapz(spherical_jn(0,i*res.x)*(-1)*res.y.T[:,0]*res.x**3))**2
-    return I
-
-M = []
-for i in range(0,160):
-    M.append(matrixsquared(q[i]))
-
-plt.plot(q,M,'-',linewidth=2.5);
-plt.xlabel('q [MeV]');
-plt.grid();
-plt.ylabel(r'$\sigma$ [Arb. Units]');
-plt.title(r'Cross section, $E_\gamma=140$',size=15);
-save_fig("Cross140")
+save_fig("wavebessel");
+plt.figure();
