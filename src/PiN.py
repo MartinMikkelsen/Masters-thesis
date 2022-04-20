@@ -55,8 +55,8 @@ def bc(ua, ub,E):
     yb,vb,Ib = ub
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-r = np.logspace(-5,0,20)*5
-E = -2
+r = np.logspace(-5,0,100)*5
+E = -0.08412275189109243
 
 u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
@@ -87,4 +87,4 @@ def rms_residuals():
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")
 
-    
+print(np.size(res.x))
