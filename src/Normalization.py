@@ -94,7 +94,7 @@ plt.ylim(-0.2, 0.2);
 plt.title(r"$E_\gamma=140$ MeV", x=0.5, y=0.9)
 plt.grid(); plt.legend(r"$-\phi(r)$ $j_0(qr)$".split(),loc=0);
 plt.xlabel("r [fm]");
-#save_fig("wavebessel");
+save_fig("wavebesselphi(r)");
 plt.figure();
 
 plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**3,'-',linewidth=2.5);
@@ -103,7 +103,9 @@ plt.ylim(-0.2, 0.2);
 plt.title(r"$E_\gamma=140$ MeV", x=0.5, y=0.9)
 plt.grid(); plt.legend(r"$-\phi(r)r^3$ $j_0(qr)$".split(),loc=0);
 plt.xlabel("r [fm]");
+save_fig("wavebesselphi(r)r3");
 plt.figure();
+
 def normsquarematrixelement(k):
     Q = np.abs(trapz(spherical_jn(0,k*res.x)*res.y.T[:,0]*res.x**3))**2
     return Q
@@ -113,10 +115,17 @@ print("Norm sqaure of the matrix element with factors =", factors**2*normsquarem
 M1 = []
 M2 = []
 for i in q:
-    M1.append(factors*matrixelement(i))
+    M1.append(matrixelement(i))
     M2.append(normsquarematrixelement(i))
 
-plt.plot(q,M1,linewidth=2.5);
+plt.plot(q,M2,linewidth=2.5);
 plt.grid();
 plt.xlabel("q [MeV]");
-plt.ylabel("M(q)");
+plt.ylabel(r"$\mathcal{M}(q)$ [Arb. units]");
+plt.legend(r"$|Q_{1,0}(q)|^2$".split(),loc=0);
+save_fig("matrixelementsquared");
+plt.figure();
+
+
+#sigma = (np.array(q)**2+m)**(-3/2)
+#plt.plot(q,sigma)
