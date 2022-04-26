@@ -7,10 +7,12 @@ from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
+from pylab import plt, mpl
 
-#sns.set_style("dark", {"axes.facecolor": "0.9"})
-#sns.set_context("paper", font_scale=1.5, rc={"lines.linewidth": 2.5})
-#sns.color_palette("muted")
+mpl.rcParams['font.family'] = 'XCharter'
+custom_params = {"axes.spines.right": True, "axes.spines.top": True}
+sns.set_theme(style="ticks", rc=custom_params)
+sns.set_context("talk")
 
 PROJECT_ROOT_DIR = "Results"
 FIGURE_ID = "Results/FigureFiles"
@@ -64,9 +66,9 @@ res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
 
 def plots():
     fig, ax = plt.subplots()
-    plt.plot(res.x,res.y.T,'-',linewidth=2.5);
+    plt.plot(res.x,res.y.T,'-',linewidth=3.5);
     plt.title("Numerical solution",size=15)
-    plt.grid(); plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
+    plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
     plt.xlabel("r [fm]")
     plt.show()
 
@@ -81,33 +83,34 @@ gamma = np.linspace(m,140,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
 
 def matrixelement(k):
-    Q = np.trapz(spherical_jn(0,k*res.x)*(-1)*res.y.T[:,0]*res.x**3)
+    Q = np.trapz(spherical_jn(1,k*res.x)*(-1)*res.y.T[:,0]*res.x**3)
     return Q
 
 q1 = np.sqrt(2*mu*(140-m))
 
+plt.figure(figsize=(9,5.5));
 print("The matrix element = ", matrixelement(q))
 print("The matrix element with factors =", factors*matrixelement(q))
-plt.plot(res.x,(-1)*res.y.T[:,0],'-',linewidth=2.5);
-plt.plot(res.x,spherical_jn(0,q1*res.x),linewidth=2.5);
-plt.ylim(-0.2, 0.2);
+plt.plot(res.x,(-1)*res.y.T[:,0],'-',linewidth=3.5);
+plt.plot(res.x,spherical_jn(1,q1*res.x),linewidth=3.5);
+plt.ylim(-0.2, 0.5);
 plt.title(r"$E_\gamma=140$ MeV", x=0.5, y=0.9)
-plt.grid(); plt.legend(r"$-\phi(r)$ $j_0(qr)$".split(),loc=0);
+plt.legend(r"$-\phi(r)$ $j_1(qr)$".split(),loc=0);
 plt.xlabel("r [fm]");
 save_fig("wavebesselphi(r)");
-plt.figure();
+plt.figure(figsize=(9,5.5));
 
-plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**3,'-',linewidth=2.5);
-plt.plot(res.x,spherical_jn(0,q1*res.x),linewidth=2.5);
-plt.ylim(-0.2, 0.2);
+plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**3,'-',linewidth=3.5);
+plt.plot(res.x,spherical_jn(1,q1*res.x),linewidth=3.5);
+plt.ylim(-0.2, 0.5);
 plt.title(r"$E_\gamma=140$ MeV", x=0.5, y=0.9)
-plt.grid(); plt.legend(r"$-\phi(r)r^3$ $j_0(qr)$".split(),loc=0);
+plt.legend(r"$-\phi(r)r^3$ $j_1(qr)$".split(),loc=0);
 plt.xlabel("r [fm]");
 save_fig("wavebesselphi(r)r3");
-plt.figure();
+plt.figure(figsize=(9,5.5))
 
 def normsquarematrixelement(k):
-    Q = np.abs(trapz(spherical_jn(0,k*res.x)*res.y.T[:,0]*res.x**3))**2
+    Q = np.abs(trapz(spherical_jn(1,k*res.x)*res.y.T[:,0]*res.x**3))**2
     return Q
 
 print("Norm sqaure of the matrix element with factors =", factors**2*normsquarematrixelement(q))
@@ -118,13 +121,12 @@ for i in q:
     M1.append(matrixelement(i))
     M2.append(normsquarematrixelement(i))
 
-plt.plot(q,M2,linewidth=2.5);
-plt.grid();
+sns.lineplot(x=q,y=M2,linewidth=3.5);
+plt.legend(r"$|Q_{1,0}(q)|^2$".split(),loc=0);
 plt.xlabel("q [MeV]");
 plt.ylabel(r"$\mathcal{M}(q)$ [Arb. units]");
-plt.legend(r"$|Q_{1,0}(q)|^2$".split(),loc=0);
 save_fig("matrixelementsquared");
-plt.figure();
+plt.figure(figsize=(9,5.5));
 
 
 #sigma = (np.array(q)**2+m)**(-3/2)

@@ -9,6 +9,12 @@ from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
 import os
+from pylab import plt, mpl
+
+mpl.rcParams['font.family'] = 'XCharter'
+custom_params = {"axes.spines.right": True, "axes.spines.top": True}
+sns.set_theme(style="ticks", rc=custom_params)
+sns.set_context("talk")
 
 PROJECT_ROOT_DIR = "Results"
 FIGURE_ID = "Results/FigureFiles"
@@ -71,20 +77,18 @@ def inplot():
     mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
     plt.draw()
 
-fig, ax = plt.subplots()
-plt.plot(res.x,res.y.T[:,2],'-',linewidth=2.5);
-plt.plot(res.x,res.y.T[:,1],'-',linewidth=2.5);
-plt.plot(res.x,res.y.T[:,0],'-',linewidth=2.5);
-#plt.title("Numerical solution",size=15)
-plt.grid(); plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0);
+plt.figure(figsize=(9,5.5))
+sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5)
+sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
+sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
+plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
-#save_fig("Integralplot")
+plt.tight_layout()
+save_fig("Integralplot")
 
 def rms_residuals():
     plt.figure()
     plt.plot(res.x[0:283],res.rms_residuals,linewidth=2.5)
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")
-
-print(np.size(res.x))
