@@ -81,6 +81,7 @@ plt.figure(figsize=(9,5.5))
 sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
+plt.title(r"$S=10$ MeV, $b=1$ fm", x=0.5, y=0.9)
 plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
@@ -89,6 +90,6 @@ save_fig("Integralplot")
 
 def rms_residuals():
     plt.figure()
-    plt.plot(res.x[0:283],res.rms_residuals,linewidth=2.5)
+    plt.plot(res.x[0:315],res.rms_residuals,linewidth=2.5)
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")
