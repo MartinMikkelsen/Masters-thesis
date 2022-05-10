@@ -94,3 +94,24 @@ y_error = [y_errormin, y_errormax]
 
 plt.scatter(xes,yes);
 plt.errorbar(xes,yes,yerr=y_error,fmt="o");
+plt.show()
+gamma = np.linspace(m,140,np.size(res.x))
+q = np.sqrt(2*mu*(gamma-m))
+
+def normsquarematrixelement(k):
+    Q = abs(trapz(spherical_jn(0,k*res.x)*res.y.T[:,0]*res.x**4))**2
+    return Q
+
+M2 = []
+for i in q:
+    M2.append(normsquarematrixelement(i))
+
+V = 1
+Integral = 12*np.pi*V*np.trapz(res.y.T[:,0]**2*res.x**4)
+
+psi0 = 1*np.sqrt(V)*1/(np.sqrt(1+Integral))
+
+d = 16*np.pi*psi0**2*mu**2/(137*9*m**2)*140*q*mu/(200**3)*3*(10*(10))**3*M2
+plt.plot(q,d)
+
+plt.show()

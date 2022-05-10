@@ -3,6 +3,7 @@ from autograd import grad, elementwise_grad
 import autograd.numpy.random as npr
 from matplotlib import pyplot as plt
 
+
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
 
