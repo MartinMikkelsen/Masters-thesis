@@ -96,7 +96,6 @@ plt.ylim(-0.2, 0.5);
 plt.title(r"$E_\gamma=140$ MeV", x=0.5, y=0.9)
 plt.legend(r"$-\phi(r)r^4$ $j_1(qr)$".split(),loc=0);
 plt.xlabel("r [fm]");
-#save_fig("wavebesselphi(r)r4");
 plt.figure(figsize=(9,5.5))
 
 def normsquarematrixelement(k):
@@ -108,9 +107,9 @@ M2 = []
 for i in q:
     M1.append(matrixelement(i))
     M2.append(normsquarematrixelement(i))
-
+plt.figure(figsize=(9,5.5));
 sns.lineplot(x=q,y=M2,linewidth=3.5);
 plt.legend(r"$|Q_{1,0}(q)|^2$".split(),loc=0);
 plt.xlabel("q [MeV]");
 plt.ylabel(r"$\mathcal{M}(q)$ [Arb. units]");
-plt.figure(figsize=(9,5.5));
+save_fig("matrixelement");
