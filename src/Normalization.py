@@ -1,7 +1,9 @@
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+import scipy as sp
 from scipy.integrate import trapz
+from scipy.integrate import quad
 from scipy.optimize import root
 from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
@@ -72,44 +74,20 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
+intphi = np.trapz(res.y.T[:,0], res.x,dx=0.001)
 V = 1
-Integral = 12*np.pi*V*np.trapz(res.y.T[:,0]**2*res.x**4)
+N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
 
-psi0 = 1*np.sqrt(V)*1/(np.sqrt(1+Integral))
-
-print("The normalization constant, phi_0 =",psi0)
-factors = 1
-gamma = np.linspace(m,140,np.size(res.x))
+gamma = np.linspace(m,500,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
+rs = np.linspace(0,5,np.size(res.x))
 
-def matrixelement(k):
-    Q = trapz(spherical_jn(0,k*res.x)*(-1)*res.y.T[:,0]*res.x**3)
-    return Q
+def Q(q):
+    B = np.trapz(rs**4*spherical_jn(0,q*rs), rs,dx=0.001)
+    return B
 
-q1 = np.sqrt(2*mu*(140-m))
+M = []
+for i in gamma:
+    M.append(Q(i))
 
-
-plt.figure(figsize=(9,5.5));
-plt.plot(res.x,(-1)*res.y.T[:,0]*res.x**4,'-',linewidth=3.5);
-plt.plot(res.x,spherical_jn(0,q1*res.x),linewidth=3.5);
-plt.ylim(-0.2, 0.5);
-plt.title(r"$E_\gamma=140$ MeV", x=0.5, y=0.9)
-plt.legend(r"$-\phi(r)r^4$ $j_1(qr)$".split(),loc=0);
-plt.xlabel("r [fm]");
-plt.figure(figsize=(9,5.5))
-
-def normsquarematrixelement(k):
-    Q = abs(trapz(spherical_jn(0,k*res.x)*res.y.T[:,0]*res.x**4))**2
-    return Q
-
-M1 = []
-M2 = []
-for i in q:
-    M1.append(matrixelement(i))
-    M2.append(normsquarematrixelement(i))
-plt.figure(figsize=(9,5.5));
-sns.lineplot(x=q,y=M2,linewidth=3.5);
-plt.legend(r"$|Q_{1,0}(q)|^2$".split(),loc=0);
-plt.xlabel("q [MeV]");
-plt.ylabel(r"$\mathcal{M}(q)$ [Arb. units]");
-save_fig("matrixelement");
+plt.plot(q,spherical_jn(0,q*10))
