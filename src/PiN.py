@@ -86,7 +86,7 @@ plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
 plt.tight_layout()
-save_fig("Integralplot")
+#save_fig("Integralplot")
 
 def rms_residuals():
     plt.figure()

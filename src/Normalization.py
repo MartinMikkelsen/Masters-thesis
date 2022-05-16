@@ -43,7 +43,7 @@ S = 10    #MeV
 m = 139.570   #MeV
 mn = 938.2  #MeV
 mu = m*mn/(mn+m) #Reduced mass
-g = (2*mu)
+g = 2*mu
 
 def f(r): #form factor
     return S*np.exp(-r**2/b**2)
@@ -77,17 +77,21 @@ def plots():
 intphi = np.trapz(res.y.T[:,0], res.x,dx=0.001)
 V = 1
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
-
-gamma = np.linspace(m,500,np.size(res.x))
+alpha = 1/(137)
+gamma = np.linspace(m,800,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
-rs = np.linspace(0,5,np.size(res.x))
-
+phi = res.y.T[:,0]
 def Q(q):
-    B = np.trapz(rs**4*spherical_jn(0,q*rs), rs,dx=0.001)
+    B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*phi,res.x,dx=0.001))**2
     return B
 
 M = []
-for i in gamma:
+for i in q:
     M.append(Q(i))
 
-plt.plot(q,spherical_jn(0,q*10))
+omega = q**2/(2*mu)+m
+D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
+
+dsigmadomega = D*mu*q*omega*M
+plt.plot(gamma,dsigmadomega);
+plt.show()
