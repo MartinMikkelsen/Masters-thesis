@@ -41,7 +41,7 @@ def save_fig(fig_id):
 b = 1     #fm
 S = 10    #MeV
 m = 139.570   #MeV
-mn = 938.2  #MeV
+mn = 939.565  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = 2*mu
 
