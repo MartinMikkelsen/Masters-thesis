@@ -10,6 +10,9 @@ from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
 from pylab import plt, mpl
+from astropy import constants as const
+from astropy import units as u
+from astropy.units import si
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -40,8 +43,8 @@ def save_fig(fig_id):
 
 b = 1     #fm
 S = 10    #MeV
-m = 139.570   #MeV
-mn = 939.565  #MeV
+m = 134   #MeV
+mn = 938.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = 2*mu
 
@@ -78,9 +81,10 @@ intphi = np.trapz(res.y.T[:,0], res.x,dx=0.001)
 V = 1
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
 alpha = 1/(137)
-gamma = np.linspace(m,800,np.size(res.x))
+gamma = np.linspace(m,1000,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
 phi = res.y.T[:,0]
+
 def Q(q):
     B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*phi,res.x,dx=0.001))**2
     return B
@@ -89,9 +93,18 @@ M = []
 for i in q:
     M.append(Q(i))
 
-omega = q**2/(2*mu)+m
-D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
+m = 134   #MeV
+mn = 938.272  #MeV
+mu = m*mn/(mn+m) #Reduced mass
+g = 2*mu
 
+omega = (q**2)/(2*mu)+m
+D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
 dsigmadomega = D*mu*q*omega*M
-plt.plot(gamma,dsigmadomega);
-plt.show()
+plt.figure(figsize=(9,5.5));
+sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
+plt.xlabel(r"$E_\gamma$ [GeV]")
+plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
+plt.legend(r"$p\gamma$".split(),loc=0);
+plt.tight_layout()
+save_fig("theorypgamma");

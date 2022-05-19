@@ -110,5 +110,5 @@ plt.scatter(xes,yes);
 plt.errorbar(xes,yes,yerr=y_error,fmt="o");
 plt.xlabel(r"$E_\gamma$ [GeV]")
 plt.ylabel(r"$\sigma_T^{\gamma p }$ [mb]")
-plt.legend(r"$n\gamma$ $p\gamma$".split(),loc=0);
-plt.show()
+plt.legend(r"$n\pi^+$ $p\pi^0$".split(),loc=0);
+save_fig("comparingtheoryexperiment");

@@ -115,6 +115,3 @@ mp  = 938.272
 mn  = 939.565
 mplus = 139.570
 m0 = 134
-
-ratio = ((mp*m0)/(mp+m0))**2/((2*(mn*mplus)/(mn+mplus))**2)
-print(ratio)
