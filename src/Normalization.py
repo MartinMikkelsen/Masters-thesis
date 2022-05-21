@@ -86,7 +86,7 @@ q = np.sqrt(2*mu*(gamma-m))
 phi = res.y.T[:,0]
 
 def Q(q):
-    B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*phi,res.x,dx=0.001))**2
+    B = abs(np.trapz(spherical_jn(0,q*r)*r**4*phi,res.x,dx=0.001))**2
     return B
 
 M = []
@@ -102,9 +102,11 @@ omega = (q**2)/(2*mu)+m
 D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
 dsigmadomega = D*mu*q*omega*M
 plt.figure(figsize=(9,5.5));
-sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
-plt.xlabel(r"$E_\gamma$ [GeV]")
-plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
-plt.legend(r"$p\gamma$".split(),loc=0);
+print(gamma-m)
+plt.plot(r,spherical_jn(0,0.1*r))
+#sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
+#plt.xlabel(r"$E_\gamma$ [GeV]")
+#plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
+#plt.legend(r"$p\gamma$".split(),loc=0);
 plt.tight_layout()
-save_fig("theorypgamma");
+#save_fig("theorypgamma");

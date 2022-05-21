@@ -112,3 +112,5 @@ plt.xlabel(r"$E_\gamma$ [GeV]")
 plt.ylabel(r"$\sigma_T^{\gamma p }$ [mb]")
 plt.legend(r"$n\pi^+$ $p\pi^0$".split(),loc=0);
 save_fig("comparingtheoryexperiment");
+
+#relativistisk under barrier, uden dipole, neutroner, 
