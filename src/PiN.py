@@ -68,7 +68,6 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
 print(res.message,", E: ",res.p[0])
 
-
 def inplot():
     axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
     plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
