@@ -93,20 +93,17 @@ M = []
 for i in q:
     M.append(Q(i))
 
-m = 134   #MeV
-mn = 938.272  #MeV
-mu = m*mn/(mn+m) #Reduced mass
-g = 2*mu
-
 omega = (q**2)/(2*mu)+m
 D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
 dsigmadomega = D*mu*q*omega*M
-plt.figure(figsize=(9,5.5));
-print(gamma-m)
-plt.plot(r,spherical_jn(0,0.1*r))
+
+for j in range(0,450):
+    plt.scatter(q[j],Q(j))
+
+#plt.figure(figsize=(9,5.5));
 #sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
 #plt.xlabel(r"$E_\gamma$ [GeV]")
 #plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
 #plt.legend(r"$p\gamma$".split(),loc=0);
-plt.tight_layout()
+#plt.tight_layout()
 #save_fig("theorypgamma");
