@@ -1,19 +1,18 @@
-using BoundaryValueDiffEq, Plots
+using DifferentialEquations, Plots
+function lorenz(du,u,p,t)
+ du[1] = p[1]*(u[2]-u[1])
+ du[2] = u[1]*(p[2]-u[3]) - u[2]
+ du[3] = u[1]*u[2] - p[3]*u[3]
+end
 
-const g = 9.81
-L = 1.0
-tspan = (0.0, pi / 2)
-function simplependulum!(du, u, p, t)
-    θ = u[1]
-    dθ = u[2]
-    du[1] = dθ
-    du[2] = -(g / L) * sin(θ)
-end
-function bc1!(residual, u, p, t)
-    residual[1] = 20 * u[end÷2][1] + pi / 2 # the solution at the middle of the time span should be -pi/2
-    residual[2] = u[end][1] - pi / 2 # the solution at the end of the time span should be pi/2
-end
-bvp1 = BVProblem(simplependulum!, bc1!, [pi / 2, pi / 2], tspan)
-sol1 = solve(bvp1, GeneralMIRK4(), dt = 0.05)
-plot(sol1)
-title!("test")
+u0 = [1., 5., 10.]
+tspan = (0., 100.)
+p = (10.0,28.0,8/3)
+prob = ODEProblem(lorenz, u0, tspan,p)
+sol = solve(prob)
+xyzt = plot(sol, plotdensity=10000,lw=1.5)
+xy = plot(sol, plotdensity=10000, vars=(1,2))
+xz = plot(sol, plotdensity=10000, vars=(1,3))
+yz = plot(sol, plotdensity=10000, vars=(2,3))
+xyz = plot(sol, plotdensity=10000, vars=(1,2,3))
+plot(plot(xyzt,xyz),plot(xy, xz, yz, layout=(1,3),w=1), layout=(2,1))

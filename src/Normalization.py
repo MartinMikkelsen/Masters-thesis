@@ -77,6 +77,8 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
+## Alt ovenfor er ligemøj, løser nogle ligninger og får en funktion ud, som jeg kalder phi senere.
+
 intphi = np.trapz(res.y.T[:,0], res.x,dx=0.001)
 V = 1
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
@@ -85,22 +87,27 @@ gamma = np.linspace(m,1000,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
 phi = res.y.T[:,0]
 
+#Her går det galt. Jeg prøver at løse et integral, som er int(j_0(qr)*r^4*phi dr), hvor j_0(qr) er en sin(qr)/(qr).
+#Prøver at løse integralet for alle værdier af q og plotte det senere.
+
+#I funktionen Q er q en vektor, r en vektor og phi en vektor. Tror det går galt når jeg laver q*r
+#Men jeg prøver bare at udregne integralet for alle værdier af q.
+
 def Q(q):
-    B = abs(np.trapz(spherical_jn(0,q*r)*r**4*phi,res.x,dx=0.001))**2
+    B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*phi,res.x,dx=0.001))**2
     return B
 
 M = []
 for i in q:
     M.append(Q(i))
 
+#Det her under er også ligemøj
+
 omega = (q**2)/(2*mu)+m
 D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
 dsigmadomega = D*mu*q*omega*M
+plt.figure(figsize=(9,5.5));
 
-for j in range(0,450):
-    plt.scatter(q[j],Q(j))
-
-#plt.figure(figsize=(9,5.5));
 #sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
 #plt.xlabel(r"$E_\gamma$ [GeV]")
 #plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
