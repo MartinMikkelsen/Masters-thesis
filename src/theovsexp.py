@@ -39,7 +39,7 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 b = 1     #fm
-S = 10    #MeV
+S = 17    #MeV
 m = 139.570   #MeV
 mn = 938.2  #MeV
 mu = m*mn/(mn+m) #Reduced mass
@@ -81,6 +81,7 @@ alpha = 1/(137)
 gamma = np.linspace(m,1600,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
 phi = res.y.T[:,0]
+
 def Q(q):
     B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*phi,res.x,dx=0.001))**2
     return B
@@ -113,4 +114,4 @@ plt.ylabel(r"$\sigma_T^{\gamma p }$ [mb]")
 plt.legend(r"$n\pi^+$ $p\pi^0$".split(),loc=0);
 save_fig("comparingtheoryexperiment");
 
-#relativistisk under barrier, uden dipole, neutroner, 
+#relativistisk under barrier, uden dipole, neutroner,
