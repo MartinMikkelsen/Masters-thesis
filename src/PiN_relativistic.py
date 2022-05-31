@@ -51,7 +51,7 @@ def energyfunction(S,b):
     def sys(r,u,E):
         y,v,I = u
         dy = v
-        dv = g*(-E+m)*y-2/r*v+g*f(r)-1
+        dv = (m-E)**2/(2)-(m-E)*mu*y+(m-E)*f(r)-mu*f(r)+f(r)**2/(2*y)-1/r-2*v-6/r*v
         dI = f(r)*r**4*y
         return dy,dv,dI
 
