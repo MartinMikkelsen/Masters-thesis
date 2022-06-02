@@ -6,12 +6,13 @@ from scipy.integrate import trapz
 from scipy.integrate import quad
 from scipy.optimize import root
 from scipy.special import spherical_jn
-from scipy.special import hyp1f1
-from scipy.special import gamma
 from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
 from pylab import plt, mpl
+from astropy import constants as const
+from astropy import units as u
+from astropy.units import si
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -40,11 +41,75 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
+b = 1     #fm
+S = 10    #MeV
+m = 134   #MeV
+mn = 938.272  #MeV
+mu = m*mn/(mn+m) #Reduced mass
+g = 2*mu
 
-def f(u,x):
-    return (u[1],-1*u[1])
-y0 = [0,1]
-xs = np.linspace(1,5,500)
-us = odeint(f,y0,xs)
-ys = us[:,0]
-plt.plot(xs,ys)
+def f(r): #form factor
+    return S*np.exp(-r**2/b**2)
+
+def sys(r,u,E):
+    y,v,I = u
+    dy = v
+    dv = g*(-E+m)*y-2/r*v+g*f(r)
+    dI = f(r)*r**4*y
+    return dy,dv,dI
+
+def bc(ua, ub,E):
+    ya,va,Ia = ua
+    yb,vb,Ib = ub
+    return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+
+r = np.logspace(-5,0,5000)*5
+E = -2
+
+u = [0*r,0*r,E*r/r[-1]]
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
+
+def plots():
+    fig, ax = plt.subplots()
+    plt.plot(res.x,res.y.T,'-',linewidth=3.5);
+    plt.title("Numerical solution",size=15)
+    plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
+    plt.xlabel("r [fm]")
+    plt.show()
+
+phi = res.y.T[:,0]
+
+#Normalization of the final state
+intphi = 12*np.pi*np.trapz(r**2*phi**2, res.x,dx=0.001)
+V = 1
+N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
+
+phi2 = np.poly1d(np.polyfit(r,res.y.T[:,0],5))
+
+def phifunction(x):
+    func = phi2[0]+phi2[1]*x+phi2[2]*x**2+phi2[3]*x**3+phi2[4]*x**4+phi2[5]*x**5+phi[6]
+    return func
+
+alpha = 1/(137)
+gamma = np.linspace(m,1000,np.size(res.x))
+q = np.sqrt(2*mu*(gamma-m))
+phi = res.y.T[:,0]
+
+def Q(q):
+    B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*(phifunction(r)-phi2[0]),res.x,dx=0.001))**2
+    return B
+
+M = []
+for i in q:
+    M.append(Q(i))
+
+omega = (q**2)/(2*mu)+m
+D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
+dsigmadomega = D*mu*q*omega*M
+plt.figure(figsize=(9,5.5));
+
+sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
+plt.xlabel(r"$E_\gamma$ [GeV]")
+plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
+plt.legend(r"$p\gamma$".split(),loc=0);
+plt.tight_layout()

@@ -130,4 +130,4 @@ axs[1, 1].plot(d2, d4,linewidth=3.5)
 axs[1, 1].set_title(r"$S=10$ MeV, $b=3$ fm, $E_R=0.997$", x=0.5, y=0.9)
 axs[1, 1].set_xlabel("r [fm]");
 fig.tight_layout()
-save_fig("RelativisticExpansion");
+#save_fig("RelativisticExpansion");
