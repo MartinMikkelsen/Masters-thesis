@@ -18,11 +18,11 @@ function sys(r,u,E)
   return dy,dv,dI
 end
 
-  function bc(ua,ub,E)
+function bc(ua,ub,E)
     ya,va,Ia = ua
     yb,vb,ub = ub
     return va,vb+(g*(m+abs(E)))^(0.5)*yb,Ia,Ib-E
-  end
+end
 
 r = 10 .^(range(-5,stop=0,length=20))
 E = -2

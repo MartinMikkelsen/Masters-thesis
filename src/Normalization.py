@@ -104,5 +104,4 @@ plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
 plt.legend(r"$p\gamma$".split(),loc=0);
 plt.tight_layout()
 
-
 #save_fig("theorypgamma");

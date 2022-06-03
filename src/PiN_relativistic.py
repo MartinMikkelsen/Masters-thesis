@@ -39,12 +39,11 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b = 10
-S = 1
+b = 1
+S = 10
 m = 139.570   #MeV
 mn = 938.2  #MeV
 mu = m*mn/(mn+m) #Reduced mass
-g = (mu)
 
 def f(r): #form factor
     return S*np.exp(-r**2/b**2)
@@ -61,11 +60,26 @@ def sys(r,u,E):
 def bc(ua, ub,E):
     ya,va,za,la,Ia = ua
     yb,vb,zb,lb,Ib = ub
-    return va, vb, ,Ia, Ib-E,
+    return va, vb,la,lb-8*mu**3*(E-m)*yb+4*mu**2*zb, Ia, Ib-E,
 
 r = np.logspace(-5,0,100)*5
-E = -0.08412275189109243
+E = -2
 
 u = [0*r,0*r,0*r,0*r,E*r/r[-1]]
-res1 = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
-print(res1.message,", E: ",res1.p[0])
+
+res2 = solve_bvp(sys,bc,r,u,p=[E],tol=1e-3,max_nodes=100000)
+print(res.message,", E: ",res2.p[0])
+
+plt.figure(figsize=(9,5.5))
+sns.lineplot(x=res2.x,y=res2.y.T[:,4],linewidth=3.5) #Energy
+sns.lineplot(x=res2.x,y=res2.y.T[:,1],linewidth=3.5) #1st dv
+sns.lineplot(x=res2.x,y=res2.y.T[:,0],linewidth=3.5)
+sns.lineplot(x=res2.x,y=res2.y.T[:,3],linewidth=2,linestyle='--') #3rd dv
+sns.lineplot(x=res2.x,y=res2.y.T[:,2],linewidth=2,linestyle='--') #2nd dv
+#plt.ylim([-0.08,0.06])
+plt.title(r"$S=10$ MeV, $b=1$ fm", x=0.5, y=0.9)
+plt.legend(r"$E$ $\phi'$ $\phi$ $\phi'''$ $\phi''$".split(),loc=0);
+plt.xlabel("r [fm]")
+rs = np.linspace(0,5,np.size(res.x))
+plt.tight_layout()
+save_fig("Integralplot_relativistic")
