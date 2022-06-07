@@ -39,7 +39,7 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 b = 1     #fm
-S = 17    #MeV
+S = 150    #MeV
 m = 139.570   #MeV
 mn = 938.2  #MeV
 mu = m*mn/(mn+m) #Reduced mass
@@ -52,7 +52,7 @@ def sys(r,u,E):
     y,v,I = u
     dy = v
     dv = g*(-E+m)*y-2/r*v+g*f(r)
-    dI = f(r)*r**4*y
+    dI = 12*np.pi*f(r)*r**4*y
     return dy,dv,dI
 
 def bc(ua, ub,E):
@@ -74,13 +74,13 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
-intphi = np.trapz(res.y.T[:,0], res.x,dx=0.001)
 V = 1
+intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
 alpha = 1/(137)
 gamma = np.linspace(m,1600,np.size(res.x))
 q = np.sqrt(2*mu*(gamma-m))
-phi = res.y.T[:,0]
+phi = res.y.T[:,0]/10
 
 def Q(q):
     B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*phi,res.x,dx=0.001))**2
@@ -96,8 +96,8 @@ D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
 dsigmadomega = D*mu*q*omega*M
 plt.figure(figsize=(9,5.5));
 
-plt.plot(gamma/1000,dsigmadomega);
-plt.plot(gamma/1000,1/5*dsigmadomega);
+plt.plot(gamma/1000,4*np.pi*dsigmadomega);
+plt.plot(gamma/1000,5*np.pi*dsigmadomega);
 plt.legend(r"tes")
 
 

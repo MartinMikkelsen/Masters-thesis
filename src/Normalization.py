@@ -77,8 +77,8 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
-intphi = np.trapz(res.y.T[:,0], res.x,dx=0.001)
 V = 1
+intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
 alpha = 1/(137)
 gamma = np.linspace(m,1000,np.size(res.x))

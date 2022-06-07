@@ -41,18 +41,19 @@ def save_fig(fig_id):
 
 b = 1     #fm
 S = 10    #MeV
-m = 139.570   #MeV
+m = 139.570  #MeV
 mn = 938.2  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = (2*mu)
+hbarc = 197.3 #MeV fm
 
 def f(r): #form factor
-    return S*np.exp(-r**2/b**2)
+    return S/b*np.exp(-r**2/b**2)
 
 def sys(r,u,E):
     y,v,I = u
     dy = v
-    dv = g*(-E+m)*y-4/r*v+g*f(r)
+    dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
     dI = f(r)*r**4*y
     return dy,dv,dI
 
@@ -61,8 +62,8 @@ def bc(ua, ub,E):
     yb,vb,Ib = ub
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-r = np.logspace(-5,0,100)*5
-E = -0.08412275189109243
+r = np.logspace(-5,0,1000)*5
+E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
@@ -81,7 +82,7 @@ sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
 plt.title(r"$S=10$ MeV, $b=1$ fm", x=0.5, y=0.9)
-plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0);
+plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
 plt.tight_layout()
