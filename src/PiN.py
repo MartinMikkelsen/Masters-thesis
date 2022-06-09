@@ -82,7 +82,7 @@ sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
 plt.title(r"$S=10$ MeV, $b=1$ fm", x=0.5, y=0.9)
-plt.legend(r"$E$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
+plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
 plt.tight_layout()
