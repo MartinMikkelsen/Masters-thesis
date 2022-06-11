@@ -55,7 +55,7 @@ def relativistic(S,b):
         dv = z
         dz = l
         dl = 8*mu**3*(E-m)*y/(hbarc**4)-f(r)*8*mu**3/(hbarc**4)+4*mu**2*z/(hbarc**2)+(16*mu**2)*v/(r*(hbarc**2))-(6*l)/(r)
-        dI = f(r)*r**4*y
+        dI = 12*np.pi*f(r)*r**4*y
         return dy,dv,dz,dl,dI
 
     def bc(ua, ub,E):
@@ -63,7 +63,12 @@ def relativistic(S,b):
         yb,vb,zb,lb,Ib = ub
         return va, vb,la,lb-8*mu**3*(E-m)*yb+4*mu**2*zb, Ia, Ib-E,
 
-    r = np.logspace(-5,0,1000)*5
+    rmax = 5*b
+    rmin = 0.01*b
+    base1 = np.exp(1)
+    start = np.log(rmin)
+    stop = np.log(rmax)
+    r = np.logspace(start,stop,num=20*rmax,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,0*r,0*r,E*r/r[-1]]
@@ -80,7 +85,7 @@ def nonrelativistic(S,b):
         y,v,I = u
         dy = v
         dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-        dI = f(r)*r**4*y
+        dI = 12*np.pi*f(r)*r**4*y
         return dy,dv,dI
 
     def bc(ua, ub,E):
@@ -88,7 +93,12 @@ def nonrelativistic(S,b):
         yb,vb,Ib = ub
         return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-    r = np.logspace(-5,0,1000)*5
+    rmax = 5*b
+    rmin = 0.01*b
+    base1 = np.exp(1)
+    start = np.log(rmin)
+    stop = np.log(rmax)
+    r = np.logspace(start,stop,num=20*rmax,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,E*r/r[-1]]
@@ -114,7 +124,7 @@ axs[0, 0].plot(a1, a2,linewidth=3.5,linestyle='dashed', color='g')
 axs[0, 0].plot(b1, b2,linewidth=3.5, color='g')
 axs[0, 0].plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
 axs[0, 0].plot(b1, b3,linewidth=3.5, color='b')
-axs[0, 0].set_title(r"$S=10$ MeV, $b=1$ fm, $E_R=0.8724$", x=0.5, y=0.9)
+axs[0, 0].set_title(r"$S=10$ MeV, $b=1$ fm, $E_R=%.3f$" %(a5/b5), x=0.5, y=0.9)
 axs[0, 0].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
 axs[0, 0].set_xlabel("r [fm]")
 axs[0, 0].set_ylim([-0.012,0.0075])
@@ -122,7 +132,7 @@ axs[0, 1].plot(c1, c2,linewidth=3.5,linestyle='dashed',color='g')
 axs[0, 1].plot(d1, d2,linewidth=3.5,color='g')
 axs[0, 1].plot(c1, c3,linewidth=3.5,linestyle='dashed', color='b')
 axs[0, 1].plot(d1, d3,linewidth=3.5, color='b')
-axs[0, 1].set_title(r"$S=10$ MeV, $b=2$ fm, $E_R=0.8785$", x=0.5, y=0.9)
+axs[0, 1].set_title(r"$S=10$ MeV, $b=2$ fm, $E_R=%.3f$" %(c5/d5), x=0.5, y=0.9)
 axs[0, 1].set_xlabel("r [fm]")
 axs[0, 1].set_ylim([-0.012,0.0075])
 axs[0, 1].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
@@ -130,7 +140,7 @@ axs[1, 0].plot(e1, e2,linewidth=3.5,linestyle='dashed',color='g')
 axs[1, 0].plot(f1, f2,linewidth=3.5, color='g')
 axs[1, 0].plot(e1, e3,linewidth=3.5,linestyle='dashed', color='b')
 axs[1, 0].plot(f1, f3,linewidth=3.5, color='b')
-axs[1, 0].set_title(r"$S=15$ MeV, $b=1$ fm, $E_R=0.8724$", x=0.5, y=0.9)
+axs[1, 0].set_title(r"$S=15$ MeV, $b=1$ fm, $E_R=%.3f$" %(e5/f5), x=0.5, y=0.9)
 axs[1, 0].set_xlabel("r [fm]")
 axs[1, 0].set_ylim([-0.02,0.012])
 axs[1, 0].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
@@ -138,7 +148,7 @@ axs[1, 1].plot(g1, g2,linewidth=3.5,linestyle='dashed',color='g')
 axs[1, 1].plot(h1, h2,linewidth=3.5,color='g')
 axs[1, 1].plot(g1, g3,linewidth=3.5,linestyle='dashed', color='b')
 axs[1, 1].plot(h1, h3,linewidth=3.5, color='b')
-axs[1, 1].set_title(r"$S=15$ MeV, $b=2$ fm, $E_R=0.8788$", x=0.5, y=0.9)
+axs[1, 1].set_title(r"$S=15$ MeV, $b=2$ fm, $E_R=%.3f$" %(g5/h5), x=0.5, y=0.9)
 axs[1, 1].set_xlabel("r [fm]");
 axs[1, 1].set_ylim([-0.02,0.012])
 axs[1, 1].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);

@@ -41,8 +41,8 @@ def save_fig(fig_id):
 
 b = 1     #fm
 S = 10    #MeV
-m = 139.570  #MeV
-mn = 938.2  #MeV
+m = 139  #MeV
+mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = (2*mu)
 hbarc = 197.3 #MeV fm
@@ -54,7 +54,7 @@ def sys(r,u,E):
     y,v,I = u
     dy = v
     dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-    dI = f(r)*r**4*y
+    dI = 12*np.pi*f(r)*r**4*y
     return dy,dv,dI
 
 def bc(ua, ub,E):
@@ -62,11 +62,16 @@ def bc(ua, ub,E):
     yb,vb,Ib = ub
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-r = np.logspace(-5,0,1000)*5
+rmax = 5*b
+rmin = 0.01*b
+base1 = np.exp(1)
+start = np.log(rmin)
+stop = np.log(rmax)
+r = np.logspace(start,stop,num=20*rmax,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
-res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 print(res.message,", E: ",res.p[0])
 
 def inplot():
@@ -78,15 +83,15 @@ def inplot():
     plt.draw()
 
 plt.figure(figsize=(9,5.5))
-sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5)
+sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
-plt.title(r"$S=10$ MeV, $b=1$ fm", x=0.5, y=0.9)
+plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
 plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
 plt.tight_layout()
-#save_fig("Integralplot")
+save_fig("Integralplot")
 
 def rms_residuals():
     plt.figure()
