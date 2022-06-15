@@ -295,64 +295,55 @@ This should be compared to experimental data shown in figure \ref{fig:pgammacros
     \includegraphics[width=\linewidth]{Figures/pgammaexperiment.pdf}
     \end{sidecaption}
 \end{figure}
-Plotting \eqref{diffcrosssection} yields
-\begin{figure}[H]
-    \begin{sidecaption}{The differential cross section}[fig:difcros]
-    \includegraphics[width=\linewidth]{Figures/theorypgamma.pdf}
-    \end{sidecaption}
-\end{figure}
-Comparing the two
-\begin{figure}[H]
-    \begin{sidecaption}{Comparing}[fig:comparing]
-    \includegraphics[width=\linewidth]{Figures/comparingtheoryexperiment.pdf}
-    \end{sidecaption}
-\end{figure}
 \section{Pion Photoproduction exact}
-In section \ref{sec:dipoleapprox} we looked at how to use the model descriped in section \ref{sec:model} to get an expression for the cross section which was compared to experimental data. More specifically we used the dipole approximation which introduces a trade-off between the difficulty of the calculations and the regime in which our solution is valid. We expect the dipole approximation to hold true for low energies just above the threshold. To both validate and generalize this result we now do a different approach and calculate the cross section exact and also consider recoil effects. Strictly speaking, recoil effects should also be considering in section \ref{sec:dipoleapprox} since the mass ratio between the nucleon and the pion cannot be assumed to yield a stationary nucleon after the pion photoproduction process. To calculate the exact matrix elements we consider a non-relativistic system of particles interacting with the electromagnetic field. The interacting part of the Hamiltonian is given by
+In section \ref{sec:dipoleapprox} we looked at how to use the model described in section \ref{sec:model} to get an expression for the cross section which was compared to experimental data. More specifically we used the dipole approximation which introduces a trade-off between the difficulty of the calculations and the regime in which our solution is valid. We expect the dipole approximation to hold for low energies just above the threshold. To both validate and generalize this result we now do a different approach and calculate the cross section exact and also consider recoil effects. Strictly speaking, recoil effects should also be considered in section \ref{sec:dipoleapprox} since the mass ratio between the nucleon and the pion cannot be assumed to yield a stationary nucleon after the pion photoproduction process. To calculate the exact matrix elements we consider a non-relativistic system of particles interacting with the electromagnetic field. The interacting part of the Hamiltonian is given by
 \begin{equation} \label{firstinthamil}
-    H = \frac{1}{2m_\pi} \bigg( \vec{p}-\frac{e}{c}\vec{A}(\vec{r}) \bigg)^2,
+	H = \frac{1}{2m_\pi} \bigg( \vec{p}-\frac{e}{c}\vec{A}(\vec{r}) \bigg)^2,
 \end{equation}
 where $\vec{p}$ is the momentum operator and $\vec{A}(\vec{r})$ is the quantized vector potential at the point $\vec{r}$. Note that we have already replaced the usual mass by the mass of the pion, $m_\pi$ since we are considering the interaction of a pion with charge $e$ with the electromagnetic field. 
 
-The electromagnetic interaction is relatively weak compared to the strong force. For our problem this means we can expand the interaction taking only the lowest non-vanishing order of perturbation into account. Since we later want to consider transition probabilites we only keep the first non-linear term of \eqref{firstinthamil} which yields
+The electromagnetic interaction is relatively weak compared to the strong force. For our problem, this means we can expand the interaction by taking only the lowest non-vanishing order of perturbation into account. Since we later want to consider transition probabilities we only keep the first non-linear term of \eqref{firstinthamil} which yields
 \begin{equation}\label{secondinthamil}
-    V^{(1)} = -\frac{e}{2m_\pi c}\bigg( \vec{p}\cdot \vec{A}(\vec{r}_\pi,t)+\vec{A}(\vec{r}_\pi,t)\cdot \vec{p}\bigg),
+	V^{(1)} = -\frac{e}{2m_\pi c}\bigg( \vec{p}\cdot \vec{A}(\vec{r}_\pi,t)+\vec{A}(\vec{r}_\pi,t)\cdot \vec{p}\bigg),
 \end{equation}
 \begin{marginfigure}
-\centering
-\input{Figures/Jacobi}
-\caption{Jacobi coordinates illustrating $\vec{r}_\pi$ used in the vector potential in equation \ref{thirdinthamil}. Here we use $\vec{r}=\vec{r}_\pi-\vec{r}_N$ and see that $\vec{r}_\pi = \vec{R}+\vec{r}\frac{m_N}{M}$, where $M=m_N+m_\pi$.}
-\label{JacobiIllustration}
+	\centering
+	\input{Figures/Jacobi}
+	\caption{Jacobi coordinates illustrating $\vec{r}_\pi$ used in the vector potential in equation \ref{thirdinthamil}. Here we use $\vec{r}=\vec{r}_\pi-\vec{r}_N$ and see that $\vec{r}_\pi = \vec{R}+\vec{r}\frac{m_N}{M}$, where $M=m_N+m_\pi$.}
+	\label{JacobiIllustration}
 \end{marginfigure}
 \noindent which also means the interacting part is linear in the creation(annihilation) operators corresponding to single-photon emission(absorption). Our choice of gauge is purely conventional and we choose the radiation gauge which imposes a condition on the vector potential given by
 \begin{equation}
-    \nabla \cdot \vec{A} = 0,
+	\nabla \cdot \vec{A} = 0,
 \end{equation}
 and this is a convenient choice of gauge since the commutator in \eqref{secondinthamil} is $\nabla \cdot \vec{A}$ and we can write
 \begin{equation}\label{thirdinthamil}
-    V^{(1)} = -\frac{e}{m_\pi c}\vec{A}(\vec{r_\pi},t)\cdot \vec{p}_\pi. 
+	V^{(1)} = -\frac{e}{m_\pi c}\vec{A}(\vec{r_\pi},t)\cdot \vec{p}_\pi. 
 \end{equation}
 Note that \eqref{thirdinthamil} consists of the pion momentum operator, $\vec{p}_\pi$ and the electromagnetic vector potential at a distance $r_\pi$. This distance was also mentioned in section \ref{sec:model} and can be expressed in term of the Jacobi coordinates illustrated on figure \ref{JacobiIllustration} where the relative coordinate is given by $\vec{r}=\vec{r}_\pi-\vec{r}_N$ which leads to the following transformation of equation \eqref{thirdinthamil}
 \begin{equation}
-    V^{(1)} = -\frac{e}{m_\pi c}\vec{A}(\vec{r_\pi},t)\cdot \vec{p}_\pi = \frac{-e}{m_\pi} \bigg( \vec{p}+\frac{m_N}{M}\vec{P}\bigg)\vec{A}\bigg(\vec{R}+\frac{m_N}{M}\vec{r},t\bigg),
+	V^{(1)} = -\frac{e}{m_\pi c}\vec{A}(\vec{r_\pi},t)\cdot \vec{p}_\pi = \frac{-e}{m_\pi} \bigg( \vec{p}+\frac{m_N}{M}\vec{P}\bigg)\vec{A}\bigg(\vec{R}+\frac{m_N}{M}\vec{r},t\bigg),
 \end{equation}
 where $M=m_N+m_\pi$ is the total mass of the system. We now move on from the general theory of the pion interacting with the electromagnetic field and consider the specific case of pion photoproduction. To recap we consider the following processes
 \begin{align}
-    p \gamma & \rightarrow p \pi^0 \label{photo1}\\
-    p \gamma & \rightarrow n \pi^+ \label{photo2}\\
-    n \gamma & \rightarrow n \pi^0 \label{photo3}\\
-    n \gamma & \rightarrow p \pi^- \label{photo4},
+	p \gamma & \rightarrow p \pi^0 \label{photo1}\\
+	p \gamma & \rightarrow n \pi^+ \label{photo2}\\
+	n \gamma & \rightarrow n \pi^0 \label{photo3}\\
+	n \gamma & \rightarrow p \pi^- \label{photo4},
 \end{align}
-where the inital states consist of a dressed proton or neutron and a plane wave photon which in the language of 2nd quantization can be written as $a_{\vec{k},\lambda}^\dagger \ket{0}$ corresponding to creating a photon with wave vector $\vec{k}$ and polarization $\lambda$ from the vacuum $\ket{0}$. The final states consists of a nucleon and a pion and no photon, i.e electromagnetic vacuum. This leads to the following expression for the matrix element for the transitions in \eqref{photo1}, \eqref{photo2}, \eqref{photo3} and \eqref{photo4}
+where the initial states consist of a dressed proton or neutron and a plane wave photon which in the language of 2nd quantization can be written as $a_{\vec{k},\lambda}^\dagger \ket{0}$ corresponding to creating a photon with wave vector $\vec{k}$ and polarization $\lambda$ from the vacuum $\ket{0}$. The final states consists of a nucleon and a pion and no photon, i.e electromagnetic vacuum. This leads to the following expression for the matrix element for the transitions in \eqref{photo1}, \eqref{photo2}, \eqref{photo3} and \eqref{photo4}
 \begin{equation}
-    \frac{-e}{m_\pi c}\mel*{0}{\vec{A}\big( \vec{R}+\frac{m_N}{M}\vec{r},t\big) a_{\vec{k},\lambda}^\dagger}{0} = \frac{-e}{m_\pi} \sqrt{\frac{2\pi \hbar}{\omega_{\vec{k}}V}} \vec{e}_{\vec{k},\lambda}\text{e}^{i\vec{k}(\vec{R}+\frac{m_N}{M}\vec{r})-i\omega_k t}.
+	\frac{-e}{m_\pi c}\mel*{0}{\vec{A}\big( \vec{R}+\frac{m_N}{M}\vec{r},t\big) a_{\vec{k},\lambda}^\dagger}{0} = \frac{-e}{m_\pi} \sqrt{\frac{2\pi \hbar}{\omega_{\vec{k}}V}} \vec{e}_{\vec{k},\lambda}\text{e}^{i\vec{k}(\vec{R}+\frac{m_N}{M}\vec{r})-i\omega_k t}.
 \end{equation}
 Completely analogous to section \ref{sec:dipoles} and specifically equation \eqref{domega} we now want to consider the probability of transition per unit time of going from the initial state $\ket{i}$ to $\bra{f}$ according to Fermi's golden rule
 \begin{equation}
-        \text{d}\omega = \frac{2\pi}{\hbar} \abs{\mathcal{M}}^2 \text{d}\rho,
+	\text{d}\omega = \frac{2\pi}{\hbar} \abs{\mathcal{M}}^2 \text{d}\rho,
 \end{equation}
 where $\text{d}\rho
 $ is the density of states also given by \eqref{densityofstates}. The difference is that we do not employ the dipole approximation to evaluate the matrix element $\mathcal{M}$ and we also consider recoil. In total this leads to the following matrix element
 \begin{equation}
-    \mathcal{M}=
+	\mathcal{M}=
 \end{equation}
+
+
+
