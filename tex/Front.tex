@@ -1,0 +1,106 @@
+% The actual front page
+\begin{titlingpage}
+\newlength{\frontpagecorrection}
+\calccentering{\frontpagecorrection}
+\begin{adjustwidth*}{\frontpagecorrection}{-\frontpagecorrection}
+	
+	\centering
+	\sffamily
+	
+	\vspace*{0.1cm}
+	
+	\fontsize{22pt}{25pt}\selectfont
+	
+	\textsc{\projecttitle}
+	 \par
+	\vspace{0.8cm}
+	
+	\fontsize{18pt}{22pt}\selectfont
+	
+	Martin Mikkelsen \\
+	201706771 \par
+	
+	\vspace{1cm}
+
+\input{Figures/formfactor}	
+
+		
+	%\includegraphics[width=1\textwidth]{FinalKinematics.pdf}%{Figures/AUSEGL/BLAA/auseglblaa.eps}
+	\vspace{1cm}
+	
+	Master's thesis \\
+	Supervisor: Dmitri Fedorov
+	\vspace{1.0cm}
+	
+	\fontsize{13pt}{14pt}\selectfont
+	
+	Department of Physics and Astronomy\par
+	Aarhus University\par
+	Denmark
+	
+	\vspace{0.3cm}
+	
+	November 2022
+	
+\end{adjustwidth*}
+\end{titlingpage}
+
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% The verso of the title page
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+% We actually want the page numbering to start at 1 at the front page in order
+% to count pages for the requirements! Easy to disable by out-commenting the line.
+\setcounter{page}{2}
+
+% ~~~~~~~~
+% Abstract
+% ~~~~~~~~
+\vspace*{-0.5cm}
+\section*{Summary}
+\addcontentsline{toc}{chapter}{Summary / Resumé}
+\thispagestyle{empty}
+This is a bachelor's project about relativistic kinematics. This means a theoretical description of particle's motion without considering the forces that cause them to move, in the relativistic limit. More specifically this project illuminates three-particle decays with kinematic invariant quantities. The theory introduces an approach to examine an anomaly that occurred in an experiment when a Hungarian research team measured transitions in $^8$Be. It combines considerations of phase space for three-particle decay with resonance amplitudes and angular distributions. This leads to experimental predictions separated into three parts depending on the spin state of the resonant particle, the X17 particle. This project concludes that the formalism is consistent with the relativistic scattering angles in the laboratory system and how experimental results can be illustrated using kinematic invariants. Three angles are proposed to investigate the X17 particle experimentally.  
+\vspace{1cm}
+\section*{Resumé}
+Dette bachelorprojekt omhandler relativistisk kinematisk. Det vil altså sige en teoretisk beskrivelse af partiklers bevægelse uden ydre påvirkning i den relativistiske grænse. Mere specifikt belyser dette projekt 3-partikel henfald ved hjælp af kinematiske invariante størrelser. Teorien i projektet introducerer den tilgang, der er anvendt til at undersøge en anormalitet i et forsøg, som opstod da et ungarnsk forskerhold målte overgange i $^8$Be. Teorien kombinerer overvejelser omkring faserum for tre-partikel henfald med resonansamplituder og vinkelfordelinger. Dette fører til eksperimentelle forudsigelser, der er inddelt i tre dele afhængig af spintilstanden for resonanspartiklen, X17. Projektet konkluderer, at formalismen er konsistent med den relativistiske spredningsvinkel i laboratoriets hvileramme og viser hvordan eksperimentelle resultater kan repræsenteres ved kinematiske invariante størrelser. Der foreslås tre vinkler, som kan måles eksperimentelt for at undersøge X17 partiklen.
+\newpage
+
+
+% ~~~~~~~~~~~~
+% The colophon
+% ~~~~~~~~~~~~
+
+% Get font-info
+\makeatletter
+\edef\fontandleading{\@memptsize.0/\the\baselineskip}
+\makeatother
+\thispagestyle{empty}
+% Push to bottom of page and locally set indents
+\strut\vfill
+{
+	\setlength{\parindent}{0pt}
+	\addtolength{\parskip}{.6em}
+	
+	\begin{center}
+		\bfseries\sffamily Colophon
+	\end{center}
+	
+	\small
+	
+	\textsl{\projecttitle}
+	
+	\smallskip
+	
+	Master's thesis by Martin Mikkelsen
+	
+	The project is supervised by Dmitri Fedorov
+	
+	Typeset by the author using \LaTeX{} and the \textsf{memoir} document class. Figures are made with the using the Seaborn package in Python the Tikz package.
+	
+	Code for document and figures can be found on \url{https://github.com/MartinMikkelsen}
+	
+	Printed at Aarhus University
+}
+\newpage

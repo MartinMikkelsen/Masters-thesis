@@ -11,6 +11,7 @@ import seaborn as sns
 import os
 from pylab import plt, mpl
 
+
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -82,6 +83,7 @@ def inplot():
     mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
     plt.draw()
 
+
 plt.figure(figsize=(9,5.5))
 sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
 sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
@@ -91,10 +93,10 @@ plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
 plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
 plt.tight_layout()
-save_fig("Integralplot")
+#save_fig("Integralplot")
 
 def rms_residuals():
     plt.figure()
-    plt.plot(res.x[0:315],res.rms_residuals,linewidth=2.5)
+    plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")

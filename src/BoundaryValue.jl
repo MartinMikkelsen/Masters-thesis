@@ -18,7 +18,7 @@ function sys(r,u,E)
   return dy,dv,dI
 end
 
-function bc(ua,ub,E)
+function bc!(ua,ub,E)
     ya,va,Ia = ua
     yb,vb,ub = ub
     return va,vb+(g*(m+abs(E)))^(0.5)*yb,Ia,Ib-E
@@ -29,4 +29,5 @@ E = -2
 
 u = [0*r,0*r,E*r/r[1]]
 
-res = BVProblem(sys, bc, u, r)
+res = BVProblem(sys, bc!, E, r)
+sol1 = solve(res, GeneralMIRK4(), dt=0.05)

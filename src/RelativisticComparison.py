@@ -154,3 +154,14 @@ axs[1, 1].set_ylim([-0.02,0.012])
 axs[1, 1].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
 fig.tight_layout()
 save_fig("RelativisticExpansion");
+
+# plt.figure(figsize=(9,5.5))
+# plt.plot(a1, a2,linewidth=3.5,linestyle='dashed', color='g')
+# plt.plot(b1, b2,linewidth=3.5, color='g')
+# plt.plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
+# plt.plot(b1, b3,linewidth=3.5, color='b')
+# plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(10,1,a5/b5), x=0.5, y=0.8)
+# plt.legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
+# plt.xlabel("r [fm]")
+# plt.tight_layout()
+# save_fig("Single_comparision");
