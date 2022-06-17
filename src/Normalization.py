@@ -43,8 +43,8 @@ def save_fig(fig_id):
 
 b = 1     #fm
 S = 10    #MeV
-m = 139.570  #MeV
-mn = 938.2  #MeV
+m = 139  #MeV
+mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = (2*mu)
 hbarc = 197.3 #MeV fm
@@ -56,7 +56,7 @@ def sys(r,u,E):
     y,v,I = u
     dy = v
     dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-    dI = f(r)*r**4*y
+    dI = 12*np.pi*f(r)*r**4*y
     return dy,dv,dI
 
 def bc(ua, ub,E):
@@ -64,12 +64,17 @@ def bc(ua, ub,E):
     yb,vb,Ib = ub
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-r = np.logspace(-5,0,1000)*5
+rmax = 5*b
+rmin = 0.01*b
+base1 = np.exp(1)
+start = np.log(rmin)
+stop = np.log(rmax)
+r = np.logspace(start,stop,num=150*rmax,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
-res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6)
-print(res.message,", E: ",res.p[0])
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+#print(res.message,", E: ",res.p[0])
 
 def plots():
     fig, ax = plt.subplots()
@@ -84,29 +89,26 @@ V = 1
 intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
 alpha = 1/(137)
-gamma = np.linspace(m,1000,np.size(res.x))
-q = np.sqrt(2*mu*(gamma-m))
-phi = res.y.T[:,0]
-rs = np.linspace(0,5,np.size(res.x))
+
+frontfactors = 16*np.pi*alpha*N**2*(mu/m)**2/(9)
+
+Egamma = np.linspace(m,500,np.size(res.y.T[:,0]))
+q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
 
 def Q(q):
-    B = abs(np.trapz(spherical_jn(0,q-m*r)*rs**4*phi,res.x,dx=0.001))**2
-    return B
+    M = np.trapz(spherical_jn(0,q*r)*res.y.T[:,0]*r**4,res.x,dx=0.001)
+    return abs(M)
 
-M = []
+N = []
 for i in q:
-    M.append(Q(i))
+    N.append(Q(i))
+U = np.array(N)
 
-omega = (q**2)/(2*mu)+m
-D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
-dsigmadomega = D*mu*q*omega*M
-
-plt.figure(figsize=(9,5.5));
-
-sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
-plt.xlabel(r"$E_\gamma$ [GeV]")
-plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
-plt.legend(r"$p\gamma$".split(),loc=0);
+plt.figure(figsize=(9,5.5))
+plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
+plt.xlabel(r"$E_\gamma$ [MeV]")
+plt.ylabel(r"$\frac{d\sigma}{d\Omega}$")
 plt.tight_layout()
-
-#save_fig("theorypgamma");
+dsigmadomega = frontfactors*mu*q/(hbarc)*U**2
+plt.plot(Egamma+m,dsigmadomega,linewidth=3.5);
+save_fig("theorypgamma")
