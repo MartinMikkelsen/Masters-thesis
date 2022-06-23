@@ -1,33 +1,20 @@
 using BoundaryValueDiffEq
-const b = 1
-S = 10
-m_π = 139.570
-mn = 938.2
-μ = m_π*mn/(m_π+mn)
-g = (2*μ)
 
-function f(r)
-  S*exp(-r^2/b^2)
+const q = 9.81
+L = 1.0
+tspan = (0.0,pi/2)
+function simplependulum!(du,u,p,t)
+    θ  = u[1]
+    dθ = u[2]
+    du[1] = dθ
+    du[2] = -(q/L)*sin(θ)
 end
 
-function sys(r,u,E)
-  y,v,I = u
-  dy = v
-  dv = g*(-E+m)*y-2/r*v+g*f(r)
-  dI = f(r)*r^4*y
-  return dy,dv,dI
+u₀_2 = [-1.6, -1.7] # the initial guess
+function bc3!(residual, sol, p, t)
+    residual[1] = sol(pi/4)[1] + pi/2 # use the interpolation here, since indexing will be wrong for adaptive methods
+    residual[2] = sol(pi/2)[1] - pi/2
 end
-
-function bc!(ua,ub,E)
-    ya,va,Ia = ua
-    yb,vb,ub = ub
-    return va,vb+(g*(m+abs(E)))^(0.5)*yb,Ia,Ib-E
-end
-
-r = 10 .^(range(-5,stop=0,length=20))
-E = -2
-
-u = [0*r,0*r,E*r/r[1]]
-
-res = BVProblem(sys, bc!, E, r)
-sol1 = solve(res, GeneralMIRK4(), dt=0.05)
+bvp3 = BVProblem(simplependulum!, bc3!, u₀_2, tspan)
+sol3 = solve(bvp3, Shooting(Vern7()))
+plot(sol3)

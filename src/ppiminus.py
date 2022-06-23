@@ -10,9 +10,7 @@ from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
 from pylab import plt, mpl
-from astropy import constants as const
-from astropy import units as u
-from astropy.units import si
+import mpmath as mp
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -41,21 +39,24 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
+
+
 b = 1     #fm
 S = 10    #MeV
-m = 134   #MeV
-mn = 938.272  #MeV
+m = 139  #MeV
+mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
-g = 2*mu
+g = (2*mu)
+hbarc = 197.3 #MeV fm
 
 def f(r): #form factor
-    return S*np.exp(-r**2/b**2)
+    return S/b*np.exp(-r**2/b**2)
 
 def sys(r,u,E):
     y,v,I = u
     dy = v
-    dv = g*(-E+m)*y-2/r*v+g*f(r)
-    dI = f(r)*r**4*y
+    dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+    dI = 12*np.pi*f(r)*r**4*y
     return dy,dv,dI
 
 def bc(ua, ub,E):
@@ -63,11 +64,17 @@ def bc(ua, ub,E):
     yb,vb,Ib = ub
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-r = np.logspace(-5,0,5000)*5
+rmax = 5*b
+rmin = 0.01*b
+base1 = np.exp(1)
+start = np.log(rmin)
+stop = np.log(rmax)
+r = np.logspace(start,stop,num=150*rmax,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
-res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-5)
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+#print(res.message,", E: ",res.p[0])
 
 def plots():
     fig, ax = plt.subplots()
@@ -77,39 +84,28 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
-phi = res.y.T[:,0]
 
-#Normalization of the final state
-intphi = 12*np.pi*np.trapz(r**2*phi**2, res.x,dx=0.001)
 V = 1
+intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
-
-phi2 = np.poly1d(np.polyfit(r,res.y.T[:,0],5))
-
-def phifunction(x):
-    func = phi2[0]+phi2[1]*x+phi2[2]*x**2+phi2[3]*x**3+phi2[4]*x**4+phi2[5]*x**5+phi[6]
-    return func
-
 alpha = 1/(137)
-gamma = np.linspace(m,1000,np.size(res.x))
-q = np.sqrt(2*mu*(gamma-m))
-phi = res.y.T[:,0]
+
+frontfactors = 16*np.pi*alpha*N**2*(mu/m)**2/(9)
+
+Egamma = np.linspace(m,500,np.size(res.y.T[:,0]))
+q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
 
 def Q(q):
-    B = abs(np.trapz(spherical_jn(0,q-m*r)*r**4*(phifunction(r)-phi2[0]),res.x,dx=0.001))**2
-    return B
+    M = np.trapz(spherical_jn(0,q*r)*res.y.T[:,0]*r**4,res.x,dx=0.001)
+    return abs(M)
 
-M = []
+N = []
 for i in q:
-    M.append(Q(i))
+    N.append(Q(i))
+U = np.array(N)
 
-omega = (q**2)/(2*mu)+m
-D = 16/(9)*np.pi*N**2*alpha*(mu/m)**2
-dsigmadomega = D*mu*q*omega*M
-plt.figure(figsize=(9,5.5));
+x = np.linspace(1,1500,750)
+F1 = lambda x: mp.coulombf(1,2,x)
+mp.plot([F1], [0,2])
 
-sns.lineplot(x=gamma/1000,y=dsigmadomega, linewidth=2.5);
-plt.xlabel(r"$E_\gamma$ [GeV]")
-plt.ylabel(r"$\frac{d\sigma}{d\Omega}$ [$\mu$b/sr]")
-plt.legend(r"$p\gamma$".split(),loc=0);
-plt.tight_layout()
+plt.plot(Egamma,abs(spherical_jn(0,q*r))**2)
