@@ -1,18 +1,13 @@
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-import scipy as sp
 from scipy.integrate import trapz
 from scipy.integrate import quad
 from scipy.optimize import root
-from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
 from pylab import plt, mpl
-from astropy import constants as const
-from astropy import units as u
-from astropy.units import si
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -46,8 +41,10 @@ S = 10    #MeV
 m = 139  #MeV
 mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
+M = m+mn
 g = (2*mu)
 hbarc = 197.3 #MeV fm
+alpha = 1/137
 
 def f(r): #form factor
     return S/b*np.exp(-r**2/b**2)
@@ -84,31 +81,31 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
+def diffcross(Egamma):
 
-V = 1
-intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
-N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
-alpha = 1/(137)
+    k = Egamma/(hbarc)
+    q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
+    s = q+mn/(M)*k
 
-frontfactors = 16*np.pi*alpha*N**2*(mu/m)**2/(9)
+    phi = res.y.T[:,0]
+    phiprime = res.y.T[:,1]
 
-Egamma = np.linspace(150,250,np.size(res.y.T[:,0]))
-q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
+    def F(i):
+        Integral = np.trapz(np.exp(-i*r)*phi+np.exp(-i*r)*r*phiprime,res.x,dx=0.001)
+        return Integral
 
-def Q(q):
-    M = np.trapz(spherical_jn(0,q*r)*res.y.T[:,0]*r**4,res.x,dx=0.001)
-    return abs(M)
+    frontfactors = alpha*np.sqrt(2)/(2*np.pi)*np.sqrt(Egamma/(m))*(mu/m)**(3/2)*1/k**2
+    theta = np.linspace(0,np.pi,np.size(res.x))
 
-N = []
-for i in q:
-    N.append(Q(i))
-U = np.array(N)
+    dsigmadOmega = frontfactors*(q**2-(k*q*np.cos(theta))**2/(k**2))*s**2*F(s)**2
 
-plt.figure(figsize=(9,5.5))
-plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
-plt.xlabel(r"$E_\gamma$ [MeV]")
-plt.ylabel(r"$\frac{d\sigma}{d\Omega}$")
-plt.tight_layout()
-dsigmadomega = frontfactors*mu*q/(hbarc)*U**2
-plt.plot(Egamma,4*np.pi*dsigmadomega,linewidth=3.5);
-#save_fig("theorypgamma")
+    return dsigmadOmega
+
+def radtodeg(x):
+    degree=(x*180)/np.pi
+    return degree
+
+plt.plot(radtodeg(theta),diffcross(230)*10e8);
+plt.plot(radtodeg(theta),diffcross(240)*10e8);
+plt.plot(radtodeg(theta),diffcross(260)*10e8);
+plt.plot(radtodeg(theta),diffcross(300)*10e8);
