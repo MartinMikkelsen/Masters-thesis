@@ -5,6 +5,7 @@ from scipy.integrate import trapz
 from scipy.integrate import quad
 from scipy.optimize import root
 from scipy.integrate import solve_bvp
+from scipy.special import spherical_jn
 import seaborn as sns
 import os
 from pylab import plt, mpl
@@ -36,9 +37,9 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b = 1     #fm
-S = 10    #MeV
-m = 139  #MeV
+b = 0.65    #fm
+S = 12    #MeV
+m = 135  #MeV
 mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
@@ -66,46 +67,39 @@ rmin = 0.01*b
 base1 = np.exp(1)
 start = np.log(rmin)
 stop = np.log(rmax)
-r = np.logspace(start,stop,num=150*rmax,base=np.exp(1))
+r = np.logspace(start,stop,num=5000,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
-#print(res.message,", E: ",res.p[0])
-
-def plots():
-    fig, ax = plt.subplots()
-    plt.plot(res.x,res.y.T,'-',linewidth=3.5);
-    plt.title("Numerical solution",size=15)
-    plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
-    plt.xlabel("r [fm]")
-    plt.show()
-
-def diffcross(Egamma):
-
-    k = Egamma/(hbarc)
-    q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
-    s = q+mn/(M)*k
-
-    phi = res.y.T[:,0]
-    phiprime = res.y.T[:,1]
-
-    def F(i):
-        Integral = np.trapz(np.exp(-i*r)*phi+np.exp(-i*r)*r*phiprime,res.x,dx=0.001)
-        return Integral
-
-    frontfactors = alpha*np.sqrt(2)/(2*np.pi)*np.sqrt(Egamma/(m))*(mu/m)**(3/2)*1/k**2
-    theta = np.linspace(0,np.pi,np.size(res.x))
-
-    dsigmadOmega = frontfactors*(q**2-(k*q*np.cos(theta))**2/(k**2))*s**2*F(s)**2
-
-    return dsigmadOmega
 
 def radtodeg(x):
     degree=(x*180)/np.pi
     return degree
 
-plt.plot(radtodeg(theta),diffcross(230)*10e8);
-plt.plot(radtodeg(theta),diffcross(240)*10e8);
-plt.plot(radtodeg(theta),diffcross(260)*10e8);
-plt.plot(radtodeg(theta),diffcross(300)*10e8);
+theta = np.linspace(0,np.pi,np.size(res.x))
+phi = res.y.T[:, 0]
+
+def F(s):
+    Integral = np.trapz(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
+    return abs(Integral)
+
+def dsigmadOmegaAngle(Egamma):
+    Eq = Egamma-m
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/hbarc
+    s = q+mn/M*k
+
+    frontfactors = 16/2*np.pi*np.sqrt(2)*np.sqrt(Eq/m)*(mu/m)**(3/2)
+
+    dsigmadOmega = frontfactors*1/k*(q**2-(k*q*np.cos(theta))**2/k**2)*F(s)**2
+    return dsigmadOmega
+
+plt.figure(figsize=(9,5.5));
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(240)*1e6)
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(260)*1e6)
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(280)*1e6)
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(300)*1e6)
+plt.xlabel(r"$\theta_{c.m}$ ");
+plt.ylabel(r"$d\sigma/d\Omega $ [$\mu$b/sr ]");
+#plt.legend(r"$(\gamma,\pi^+)$ $(\gamma,\pi^0)$".split(),loc=0,frameon=False);

@@ -94,6 +94,7 @@ plt.xlabel("r [fm]")
 rs = np.linspace(0,5,np.size(res.x))
 plt.tight_layout()
 #save_fig("Integralplot")
+plt.show()
 
 def rms_residuals():
     plt.figure()

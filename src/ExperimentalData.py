@@ -2,6 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from scipy.integrate import trapz
+from scipy.integrate import quad
+from scipy.optimize import root
+from scipy.integrate import solve_bvp
+from scipy.special import spherical_jn
+
 from pylab import plt, mpl
 
 mpl.rcParams['font.family'] = 'XCharter'
@@ -92,7 +98,6 @@ diffcrossFischer240Errormin = [np.nan,np.nan,0.27,np.nan,0.18,np.nan,0.15,np.nan
 diffcrossFischer240Errormax = diffcrossFischer240Errormin
 diffcrossFischer240Error = [diffcrossFischer240Errormin, diffcrossFischer240Errormax]
 
-
 diffcrossFischer250 = [6.40,np.nan,8.70,np.nan,10.15,np.nan,9.09,np.nan,9.01,np.nan,8.72,np.nan,8.52,np.nan,7.72,np.nan,np.nan,np.nan,np.nan]
 diffcrossFischer250Errormin = [0.52,np.nan,0.41,np.nan,0.29,np.nan,0.24,np.nan,0.22,np.nan,0.26,np.nan,0.19,np.nan,0.19,np.nan,np.nan,np.nan,np.nan]
 diffcrossFischer250Errormax = diffcrossFischer250Errormin
@@ -127,7 +132,72 @@ plt.errorbar(angleFischer, diffcrossFischer230, yerr=diffcrossFischer230Error, f
 plt.errorbar(angleFischer, diffcrossFischer240, yerr=diffcrossFischer240Error, fmt='o');
 plt.errorbar(angleFischer, diffcrossFischer260, yerr=diffcrossFischer260Error, fmt='o');
 plt.errorbar(angleFischer2, diffcrossFischer300, yerr=diffcrossFischer300Error, fmt='o');
+
 plt.legend(r"$E_\gamma=230\,MeV$ $E_\gamma=240\,MeV$ $E_\gamma=260\,MeV$ $E\gamma=300\,MeV$".split(),loc=0,frameon=False);
 plt.xlabel(r"$\theta_{c.m}^\pi$");
 plt.ylabel(r"$\frac{\mu b}{sr}$");
-save_fig("Fischerdata")
+
+b = 0.65    #fm
+S = 12    #MeV
+m = 135  #MeV
+mn = 939  #MeV
+mu = m*mn/(mn+m) #Reduced mass
+M = m+mn
+g = (2*mu)
+hbarc = 197.3 #MeV fm
+alpha = 1/137
+
+def f(r): #form factor
+    return S/b*np.exp(-r**2/b**2)
+
+def sys(r,u,E):
+    y,v,I = u
+    dy = v
+    dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+    dI = 12*np.pi*f(r)*r**4*y
+    return dy,dv,dI
+
+def bc(ua, ub,E):
+    ya,va,Ia = ua
+    yb,vb,Ib = ub
+    return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+
+rmax = 5*b
+rmin = 0.01*b
+base1 = np.exp(1)
+start = np.log(rmin)
+stop = np.log(rmax)
+r = np.logspace(start,stop,num=5000,base=np.exp(1))
+E = -2
+
+u = [0*r,0*r,E*r/r[-1]]
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+
+def radtodeg(x):
+    degree=(x*180)/np.pi
+    return degree
+
+theta = np.linspace(0,np.pi,np.size(res.x))
+phi = res.y.T[:, 0]
+
+def F(s):
+    Integral = np.trapz(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
+    return abs(Integral)
+
+def dsigmadOmegaAngle(Egamma):
+    Eq = Egamma-m
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/hbarc
+    s = q+mn/M*k
+
+    frontfactors = 16*np.pi*np.sqrt(2)*np.sqrt(Eq/m)*(mu/m)**(3/2)
+
+    dsigmadOmega = frontfactors*1/k*(q**2-(k*q*np.cos(theta))**2/k**2)*F(s)**2
+    return dsigmadOmega
+
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(230)*1e6)
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(240)*1e6)
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(260)*1e6)
+plt.plot(radtodeg(theta),dsigmadOmegaAngle(300)*1e6)
+plt.xlabel(r"$\theta_{c.m}$ ");
+plt.ylabel(r"$d\sigma/d\Omega $ [$\mu$b/sr ]");

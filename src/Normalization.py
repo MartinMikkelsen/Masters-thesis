@@ -10,9 +10,7 @@ from scipy.integrate import solve_bvp
 import seaborn as sns
 import os
 from pylab import plt, mpl
-from astropy import constants as const
-from astropy import units as u
-from astropy.units import si
+
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -42,13 +40,13 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 b = 1     #fm
-S = 10    #MeV
-m = 139  #MeV
+S = 15    #MeV
+m = 135  #MeV
 mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = (2*mu)
 hbarc = 197.3 #MeV fm
-
+M = m+mn
 def f(r): #form factor
     return S/b*np.exp(-r**2/b**2)
 
@@ -84,31 +82,58 @@ def plots():
     plt.xlabel("r [fm]")
     plt.show()
 
-
 V = 1
 intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
 N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
 alpha = 1/(137)
 
-frontfactors = 16*np.pi*alpha*N**2*(mu/m)**2/(9)
+frontfactors = 16/18*np.pi*alpha*N**2*np.sqrt(2)
+phi = res.y.T[:, 0]
 
-Egamma = np.linspace(150,250,np.size(res.y.T[:,0]))
-q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
+Egamma = np.linspace(m,160,np.size(res.y.T[:,0]))
+Eq = Egamma-m
+k = (Eq+m)/(hbarc)
+q = np.sqrt(2*mu*Eq)/hbarc
 
-def Q(q):
-    M = np.trapz(spherical_jn(0,q*r)*res.y.T[:,0]*r**4,res.x,dx=0.001)
+def Q(Eq):
+    M = np.trapz(spherical_jn(0,q*r)*phi*r**4,r,dx=0.001)
     return abs(M)
 
 N = []
-for i in q:
+for i in Eq:
     N.append(Q(i))
-U = np.array(N)
+U = sum(np.array(N))
 
 plt.figure(figsize=(9,5.5))
+plt.title("$S=%s$ MeV, $b=%s$ fm" %(S,b), x=0.5, y=0.8)
 plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
 plt.xlabel(r"$E_\gamma$ [MeV]")
-plt.ylabel(r"$\frac{d\sigma}{d\Omega}$")
+plt.ylabel(r"$\sigma$")
 plt.tight_layout()
-dsigmadomega = frontfactors*mu*q/(hbarc)*U**2
+
+dsigmadomega = frontfactors*np.sqrt(Eq/m)*(Eq+m)/(hbarc)**3*mu**2*U**2
 plt.plot(Egamma,4*np.pi*dsigmadomega,linewidth=3.5);
-#save_fig("theorypgamma")
+plt.show()
+#save_fig("theorypgamma2")
+
+#Now considering the exact matrix element
+theta = 0
+
+def F(s):
+    Integral = np.trapz(spherical_jn(1, s*r)*phi*r**3, r, dx=0.001)
+    return abs(Integral)
+
+Eq = Egamma-m
+k = Egamma/hbarc
+q = np.sqrt(2*mu*Eq)/hbarc
+s = q+mn/M*k
+
+K = []
+for i in s:
+    K.append(F(i))
+B = sum(np.array(K))
+
+def dsigmadOmegaAngle(Egamma):
+    frontfactors =  16/2*np.pi*np.sqrt(2)*alpha
+    dsigmadOmega = frontfactors*np.sqrt(Eq/m)*(mu/m)**(3/2)*1/k*(q**2-(k*q)**2/k**2)*B**2
+    return dsigmadOmega
