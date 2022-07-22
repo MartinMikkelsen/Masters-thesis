@@ -37,8 +37,8 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b = 0.65    #fm
-S = 12    #MeV
+b = 2    #fm
+S = 10   #MeV
 m = 135  #MeV
 mn = 939  #MeV
 mu = m*mn/(mn+m) #Reduced mass
@@ -77,29 +77,47 @@ def radtodeg(x):
     degree=(x*180)/np.pi
     return degree
 
-theta = np.linspace(0,np.pi,np.size(res.x))
-phi = res.y.T[:, 0]
+phi = res.y.T[:,0]
 
 def F(s):
     Integral = np.trapz(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
-    return abs(Integral)
+    return Integral
 
-def dsigmadOmegaAngle(Egamma):
+def dsigmadOmegaAngle(Egamma,theta):
     Eq = Egamma-m
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/hbarc
     s = q+mn/M*k
 
-    frontfactors = 16/2*np.pi*np.sqrt(2)*np.sqrt(Eq/m)*(mu/m)**(3/2)
+    frontfactors = alpha*np.sqrt(2)/(2*np.pi)*np.sqrt(Eq/mn)*(mu/mn)**(3/2)
 
     dsigmadOmega = frontfactors*1/k*(q**2-(k*q*np.cos(theta))**2/k**2)*F(s)**2
     return dsigmadOmega
 
-plt.figure(figsize=(9,5.5));
-plt.plot(radtodeg(theta),dsigmadOmegaAngle(240)*1e6)
-plt.plot(radtodeg(theta),dsigmadOmegaAngle(260)*1e6)
-plt.plot(radtodeg(theta),dsigmadOmegaAngle(280)*1e6)
-plt.plot(radtodeg(theta),dsigmadOmegaAngle(300)*1e6)
-plt.xlabel(r"$\theta_{c.m}$ ");
-plt.ylabel(r"$d\sigma/d\Omega $ [$\mu$b/sr ]");
-#plt.legend(r"$(\gamma,\pi^+)$ $(\gamma,\pi^0)$".split(),loc=0,frameon=False);
+def sigma(Egamma):
+    Eq = Egamma-m
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/hbarc
+    s = q+mn/M*k
+
+    frontfactors = alpha*np.sqrt(2)/(2*np.pi)*np.sqrt(Eq/mn)*(mu/mn)**(3/2)
+
+    dsigmadOmega = frontfactors*1/k*(q**2-(k*q*np.cos(np.pi/2))**2/k**2)*F(s)**2
+    return dsigmadOmega
+
+gammaFuchs = [145.29, 146.11, 146.99, 147.82, 148.97, 149.83, 150.86, 151.69, 152.53, 153.37]
+sigmaFuchs = [0.056, 0.112, 0.158, 0.202, 0.284, 0.390, 0.462, 0.589, 0.676, 0.801]
+errorFuchsmin = [0.009, 0.011, 0.009, 0.014, 0.016, 0.017, 0.019, 0.026, 0.024, 0.027]
+errorFuchsmax = errorFuchsmin
+errorFuchs = [errorFuchsmin, errorFuchsmax]
+
+plt.scatter(gammaFuchs,sigmaFuchs);
+plt.errorbar(gammaFuchs,sigmaFuchs,yerr=errorFuchs,fmt="o");
+plt.xlabel(r"$E_\gamma$ [GeV]")
+plt.ylabel(r"$\sigma$ [mb]")
+
+theta = np.linspace(0,np.pi,np.size(res.x))
+Photonenergy = np.linspace(145,153,np.size(res.x))
+#plt.plot(Photonenergy,sigma(Photonenergy)*4*np.pi*10e6)
+plt.plot(Photonenergy,dsigmadOmegaAngle(Photonenergy,np.pi/2)*4*np.pi*10e6);
+#plt.plot(theta,dsigmadOmegaAngle(146.8,theta)*10e8);

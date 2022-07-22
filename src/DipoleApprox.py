@@ -152,14 +152,17 @@ def DipolePi0(b,S):
         N.append(Q(i))
     U = sum(np.array(N))
 
+
     dsigmadomega = frontfactors*np.sqrt(Eq/m)*(Eq+m)/(hbarc)**3*mu**2*U**2
     return dsigmadomega
 
-Egamma1 = np.linspace(139,150,np.size(res.y.T[:,0]))
-Egamma2 = np.linspace(135,150,np.size(res.y.T[:,0]))
 
 b = 0.65
 S = 12
+
+Egamma1 = np.linspace(139,150,np.size(DipolePiPlus(b,S)))
+Egamma2 = np.linspace(135,150,np.size(DipolePi0(b,S)))
+
 plt.figure(figsize=(9,5.5))
 plt.title("$S=%s$ MeV, $b=%s$ fm" %(S,b), x=0.5, y=0.8)
 plt.xlabel(r"$E_\gamma$ [MeV]")
@@ -182,4 +185,5 @@ plt.ylabel(r"$\sigma$ [$\mu$b]");
 plt.axvline(x=135+10, color='r', linestyle='--')
 plt.axvline(x=139+10, color='r', linestyle='--')
 plt.legend(r"$(\gamma,\pi^+)$ $(\gamma,\pi^0)$".split(),loc=0,frameon=False);
-save_fig("theorypgamma2")
+#save_fig("theorypgamma2")
+plt.show()
