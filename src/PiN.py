@@ -42,8 +42,8 @@ def save_fig(fig_id):
 
 b = 1     #fm
 S = 10    #MeV
-m = 139  #MeV
-mn = 939  #MeV
+m = 135  #MeV
+mn = 938.927  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = (2*mu)
 hbarc = 197.3 #MeV fm
@@ -101,3 +101,6 @@ def rms_residuals():
     plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")
+
+
+print(0.6267579320433943-0.6187727489378736)
