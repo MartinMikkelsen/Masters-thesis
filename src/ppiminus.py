@@ -1,16 +1,21 @@
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-import scipy as sp
+from scipy.integrate import simpson
 from scipy.integrate import trapz
-from scipy.integrate import quad
 from scipy.optimize import root
 from scipy.special import spherical_jn
+from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
+from scipy import fft
+from sympy import hankel_transform, inverse_hankel_transform
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+from pyhank import HankelTransform
 import seaborn as sns
 import os
 from pylab import plt, mpl
-import mpmath as mp
+
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -33,19 +38,19 @@ if not os.path.exists(DATA_ID):
 def image_path(fig_id):
     return os.path.join(FIGURE_ID, fig_id)
 
+
 def data_path(dat_id):
     return os.path.join(DATA_ID, dat_id)
 
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-
-
 b = 1     #fm
 S = 10    #MeV
-m = 139  #MeV
-mn = 939  #MeV
+m = 135  #MeV
+mn = 938.927  #MeV
 mu = m*mn/(mn+m) #Reduced mass
+M = m+mn
 g = (2*mu)
 hbarc = 197.3 #MeV fm
 
@@ -65,47 +70,42 @@ def bc(ua, ub,E):
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
 rmax = 5*b
-rmin = 0.01*b
-base1 = np.exp(1)
-start = np.log(rmin)
-stop = np.log(rmax)
-r = np.logspace(start,stop,num=150*rmax,base=np.exp(1))
+r = np.linspace(0.01*b,1.5*rmax,num=1000)
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
-res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-6,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
-def plots():
-    fig, ax = plt.subplots()
-    plt.plot(res.x,res.y.T,'-',linewidth=3.5);
-    plt.title("Numerical solution",size=15)
-    plt.legend(r"$\phi$ $\phi'$ $I$".split(),loc=0);
+
+def plot():
+    plt.figure(figsize=(9,5.5))
+    sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
+    sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
+    sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
+    plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
+    plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
     plt.xlabel("r [fm]")
+    rs = np.linspace(0,5,np.size(res.x))
+    plt.tight_layout()
+    #save_fig("Integralplot")
     plt.show()
 
+phi = np.size(res.y.T[0:1000,0])
 
-V = 1
-intphi = 3*V*np.trapz(res.y.T[:,0]**2*r**2, res.x,dx=0.001)
-N = 1/np.sqrt(V)*1/(np.sqrt(1+intphi))
-alpha = 1/(137)
+Egamma = np.linspace(145,155,1000)
+Eq = Egamma-m
+k = Egamma/hbarc
+q = np.sqrt(2*mu*Eq)/hbarc
+s = q+mn/M*k
 
-frontfactors = 16*np.pi*alpha*N**2*(mu/m)**2/(9)
+def F(s):
+    Integral = np.trapz(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
+    return abs(Integral)
 
-Egamma = np.linspace(m,500,np.size(res.y.T[:,0]))
-q = np.sqrt(2*mu*(Egamma-m))/(hbarc)
+def G(s):
+    Integral = simpson(spherical_jn(1,s*r)*phi*r**3,r, dx=0.001)
+    return abs(Integral)
 
-def Q(q):
-    M = np.trapz(spherical_jn(0,q*r)*res.y.T[:,0]*r**4,res.x,dx=0.001)
-    return abs(M)
-
-N = []
-for i in q:
-    N.append(Q(i))
-U = np.array(N)
-
-x = np.linspace(1,1500,750)
-F1 = lambda x: mp.coulombf(1,2,x)
-mp.plot([F1], [0,2])
-
-plt.plot(Egamma,abs(spherical_jn(0,q*r))**2)
+print(G(s))
+print(F(s))

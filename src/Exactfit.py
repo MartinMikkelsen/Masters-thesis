@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import trapz
 from scipy.integrate import quad
 from scipy.optimize import root
+from scipy.integrate import simpson
 from scipy.integrate import solve_bvp
 from scipy.special import spherical_jn
 from scipy.optimize import curve_fit
@@ -93,9 +94,10 @@ def F(s,S,b):
     u = [0*r,0*r,E*r/r[-1]]
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
-    phi = np.array(res.y.T[:,0])
-    r = np.logspace(start,stop,num=phi.shape[0],base=np.exp(1))
-    Integral = np.trapz(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
+    phi = np.array(res.y.T[0:1000,0])
+    r = np.linspace(0.01*b,1.5*rmax,num=1000)
+    Integral = simpson(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
+
     return Integral
 
 
@@ -111,7 +113,7 @@ plt.errorbar(gammaFuchs,sigmaFuchs,yerr=errorFuchs,fmt="o");
 plt.xlabel(r"$E_\gamma$ [GeV]")
 plt.ylabel(r"$\sigma$ [mb]")
 
-initial = [3,2]
+initial = [10,2]
 
 popt, cov = curve_fit(sigma, gammaFuchs, sigmaFuchs, initial, errorFuchsmax)
 print(popt)

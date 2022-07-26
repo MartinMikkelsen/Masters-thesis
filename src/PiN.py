@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt
 from scipy.integrate import trapz
 from scipy.optimize import root
 from scipy.special import spherical_jn
+from scipy.special import spherical_jn
 from scipy.integrate import solve_bvp
+from scipy import fft
+from sympy import hankel_transform, inverse_hankel_transform
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
@@ -45,6 +48,7 @@ S = 10    #MeV
 m = 135  #MeV
 mn = 938.927  #MeV
 mu = m*mn/(mn+m) #Reduced mass
+M = m+mn
 g = (2*mu)
 hbarc = 197.3 #MeV fm
 
@@ -68,12 +72,12 @@ rmin = 0.01*b
 base1 = np.exp(1)
 start = np.log(rmin)
 stop = np.log(rmax)
-r = np.logspace(start,stop,num=20*rmax,base=np.exp(1))
+r = np.logspace(start,stop,num=2*rmax,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
-print(res.message,", E: ",res.p[0])
+#print(res.message,", E: ",res.p[0])
 
 def inplot():
     axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
@@ -83,18 +87,18 @@ def inplot():
     mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
     plt.draw()
 
-
-plt.figure(figsize=(9,5.5))
-sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
-sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
-sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
-plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
-plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
-plt.xlabel("r [fm]")
-rs = np.linspace(0,5,np.size(res.x))
-plt.tight_layout()
-#save_fig("Integralplot")
-plt.show()
+def plot():
+    plt.figure(figsize=(9,5.5))
+    sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
+    sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
+    sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
+    plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
+    plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
+    plt.xlabel("r [fm]")
+    rs = np.linspace(0,5,np.size(res.x))
+    plt.tight_layout()
+    #save_fig("Integralplot")
+    plt.show()
 
 def rms_residuals():
     plt.figure()
@@ -102,5 +106,4 @@ def rms_residuals():
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")
 
-
-print(0.6267579320433943-0.6187727489378736)
+plot()
