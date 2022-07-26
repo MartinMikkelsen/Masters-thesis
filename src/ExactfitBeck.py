@@ -57,7 +57,6 @@ def sigma(Egamma,S,b):
     N = []
     for i in s:
         N.append(F(i,S,b))
-
     U = sum(np.array(N))
 
     frontfactors = alpha*np.sqrt(2)/(2*np.pi)*np.sqrt(Eq/mn)*(mu/mn)**(3/2)
@@ -95,32 +94,30 @@ def F(s,S,b):
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
     phi = np.array(res.y.T[0:1000,0])
-    r = np.linspace(0.01*b,1.5*rmax,num=1000)
     Integral = simpson(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
 
     return Integral
 
 plt.figure(figsize=(9,5.5))
-gammaFuchs = np.array([145.29, 146.11, 146.99, 147.82, 148.97, 149.83, 150.86, 151.69, 152.53, 153.37])
-sigmaFuchs = np.array([0.056, 0.112, 0.158, 0.202, 0.284, 0.390, 0.462, 0.589, 0.676, 0.801])
-errorFuchsmin = np.array([0.009, 0.011, 0.009, 0.014, 0.016, 0.017, 0.019, 0.026, 0.024, 0.027])
-errorFuchsmax = errorFuchsmin
-errorFuchs = [errorFuchsmin, errorFuchsmax]
-
-plt.scatter(gammaFuchs,sigmaFuchs);
-plt.errorbar(gammaFuchs,sigmaFuchs,yerr=errorFuchs,fmt="o");
-plt.xlabel(r"$E_\gamma$ [GeV]")
-plt.ylabel(r"$\sigma$ [mb]")
+gammaBeck = [144.63155397390273, 145.18244365361804, 145.73333333333332, 146.24341637010676, 146.77390272835112, 147.34519572953735, 147.87568208778174, 148.42657176749702, 148.95705812574138, 149.5079478054567, 150.058837485172, 150.6097271648873, 151.1606168446026, 151.73190984578883, 152.28279952550415, 152.85409252669038, 153.4253855278766, 153.99667852906285, 154.5679715302491, 155.15966785290627, 155.79217081850533]
+sigmaBeck = [0.06203007518796992, 0.10432330827067668, 0.14661654135338345, 0.1607142857142857, 0.23966165413533833, 0.2706766917293233, 0.30451127819548873, 0.35526315789473684, 0.40037593984962405, 0.5103383458646616, 0.5328947368421052, 0.6174812030075187, 0.6513157894736842, 0.7133458646616541, 0.7894736842105263, 0.8853383458646616, 1.00093984962406, 1.1165413533834585, 1.206766917293233, 1.401315789473684, 1.5310150375939848]
+errorminPointBecks = [0.06203007518796992, 0.10432330827067668, 0.14661654135338345, 0.1607142857142857, 0.21146616541353383, 0.23684210526315788, 0.2706766917293233, 0.3157894736842105, 0.3580827067669173, 0.4595864661654135, 0.47932330827067665, 0.5582706766917293, 0.5921052631578947, 0.6484962406015037, 0.724624060150376, 0.8120300751879699, 0.9248120300751879, 0.9924812030075187, 1.1137218045112782, 1.2998120300751879, 1.4210526315789473]
+crossErrormin = np.subtract(sigmaBeck,errorminPointBecks)
+crossErrormaxBecks = crossErrormin
+sigmaerrorBecks = [crossErrormin, crossErrormaxBecks]
+plt.scatter(gammaBeck,sigmaBeck);
+plt.errorbar(gammaBeck,sigmaBeck,yerr=sigmaerrorBecks,fmt="o");
+plt.xlabel(r"$E_\gamma$ [MeV]");
+plt.ylabel(r"$\sigma$ [$\mu$ b]");
 
 initial = [12,2]
 
-popt, cov = curve_fit(sigma, gammaFuchs, sigmaFuchs, initial, errorFuchsmax)
+popt, cov = curve_fit(sigma, gammaBeck, sigmaBeck, initial, crossErrormin)
 print(popt)
 plt.title("$S=%0.2f$ MeV, $b=%0.2f$ fm" %(popt[0],popt[1]), x=0.5, y=0.8)
 plt.xlabel(r"$E_\gamma$ [MeV]")
 plt.ylabel(r"$\sigma$")
 plt.tight_layout()
-Photonenergy = np.linspace(gammaFuchs[0],gammaFuchs[9],1000)
+Photonenergy = np.linspace(gammaBeck[0],155.79217081850533,1000)
 plt.plot(Photonenergy,sigma(Photonenergy,popt[0],popt[1]))
-#save_fig("fit")
 plt.show()
