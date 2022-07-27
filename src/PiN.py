@@ -45,8 +45,8 @@ def save_fig(fig_id):
 
 b = 1     #fm
 S = 10    #MeV
-m = 135  #MeV
-mn = 938.927  #MeV
+m = 135.57  #MeV
+mn = 938.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
 g = (2*mu)
@@ -79,14 +79,6 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
-def inplot():
-    axins = zoomed_inset_axes(ax, 2, loc=4, bbox_to_anchor = [375, 90])
-    plt.plot(res.x[110:145],res.y.T[110:145,(0,1)],linewidth=2.5)
-    plt.xticks(visible=False)
-    plt.yticks(visible=False)
-    mark_inset(ax, axins, loc1=2, loc2=1, fc="none",ec="0.5")
-    plt.draw()
-
 def plot():
     plt.figure(figsize=(9,5.5))
     sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
@@ -97,7 +89,6 @@ def plot():
     plt.xlabel("r [fm]")
     rs = np.linspace(0,5,np.size(res.x))
     plt.tight_layout()
-    #save_fig("Integralplot")
     plt.show()
 
 def rms_residuals():
@@ -105,3 +96,5 @@ def rms_residuals():
     plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
     plt.grid(); plt.legend(r"RMS".split(),loc=0);
     save_fig("rms_residuals")
+
+plot()

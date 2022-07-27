@@ -54,17 +54,11 @@ def sigma(Egamma,S,b):
     q = np.sqrt(2*mu*Eq)/hbarc
     s = q+mn/M*k
 
-    N = []
-    for i in s:
-        N.append(F(i,S,b))
+    frontfactors = np.sqrt(2)*8*np.pi**3*alpha*(mu/mn)**(3/2)
 
-    U = sum(np.array(N))
+    dsigmadOmega = frontfactors*np.sqrt(Eq/mn)*(q**2/k)*F(s,S,b)**2
 
-    frontfactors = alpha*np.sqrt(2)/(2*np.pi)*np.sqrt(Eq/mn)*(mu/mn)**(3/2)
-
-    dsigmadOmega = frontfactors*(4*np.pi)**2*1/k*(q**2-(k*q*np.cos(np.pi/2))**2/k**2)*U**2
-
-    return 4*np.pi*dsigmadOmega
+    return dsigmadOmega
 
 def F(s,S,b):
 
@@ -95,10 +89,16 @@ def F(s,S,b):
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
     phi = np.array(res.y.T[0:1000,0])
-    r = np.linspace(0.01*b,1.5*rmax,num=1000)
-    Integral = simpson(spherical_jn(1,s*r)*phi*r**3, r, dx=0.001)
 
-    return Integral
+    Integral = trapz(spherical_jn(1,s*r)*phi*r**3, x=r, dx=0.001)
+
+    N = []
+    for i in s:
+        N.append(Integral)
+
+    U = np.array(N)
+
+    return U
 
 plt.figure(figsize=(9,5.5))
 gammaFuchs = np.array([145.29, 146.11, 146.99, 147.82, 148.97, 149.83, 150.86, 151.69, 152.53, 153.37])
@@ -106,21 +106,23 @@ sigmaFuchs = np.array([0.056, 0.112, 0.158, 0.202, 0.284, 0.390, 0.462, 0.589, 0
 errorFuchsmin = np.array([0.009, 0.011, 0.009, 0.014, 0.016, 0.017, 0.019, 0.026, 0.024, 0.027])
 errorFuchsmax = errorFuchsmin
 errorFuchs = [errorFuchsmin, errorFuchsmax]
-
 plt.scatter(gammaFuchs,sigmaFuchs);
 plt.errorbar(gammaFuchs,sigmaFuchs,yerr=errorFuchs,fmt="o");
 plt.xlabel(r"$E_\gamma$ [GeV]")
 plt.ylabel(r"$\sigma$ [mb]")
 
-initial = [12,2]
+initial = [2.1,2]
 
-popt, cov = curve_fit(sigma, gammaFuchs, sigmaFuchs, initial, errorFuchsmax)
-print(popt)
-plt.title("$S=%0.2f$ MeV, $b=%0.2f$ fm" %(popt[0],popt[1]), x=0.5, y=0.8)
-plt.xlabel(r"$E_\gamma$ [MeV]")
-plt.ylabel(r"$\sigma$")
-plt.tight_layout()
 Photonenergy = np.linspace(gammaFuchs[0],gammaFuchs[9],1000)
-plt.plot(Photonenergy,sigma(Photonenergy,popt[0],popt[1]))
-#save_fig("fit")
-plt.show()
+plt.plot(Photonenergy,sigma(Photonenergy,3.3,2.2)*10e5)
+
+# popt, cov = curve_fit(sigma, gammaFuchs, sigmaFuchs, initial, errorFuchsmax)
+# print(popt)
+# plt.title("$S=%0.2f$ MeV, $b=%0.2f$ fm" %(popt[0],popt[1]), x=0.5, y=0.8)
+# plt.xlabel(r"$E_\gamma$ [MeV]")
+# plt.ylabel(r"$\sigma$")
+# plt.tight_layout()
+# Photonenergy = np.linspace(gammaFuchs[0],gammaFuchs[9],1000)
+# plt.plot(Photonenergy,sigma(Photonenergy,2.1,2))
+# #save_fig("fit")
+# plt.show()
