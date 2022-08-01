@@ -1,19 +1,16 @@
 import numpy as np
-from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from scipy.integrate import trapz
-from scipy.optimize import root
 from scipy.special import spherical_jn
-from scipy.special import spherical_jn
+from scipy.special import jv
+from hankel import HankelTransform     # Import the basic class
 from scipy.integrate import solve_bvp
+from scipy import integrate
 from scipy import fft
 from sympy import hankel_transform, inverse_hankel_transform
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
 import os
 from pylab import plt, mpl
-
+from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -47,6 +44,7 @@ b = 1     #fm
 S = 10    #MeV
 m = 135.57  #MeV
 mn = 938.272  #MeV
+mp = 938.927  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
 g = (2*mu)
@@ -72,29 +70,44 @@ rmin = 0.01*b
 base1 = np.exp(1)
 start = np.log(rmin)
 stop = np.log(rmax)
-r = np.logspace(start,stop,num=2*1000,base=np.exp(1))
+r = np.logspace(start,stop,num=1000,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
-def plot():
-    plt.figure(figsize=(9,5.5))
-    sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
-    sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
-    sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
-    plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
-    plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
-    plt.xlabel("r [fm]")
-    rs = np.linspace(0,5,np.size(res.x))
-    plt.tight_layout()
-    plt.show()
+Egamma = np.linspace(145,155,1000)
+Eq = Egamma-m
+k = Egamma/hbarc
+q = np.sqrt(2*mu*Eq)/hbarc
+s = q+mp/M*k
 
-def rms_residuals():
-    plt.figure()
-    plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
-    plt.grid(); plt.legend(r"RMS".split(),loc=0);
-    save_fig("rms_residuals")
+phi = res.y.T[:1000,0]
 
-plot()
+# j_l(z) = √\frac{π}{2z} J_{l+1/2}(z)
+
+func = Spline(r,abs(phi*r**2*np.sqrt(np.pi/(2*s*r))))
+funtest =  Spline(r,phi*r**3*spherical_jn(1,s*r))
+
+int = integrate.quad(funtest,0,6)
+print(int)
+
+plt.plot(r,abs(r**3*phi*spherical_jn(1,s*r)))
+
+def Hankel(s):
+    Integral = integrate.quad(func(s),0,10)
+    return Integral
+
+ht = HankelTransform(
+    nu= 3/2,     # The order of the bessel function
+    N = 120,     # Number of steps in the integration
+    h = 0.03     # Proxy for "size" of steps in integration
+)
+
+plt.figure(figsize=(9,5.5))
+F = ht.transform(func,s,ret_err=False) # Return the transform of f at s.
+plt.plot(s,F)
+plt.ylabel(r"$F_{3/2}(s)$", fontsize=15)
+plt.xlabel(r"$s$", fontsize=15)
+plt.show()
