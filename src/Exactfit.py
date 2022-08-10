@@ -57,9 +57,10 @@ def sigma(Egamma,S,b):
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/hbarc
     s = q+mp/M*k
+
     frontfactors = np.sqrt(2)*8*np.pi**3*alpha*(mu/m)**(3/2)
 
-    CrossSection = frontfactors*np.sqrt(Eq/m)*(q**2/k)*F(s,S,b)**2
+    CrossSection = frontfactors*np.sqrt(Eq/m)*(q**2/k)*F(s,S,b)
 
     return CrossSection*10e6
 
@@ -85,26 +86,26 @@ def F(s,S,b):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r = np.logspace(start,stop,num=10,base=np.exp(1))
+    r = np.logspace(start,stop,num=3000,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,E*r/r[-1]]
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
-    phi = res.y.T[:10,0]
+    phi = res.y.T[:3000,0]
 
     # j_l(z) = √\frac{π}{2z} J_{l+1/2}(z)
 
-    func = Spline(r,phi*r**2*np.sqrt(np.pi/(2*s*r)))
+    def F(s):
+        integral = quad(Spline(r,phi*r**3*spherical_jn(1,s*r)),0,5)
+        return integral[0]
 
-    ht = HankelTransform(
-        nu= 3/2,     # The order of the bessel function
-        N = 120,     # Number of steps in the integration
-        h = 0.03     # Proxy for "size" of steps in integration
-    )
-    Fs = ht.transform(func,s,ret_err=False) # Return the transform of f at s.
+    N = []
+    for i in s:
+        N.append(F(i))
+    U = np.array(N)
 
-    return Fs
+    return U**2
 
 plt.figure(figsize=(9,5.5))
 
@@ -117,14 +118,14 @@ plt.errorbar(gammaFuchs,sigmaFuchs,yerr=errorFuchs,fmt="o");
 plt.xlabel(r"$E_\gamma$ [MeV]")
 plt.ylabel(r"$\sigma$ [$\mu$b]")
 
-initial = [12.25,1.456]
+initial = [5,2]
 
 popt, cov = curve_fit(sigma, gammaFuchs, sigmaFuchs, initial, errorFuchsmax)
 print(popt)
+print(np.sqrt(np.diag(cov)))
 plt.title("$S=%0.2f$ MeV, $b=%0.2f$ fm" %(popt[0],popt[1]), x=0.5, y=0.8)
 plt.xlabel(r"$E_\gamma$ [MeV]")
-plt.ylabel(r"$\sigma$")
-plt.tight_layout()
+plt.ylabel(r"$\sigma$ [$\mu$b]")
+plt.tight_layout();
 Photonenergy = np.linspace(gammaFuchs[0],gammaFuchs[9],10)
-plt.plot(Photonenergy,sigma(Photonenergy,popt[0],popt[1]))
-#save_fig("fit")
+plt.plot(Photonenergy,sigma(Photonenergy,popt[0],popt[1]));

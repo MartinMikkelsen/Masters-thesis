@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.special import spherical_jn
+import scipy.special as scipy_bessel
 from scipy.special import jv
-from hankel import HankelTransform     # Import the basic class
+from pyhank import qdht, iqdht, HankelTransform
 from scipy.integrate import solve_bvp
 from scipy import integrate
 from scipy import fft
@@ -83,31 +84,13 @@ k = Egamma/hbarc
 q = np.sqrt(2*mu*Eq)/hbarc
 s = q+mp/M*k
 
-phi = res.y.T[:1000,0]
+phi = res.y.T[0:1000,0]
 
-# j_l(z) = √\frac{π}{2z} J_{l+1/2}(z)
 
-func = Spline(r,abs(phi*r**2*np.sqrt(np.pi/(2*s*r))))
-funtest =  Spline(r,phi*r**3*spherical_jn(1,s*r))
+func = Spline(r,phi*r**2*1/np.sqrt(np.pi/(2*s*r)))
 
-int = integrate.quad(funtest,0,6)
-print(int)
+plt.plot(r,func(r))
 
-plt.plot(r,abs(r**3*phi*spherical_jn(1,s*r)))
-
-def Hankel(s):
-    Integral = integrate.quad(func(s),0,10)
-    return Integral
-
-ht = HankelTransform(
-    nu= 3/2,     # The order of the bessel function
-    N = 120,     # Number of steps in the integration
-    h = 0.03     # Proxy for "size" of steps in integration
-)
-
-plt.figure(figsize=(9,5.5))
-F = ht.transform(func,s,ret_err=False) # Return the transform of f at s.
-plt.plot(s,F)
-plt.ylabel(r"$F_{3/2}(s)$", fontsize=15)
-plt.xlabel(r"$s$", fontsize=15)
-plt.show()
+def Hankel(fnc,s):
+    integral = integrate.quad(fnc,0,10)
+    return integral
