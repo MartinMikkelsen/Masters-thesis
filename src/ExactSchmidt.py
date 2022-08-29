@@ -49,24 +49,47 @@ mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
 g = 2*mu
 hbarc = 197.3 #MeV fm
-alpha = 1/137
+alpha = 1/137.03
+
+def s_energy(Egamma):
+    theta = np.linspace(0,np.pi,22)
+    Eq = Egamma-0.5*(Egamma**2/(mp+m))
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/hbarc
+    s = (q**2+(mp*k/M)**2+2*q*k*np.cos(theta))**0.5
+    return s,q,k,Eq
 
 def sigma(Egamma,S,b):
 
-    Eq = Egamma-m
-    k = Egamma/hbarc
-    q = np.sqrt(2*mu*Eq)/hbarc
-    s = q+mp/M*k
+    s = s_energy(Egamma)[0]
+    q = s_energy(Egamma)[1]
+    k = s_energy(Egamma)[2]
+    Eq = s_energy(Egamma)[3]
 
-    frontfactors = np.sqrt(2)*8*np.pi**3*alpha*(mu/m)**(3/2)
+    frontfactors = np.sqrt(2)*8*np.pi**3*alpha*(mu/mp)**(3/2)
 
-    CrossSection = frontfactors*np.sqrt(Eq/m)*(q**2/k)*F(s,S,b)
+    CrossSection = frontfactors*np.sqrt(Eq/mp)*(q**2/k)*F(s,S,b)**2
 
     return CrossSection*10e6
 
+# def dsigmadomega(Egamma,S,b):
+#     s = s_energy(Egamma)[0]
+#     q = s_energy(Egamma)[1]
+#     k = s_energy(Egamma)[2]
+#     Eq = s_energy(Egamma)[3]
+#     theta = np.linspace(0,np.pi,22)
+#     print(np.size(q))
+#     print(np.size(Egamma))
+#     print(np.size(theta))
+#     print(F(s,S,b))
+#
+#     factors = 16*np.pi*np.sqrt(2)*alpha
+#     dsigmadOmega = factors*np.sqrt(Eq/m)*(mu/m)**(3/2)*hbarc*q**2/Egamma*np.sin(theta)**2*F(s,S,b)**2
+#     return dsigmadOmega
+
 def F(s,S,b):
 
-    def f(r): #form factor
+    def f(r):
         return S/b*np.exp(-r**2/b**2)
 
     def sys(r,u,E):
@@ -93,19 +116,30 @@ def F(s,S,b):
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
     phi = res.y.T[:2500,0]
+    #print(res.message,", E: ",res.p[0])
 
     # j_l(z) = √\frac{π}{2z} J_{l+1/2}(z)
 
+    S = []
+    def sint(s):
+        integral = quad(theta,s,0,np.pi)
+        return integral[0]
+
+    for i in s:
+        S.append(sint(i))
+    sinteg = np.array(S)
+    print(sinteg)
     def F(s):
-        integral = quad(Spline(r,phi*r**3*spherical_jn(1,s*r)),0,5)
+        integral = quad(Spline(r,phi*r**3*spherical_jn(1,sinteg*r)),0,rmax)
         return integral[0]
 
     N = []
     for i in s:
         N.append(F(i))
+
     U = np.array(N)
 
-    return U**2
+    return U
 
 plt.figure(figsize=(9,5.5))
 
@@ -116,9 +150,10 @@ errorSchmidtmin = np.subtract(sigmaSchmidt,sigmaSchmidtPoint)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
 plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o");
-plt.xlabel(r"$E_\gamma$ [MeV]")
-plt.ylabel(r"$\sigma$ [$\mu$b]")
+plt.xlabel(r"$E_\gamma$ [MeV]");
+plt.ylabel(r"$\sigma$ [$\mu$b]");
 initial = [10,2]
+Photonenergy = np.linspace(gammaSchmidt[0],gammaSchmidt[21],22)
 
 popt, cov = curve_fit(sigma, gammaSchmidt, sigmaSchmidt, initial, errorSchmidtmax)
 print(popt)
