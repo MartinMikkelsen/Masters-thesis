@@ -59,7 +59,7 @@ def sigma(Egamma,S,b):
     q = np.sqrt(2*mu*Eq)/hbarc
     s = q+mp/M*k
 
-    frontfactors = 16*np.pi*4*np.pi*F(q,S,b)[1]**2*alpha/(9)
+    frontfactors = 8*np.pi*4*np.pi*F(q,S,b)[1]**2*alpha/(9)
 
     CrossSection = frontfactors*np.sqrt(Eq/m)*k*mu**2/(hbarc)*F(q,S,b)[0]
 
@@ -121,7 +121,7 @@ sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
 plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o");
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma$ [$\mu$b]");
-initial = [15,4]
+initial = [15,1]
 Photonenergy = np.linspace(gammaSchmidt[0],gammaSchmidt[21],22)
 popt, cov = curve_fit(sigma, gammaSchmidt, sigmaSchmidt, p0=initial, sigma=errorSchmidtmax, method='lm')
 print(np.sqrt(np.diag(cov)))

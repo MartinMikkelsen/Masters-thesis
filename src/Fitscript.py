@@ -8,13 +8,14 @@ from scipy.integrate import simpson
 from scipy.integrate import solve_bvp
 from scipy.special import spherical_jn
 from scipy.optimize import curve_fit
+from scipy import interpolate
 import seaborn as sns
 import os
 from scipy import integrate
 from pylab import plt, mpl
 from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from hankel import HankelTransform     # Import the basic class
-
+from tqdm import tqdm
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -52,77 +53,61 @@ alpha = 1/137
 charge = hbarc/(137)
 Mpip = m+mp
 
-def sigma(Egamma,S,b):
-
-    A = diffcross(Egamma,S,b)
-
-    return A
-
 def diffcross(Egamma,S,b):
 
-    Eq = Egamma-0.5*Egamma**2/(m+mp)
-    k = Egamma/hbarc
-    q = np.sqrt(2*Mpip*Eq)/(hbarc)
-    theta = np.linspace(0,np.pi,np.size(Egamma))
-    s = np.sqrt(q**2+k**2*(mp/Mpip)**2+2*q*k*np.cos(theta)*mp/Mpip)
+    y_vals = []
+    phi_vals = []
+    for i in tqdm(range(len(Egamma))):
 
-    rmax = 5*b
+        Eq = Egamma[i]-0.5*Egamma[i]**2/(Mpip)-m
+        k = Egamma[i]/hbarc
+        q = np.sqrt(2*mu*abs(Eq))/(hbarc)
+        s = lambda theta: np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*np.cos(theta)*m/Mpip)
 
-    differentialcross = charge*4*np.pi*Mpip/(mp**2)*q**3/k*F(s,S,b)**2
+        def f(r): #form factor
+            return S/b*np.exp(-r**2/b**2)
 
-    return differentialcross
+        def sys(r,u,E):
+            y,v,I = u
+            dy = v
+            dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+            dI = 12*np.pi*f(r)*r**4*y
+            return dy,dv,dI
 
-def F(s,S,b):
+        def bc(ua, ub,E):
+            ya,va,Ia = ua
+            yb,vb,Ib = ub
+            return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-    def f(r): #form factor
-        return S/b*np.exp(-r**2/b**2)
+        rmax = 5*b
+        rmin = 0.01*b
+        base1 = np.exp(1)
+        start = np.log(rmin)
+        stop = np.log(rmax)
+        r2 = np.logspace(start,stop,num=2500,base=np.exp(1))
+        E = -2
 
-    def sys(r,u,E):
-        y,v,I = u
-        dy = v
-        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-        dI = 12*np.pi*f(r)*r**4*y
-        return dy,dv,dI
+        u = [0*r2,0*r2,E*r2/r2[-1]]
+        res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
 
-    def bc(ua, ub,E):
-        ya,va,Ia = ua
-        yb,vb,Ib = ub
-        return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+        phi = res.y.T[:np.size(r2),0]
+        phi3 = Spline(np.sort(r2),abs(phi))
 
-    rmax = 5*b
-    rmin = 0.01*b
-    base1 = np.exp(1)
-    start = np.log(rmin)
-    stop = np.log(rmax)
-    r = np.logspace(start,stop,num=22,base=np.exp(1))
-    E = -2
+        front_func = lambda theta: (-4*np.cos(2*theta)+np.cos(4*theta)+3)/(2*np.sqrt(2)*np.sqrt(12*theta-8*np.sin(2*theta)+np.sin(4*theta)))
+        func = lambda r,theta: np.sin(theta)**3*((phi3(r))*r**3*spherical_jn(1,s(theta)*r))**2
 
-    u = [0*r,0*r,E*r/r[-1]]
-    res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+        front_const = 4*np.pi**2*charge*Mpip/(mp**2)*q**3/k
 
-    phi = res.y.T[:np.size(r),0]
-    P = np.poly1d(np.polyfit(r, phi, 8))
-    #plt.plot(r,phi,'--')
-    #plt.plot(r,P(r))
+        int_y = front_const*integrate.dblquad(func, 0, np.pi, lambda theta: 0, lambda theta: np.pi)[0]*10e4
 
-    func = abs(phi*r**3*spherical_jn(1,s*r))
+        phi_func = lambda r: phi3(r)**2*r**2
+        int_phi = 12*np.pi*quad(phi_func,0,rmax)[0]
 
-    Ps = np.poly1d(np.polyfit(r,func,8))
+        y_vals.append(int_y)
+        phi_vals.append(int_phi)
 
-    def I(s):
-        int = integrate.dblquad(lambda theta, r: np.sin(theta)**2*Ps(r), 0, rmax, lambda r: 0, lambda r: np.pi)
-        return int[0]
+    return y_vals, int_phi, res.p[0]
 
-    M = []
-    for i in s:
-        M.append(I(i))
-    Y = np.array(M)
-
-    def Normint():
-        inte = 12*np.pi*quad(r**4*phi,0,rmax)
-        return inte
-
-    return Y
 
 plt.figure(figsize=(9,5.5))
 
@@ -132,18 +117,34 @@ sigmaSchmidtPoint = np.array([0, 0, 0.059602649006622516, 0.1490066225165563, 0.
 errorSchmidtmin = np.subtract(sigmaSchmidt,sigmaSchmidtPoint)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
+sigmaErrorTest = np.subtract(errorSchmidtmax,errorSchmidtmin)
+
+
+
+def cross(Egamma,S,b):
+    cross_section = np.array(diffcross(gammaSchmidt,S,3.9)[0])
+    return cross_section
+
 plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o");
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma$ [$\mu$b]");
-initial = [10,2]
 Photonenergy = np.linspace(gammaSchmidt[0],gammaSchmidt[21],22)
-popt, cov = curve_fit(sigma, gammaSchmidt, sigmaSchmidt, p0=initial, sigma=errorSchmidtmax, method='lm')
-print(np.sqrt(np.diag(cov)))
-plt.title("$S=%0.2f$ MeV, $b=%0.2f$ fm" %(popt[0],popt[1]), x=0.5, y=0.8)
+#plt.plot(Photonenergy,cross(Photonenergy,144.17,3.61),'--')
+
+
+#plt.plot(Photonenergy,cross(Photonenergy,85,3.8))
+#plt.plot(Photonenergy,cross(Photonenergy,45,3.9))
+#plt.plot(Photonenergy,cross(Photonenergy,33.4,4))
+
+#plt.title("$S=80$ MeV, $b=3.7$ fm")
+initial = [41.5,3.8]
+popt, cov = curve_fit(cross, gammaSchmidt, sigmaSchmidt, p0=initial, sigma=errorSchmidtmax)
+plt.title("$S=%0.2f$ MeV, $b=%0.2f$ fm, fit" %(popt[0],popt[1]), x=0.5, y=0.8)
 plt.xlabel(r"$E_\gamma$ [MeV]")
 plt.ylabel(r"$\sigma$ [$\mu$b]")
 plt.tight_layout()
-Photonenergy = np.linspace(gammaSchmidt[0],gammaSchmidt[21],22)
-plt.plot(Photonenergy,sigma(Photonenergy,popt[0],popt[1]))
-#save_fig("fit")
+plt.plot(Photonenergy,cross(Photonenergy,popt[0],popt[1]))
+save_fig("fit")
+print("The norm of the wave function is =", diffcross(Photonenergy,popt[0],popt[1])[1])
+print("The energy is =", diffcross(Photonenergy,popt[0],popt[1])[2])
 plt.show()
