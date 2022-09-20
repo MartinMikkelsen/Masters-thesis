@@ -10,6 +10,9 @@ from scipy import fft
 from sympy import hankel_transform, inverse_hankel_transform
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+from scipy.interpolate import InterpolatedUnivariateSpline as Spline
+from scipy.integrate import quad
+
 import seaborn as sns
 import os
 from pylab import plt, mpl
@@ -43,8 +46,8 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b = 1     #fm
-S = 10    #MeV
+b = 3.9     #fm
+S = 41.5    #MeV
 m = 135.57  #MeV
 mn = 939.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
@@ -79,9 +82,11 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
+phi = res.y.T[:np.size(r),0]
+phi3 = Spline(r,phi)
 def plot():
     plt.figure(figsize=(9,5.5))
-    sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
+    #sns.lineplot(x=res.x,y=res.y.T[:,2]/(12*np.pi),linewidth=3.5)
     sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5)
     sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5)
     plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
@@ -98,3 +103,7 @@ def rms_residuals():
     save_fig("rms_residuals")
 
 plot()
+
+phi_func = lambda r: phi3(r)**2*r**4
+int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]
+print("Norm_integral =",int_phi)
