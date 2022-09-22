@@ -47,7 +47,7 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 b = 3.9     #fm
-S = 41.5    #MeV
+S = 41.524    #MeV
 m = 135.57  #MeV
 mn = 939.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
@@ -75,7 +75,7 @@ rmin = 0.01*b
 base1 = np.exp(1)
 start = np.log(rmin)
 stop = np.log(rmax)
-r = np.logspace(start,stop,num=2*1000,base=np.exp(1))
+r = np.logspace(start,stop,num=50000,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,E*r/r[-1]]

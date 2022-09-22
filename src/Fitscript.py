@@ -56,10 +56,8 @@ Mpip = m+mp
 
 def diffcross(Egamma,S,b,theta):
 
-    y_vals = []
-    for i in tqdm(range(len(Egamma))):
-        Eq = Egamma[i]-m-0.5*Egamma[i]**2/(Mpip)
-        k = Egamma[i]/hbarc
+        Eq = Egamma-m-0.5*Egamma**2/(Mpip)
+        k = Egamma/hbarc
         q = np.sqrt(2*mu*Eq)/(hbarc)
         s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
 
@@ -97,13 +95,15 @@ def diffcross(Egamma,S,b,theta):
             integral =  4*np.pi/s*quad(func,0,rmax)[0]
             return integral
 
-    y_vals = 10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
-    return y_vals
+        return 10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(Egamma,S,b):
-    func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
-    integ = quad(func,0,np.pi)[0]
-    return integ
+    y_vals = list()
+    for i in tqdm(Egamma):
+        func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta)
+        integ = quad(func,0,np.pi)[0]
+        y_vals.append(integ)
+    return y_vals
 
 plt.figure(figsize=(9,5.5));
 gammaSchmidt = np.array([144.0358208955224, 145.07462686567163, 146.22089552238805, 147.40298507462686, 148.5134328358209, 149.69552238805971, 150.84179104477613, 151.95223880597015, 153.09850746268657, 154.2089552238806, 155.31940298507462, 156.53731343283582, 157.61194029850748, 158.79402985074626, 159.9044776119403, 161.01492537313433, 162.19701492537314, 163.30746268656716, 164.4179104477612, 165.6358208955224, 166.71044776119402, 167.82089552238807])
@@ -117,8 +117,8 @@ plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o");
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 
-initial = [50,3.9]
-popt, cov = curve_fit(totalcross, gammaSchmidt, sigmaSchmidt, p0=initial, sigma=errorSchmidtmax)
+initial = [41.1,3.9]
+popt, cov = curve_fit(totalcross, gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmax)
 print(popt[0],popt[1])
 
 plt.show()
