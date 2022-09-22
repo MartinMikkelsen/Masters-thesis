@@ -84,7 +84,7 @@ def diffcross(Egamma,S,b):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=10000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=20000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
@@ -101,7 +101,7 @@ def diffcross(Egamma,S,b):
     norm_func = lambda r: r**4*phi3(r)**2
     norm_integral = 4*np.pi*quad(norm_func,0,rmax)[0]
     N = 1/np.sqrt(1+norm_integral)
-    return 8*np.pi*N**2*alpha/9*mu**3*k*q/(m**2*hbarc)*Q(q)**2
+    return 8*np.pi*N**2*alpha/9*mu**3*k*q/(mp**2*hbarc)*Q(q)**2*10000
 
 def totalcross(Egamma,S,b):
     totalX = 4*np.pi*diffcross(Egamma,S,b)
@@ -109,18 +109,18 @@ def totalcross(Egamma,S,b):
 
 plt.figure(figsize=(9,5.5));
 
-photonenergies = np.linspace(gammaSchmidt[0],151,50)
+photonenergies = np.linspace(gammaSchmidt[0],150,50)
 N = []
-M = list()
+M = []
 P = []
 for i in tqdm(photonenergies):
-    N.append(totalcross(i,41.5,3.9))
+    N.append(totalcross(i,15,1.5))
     #M.append(totalcross(i,10,4))
     #P.append(totalcross(i,10,4))
 
-plt.plot(photonenergies,N, label=r'$S=79.7$ MeV, $b=3.8$ fm', color='r')
-plt.plot(photonenergies,M, label=r'$S=41.5$ MeV, $b=3.9$ fm', color='g')
-plt.plot(photonenergies,P, label=r'$S=29.4$ MeV, $b=4.0$ fm', color='b')
+plt.plot(photonenergies,N, label=r'$S=15$ MeV, $b=1.5$ fm', color='r')
+#plt.plot(photonenergies,M, label=r'$S=41.5$ MeV, $b=3.9$ fm', color='g')
+#plt.plot(photonenergies,P, label=r'$S=29.4$ MeV, $b=4.0$ fm', color='b')
 
 gammaSchmidt = np.array([144.0358208955224, 145.07462686567163, 146.22089552238805, 147.40298507462686, 148.5134328358209, 149.69552238805971, 150.84179104477613])
 sigmaSchmidt = np.array([0.0398406374501992, 0.049800796812749, 0.11952191235059761, 0.2290836653386454, 0.3286852589641434, 0.448207171314741, 0.5677290836653386])
@@ -129,7 +129,7 @@ errorSchmidtmin = np.subtract(sigmaSchmidt,sigmaSchmidtPoint)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
 plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o");
-
+plt.bar(144.7,height=1, width=0.05)
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.legend(loc='best',frameon=False)
