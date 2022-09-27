@@ -57,12 +57,13 @@ alpha = 1/137
 charge2 = hbarc/(137)
 Mpip = m+mn
 
-def diffcross(Egamma,S,b):
+def diffcross(Egamma,S,b,theta):
 
     Eq = Egamma-m-0.5*Egamma**2/(Mpip)
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
+    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
 
     def f(r):
         return S/b*np.exp(-r**2/b**2)
@@ -84,7 +85,7 @@ def diffcross(Egamma,S,b):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=20000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
@@ -93,34 +94,50 @@ def diffcross(Egamma,S,b):
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
 
-    def Q(S):
-        func = lambda r: phi3(r)*r**4*spherical_jn(0,S*r)
-        integral =  quad(func,0,rmax)[0]
+    def F(S):
+        func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
+        integral =  4*np.pi/s*quad(func,0,rmax)[0]
         return integral
 
-    norm_func = lambda r: r**4*phi3(r)**2
-    norm_integral = 4*np.pi*quad(norm_func,0,rmax)[0]
-    N = 1/np.sqrt(1+norm_integral)
-    return 16*np.pi*N**2*alpha/9*mu**3*k*q/(m**2*hbarc)*Q(q)**2*10000
+    def trapzsum(s):
+        r3 = np.linspace(0,rmax,2500)
+        func = phi*r2**3*spherical_jn(1,s*r2)
+        int = 4*np.pi/s*integrate.simpson(func,x=r2,dx=0.01)
+        return int
 
-def totalcross(Egamma,S,b):
-    totalX = 4*np.pi*diffcross(Egamma,S,b)
-    return totalX
+    return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 plt.figure(figsize=(9,5.5));
 
-photonenergies = np.linspace(151.4,180,100)
-N = []
-M = []
-P = []
-for i in tqdm(photonenergies):
-    N.append(totalcross(i,21,1.5))
-    M.append(totalcross(i,20,1.5))
-    P.append(totalcross(i,19,1.5))
+angles = np.linspace(0,np.pi,50)
 
-plt.plot(photonenergies,N, label=r'$S=15$ MeV, $b=1.5$ fm', color='r')
-plt.plot(photonenergies,M, label=r'$S=41.5$ MeV, $b=3.9$ fm', color='g')
-plt.plot(photonenergies,P, label=r'$S=29.4$ MeV, $b=4.0$ fm', color='b')
+# M = []
+# for i in angles:
+#    M.append(diffcross(155,41.5,3.9,i))
+# plt.plot(angles,M)
+
+def totalcross(Egamma,S,b):
+    func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
+    integ = quad(func,0,np.pi)[0]
+    return integ
+
+#plt.title(r"$∫ d^3 r \, |\psi_{\bar{N}\pi}|^2=%0.2f$, $E= %0.2f$"%(totalcross(totalcross,41.5,3.9)[1],totalcross(photonenergies,41.5,3.9)[2]),x=0.3, y=0.8)
+plt.figure(figsize=(9,5.5));
+
+gammaSchmidt = np.array([144.0358208955224, 145.07462686567163, 146.22089552238805, 147.40298507462686, 148.5134328358209, 149.69552238805971, 150.84179104477613, 151.95223880597015, 153.09850746268657, 154.2089552238806, 155.31940298507462, 156.53731343283582, 157.61194029850748, 158.79402985074626, 159.9044776119403, 161.01492537313433, 162.19701492537314, 163.30746268656716, 164.4179104477612, 165.6358208955224, 166.71044776119402, 167.82089552238807])
+
+photonenergies = np.linspace(151.4,180,50)
+N = []
+M = list()
+P = list()
+for i in tqdm(((photonenergies))):
+    N.append(totalcross(i,50,1.5))
+    M.append(totalcross(i,40,1.5))
+    P.append(totalcross(i,30,1.5))
+
+plt.plot(photonenergies,N, label=r'$S=86.2$ MeV, $b=3.8$ fm', color='r')
+plt.plot(photonenergies,M, label=r'$S=45.5$ MeV, $b=3.9$ fm', color='g')
+plt.plot(photonenergies,P, label=r'$S=35.4$ MeV, $b=4.0$ fm', color='navy')
 
 x = [154.03437815975732, 156.01617795753288, 160.02022244691608, 164.994944388271, 170.0505561172902, 175.02527805864509, 179.95955510616784]
 y = [36.41025641025641, 43.93162393162393, 55.72649572649573, 74.52991452991454, 89.05982905982906, 98.97435897435898, 84.44444444444444]
@@ -130,8 +147,12 @@ errorSchmidtmin = np.subtract(y,yprime)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
 plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o");
+
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.legend(loc='best',frameon=False)
-plt.grid()
+#
+
+# plt.grid()
+
 plt.show()
