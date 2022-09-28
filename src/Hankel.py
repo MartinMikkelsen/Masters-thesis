@@ -43,11 +43,6 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-
-import cProfile
-import re
-cProfile.run('re.compile("foo|bar")', 'restats')
-
 m = 134.976  #MeV
 mp = 938.272  #MeV
 mu = m*mp/(mp+m) #Reduced mass
@@ -107,30 +102,18 @@ def diffcross(Egamma,S,b,theta):
 
     return 10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
-#plt.figure(figsize=(9,5.5));
-
-#print("dsigma=",diffcross(155,41.5,3.9,np.pi/2))
-#angles = np.linspace(0,np.pi,50)
-
-#M = []
-#for i in angles:
-#    M.append(diffcross(155,41.5,3.9,i))
-#plt.plot(angles,M)
-
 def totalcross(Egamma,S,b):
     func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
     integ = quad(func,0,np.pi)[0]
     return integ
 
-#plt.title(r"$∫ d^3 r \, |\psi_{\bar{N}\pi}|^2=%0.2f$, $E= %0.2f$"%(totalcross(totalcross,41.5,3.9)[1],totalcross(photonenergies,41.5,3.9)[2]),x=0.3, y=0.8)
 plt.figure(figsize=(9,5.5));
 
-gammaSchmidt = np.array([144.0358208955224, 145.07462686567163, 146.22089552238805, 147.40298507462686, 148.5134328358209, 149.69552238805971, 150.84179104477613, 151.95223880597015, 153.09850746268657, 154.2089552238806, 155.31940298507462, 156.53731343283582, 157.61194029850748, 158.79402985074626, 159.9044776119403, 161.01492537313433, 162.19701492537314, 163.30746268656716, 164.4179104477612, 165.6358208955224, 166.71044776119402, 167.82089552238807])
 
-photonenergies = np.linspace(gammaSchmidt[0],170,50)
+photonenergies = np.linspace(144.7,170,50)
 N = []
-M = list()
-P = list()
+M = []
+P = []
 for i in tqdm(((photonenergies))):
     N.append(totalcross(i,86.2,3.8))
     M.append(totalcross(i,45.5,3.9))
@@ -146,13 +129,16 @@ sigmaSchmidtPoint = np.array([0, 0, 0.059602649006622516, 0.1490066225165563, 0.
 errorSchmidtmin = np.subtract(sigmaSchmidt,sigmaSchmidtPoint)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
-plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",color='b')
+#plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",color='b')
+
+
+
 
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.legend(loc='best',frameon=False)
-
-save_fig('crossfit')
 plt.grid()
+
+#save_fig('crossfit')
 
 plt.show()

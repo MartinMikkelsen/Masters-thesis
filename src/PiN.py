@@ -46,8 +46,8 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b = 3.9     #fm
-S = 41.524    #MeV
+b =  3.9    #fm
+S = 45.5    #MeV
 m = 135.57  #MeV
 mn = 939.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
