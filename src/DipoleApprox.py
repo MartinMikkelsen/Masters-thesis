@@ -49,7 +49,7 @@ import re
 cProfile.run('re.compile("foo|bar")', 'restats')
 
 m = 139.57039  #MeV
-mn = 939.565420  #MeV
+mn = 938.272088  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = 2*mu
 hbarc = 197.327 #MeV fm
@@ -103,7 +103,7 @@ def diffcross(Egamma,S,b):
         norm_integral = 12*np.pi*quad(norm_func,0,rmax)[0]
         N = 1/np.sqrt(1+norm_integral)
 
-        diff_cross.append(8*np.pi*N**2*alpha/9*mu**3*k*q/(m**2*hbarc)*Q(q)**2*10000)
+        diff_cross.append(16*np.pi*N**2*alpha/9*mu**3*k*q/(m**2*hbarc)*Q(q)**2*10000)
     return diff_cross
 
 def totalcross(Egamma,S,b):
@@ -124,7 +124,7 @@ plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.grid()
 
-popt, pcov = curve_fit(totalcross, x,y, sigma=errorSchmidtmin ,p0=[20,2],bounds=(0,[80,4]),maxfev=1500)
+popt, pcov = curve_fit(totalcross, x,y, sigma=errorSchmidtmin ,p0=[100,2],bounds=(0,[150,4]),maxfev=1500)
 print("popt=",popt)
 print("Error=",np.sqrt(np.diag(pcov)))
 
