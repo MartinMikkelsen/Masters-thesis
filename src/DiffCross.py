@@ -122,7 +122,7 @@ def PlotC(EgammaPlot,S,b):
     ErrorBeck = [Errormin, Errormax]
     plt.errorbar(AngleBeck,DiffCrossBeck,yerr=ErrorBeck,fmt="o",label=r'$E_\gamma=151.4$ MeV');
     plt.xlabel(r"$\theta_q$ [deg]");
-    plt.ylabel(r"$d\sigma$/d$\Omega$ [$\mu$b/sr]");
+    plt.ylabel(r"$d\sigma$/d$\Omega_q$ [$\mu$b/sr]");
     plt.tight_layout()
     plt.plot(np.rad2deg(angles),0.06*np.sin(angles)**2,'--', label=r'$0.06\sin(\theta)^2$')
     plt.legend(loc='upper left',frameon=False)

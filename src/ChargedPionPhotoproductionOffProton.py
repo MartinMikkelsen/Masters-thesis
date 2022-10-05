@@ -44,9 +44,6 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 
-import cProfile
-import re
-cProfile.run('re.compile("foo|bar")', 'restats')
 
 m = 139.57039  #MeV
 mn = 939.565420  #MeV
