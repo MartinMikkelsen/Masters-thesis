@@ -84,18 +84,19 @@ def diffcross(Egamma,S,b,theta):
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
 
-    eta = -2*charge2*mu*alpha/(hbarc*s)
-    insidegamma = np.array(1+1+1.j*eta, dtype=np.complex_)
-    sigmal = np.angle(gamma(insidegamma))
-    print(sigmal)
-
+    def coulombfunc(S):
+        eta = -2*charge2*mu*alpha/(hbarc**2*S)
+        insidegamma = np.array(1+1+1.j*eta, dtype=np.complex_)
+        sigmal = np.angle(gamma(insidegamma))
+        wave = np.sin(S-0.5*np.pi-eta*np.log(2*S)+sigmal)
+        return wave
 
     def F(S):
-        func = lambda r: phi3(r)*r**3*mpmath.coulombf(1,eta,S*r)
+        func = lambda r: phi3(r)*r**3*coulombfunc(S*r)
         integral =  4*np.pi/s*sp.integrate.quad(func,0,rmax)[0]
         return integral
 
-    return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2
+    return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(Egamma,S,b):
     func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
@@ -104,7 +105,7 @@ def totalcross(Egamma,S,b):
 
 plt.figure(figsize=(9,5.5));
 
-photonenergies = np.linspace(145.4,180,10)
+photonenergies = np.linspace(145.4,180,50)
 
 
 N = []
