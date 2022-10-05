@@ -10,7 +10,7 @@ import mpmath
 from pylab import plt, mpl
 import seaborn as sns
 from numpy import frompyfunc
-
+from scipy.special import gamma, factorial
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -50,7 +50,7 @@ Mpip = m+mp
 def diffcross(Egamma,S,b,theta):
 
     Eq = Egamma-m-0.5*Egamma**2/(Mpip)
-    if Eq<0 : return 0
+    if Eq.any()<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
     s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
@@ -85,14 +85,17 @@ def diffcross(Egamma,S,b,theta):
     phi3 = Spline(r2,phi)
 
     eta = -2*charge2*mu*alpha/(hbarc*s)
+    insidegamma = np.array(1+1+1.j*eta, dtype=np.complex_)
+    sigmal = np.angle(gamma(insidegamma))
+    print(sigmal)
 
 
     def F(S):
-        func = lambda r: phi3(r)*r**3*np.array(mpmath.coulombf(1,eta,S*r))
+        func = lambda r: phi3(r)*r**3*mpmath.coulombf(1,eta,S*r)
         integral =  4*np.pi/s*sp.integrate.quad(func,0,rmax)[0]
         return integral
 
-    return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2
 
 def totalcross(Egamma,S,b):
     func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
@@ -103,19 +106,18 @@ plt.figure(figsize=(9,5.5));
 
 photonenergies = np.linspace(145.4,180,10)
 
+
 N = []
-M = []
-P = []
+# M = []
+# P = []
 for i in tqdm(photonenergies):
     N.append(totalcross(i,86.2,3.8))
-    M.append(totalcross(i,100,2))
-    P.append(totalcross(i,40,3))
+    # M.append(totalcross(i,100,2))
+    # P.append(totalcross(i,40,3))
 
 plt.plot(photonenergies,N, label=r'$S=86.2$ MeV, $b=3.8$ fm', color='r')
-plt.plot(photonenergies,M, label=r'$S=45.5$ MeV, $b=3.9$ fm', color='g')
-plt.plot(photonenergies,P, label=r'$S=35.4$ MeV, $b=4.0$ fm', color='navy')
-
-plt.plot(photonenergies,N, label=r'$S=86.2$ MeV, $b=3.8$ fm', color='r')
+# plt.plot(photonenergies,M, label=r'$S=45.5$ MeV, $b=3.9$ fm', color='g')
+# plt.plot(photonenergies,P, label=r'$S=35.4$ MeV, $b=4.0$ fm', color='navy')
 
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
