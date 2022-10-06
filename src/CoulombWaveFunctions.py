@@ -11,6 +11,7 @@ from pylab import plt, mpl
 import seaborn as sns
 from numpy import frompyfunc
 from scipy.special import gamma, factorial
+from scipy.special import spherical_jn
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -84,16 +85,12 @@ def diffcross(Egamma,S,b,theta):
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
 
-    def coulombfunc(S):
-        eta = -2*charge2*mu*alpha/(hbarc**2*S)
-        insidegamma = np.array(1+1+1.j*eta, dtype=np.complex_)
-        sigmal = np.angle(gamma(insidegamma))
-        wave = np.sin(S-0.5*np.pi-eta*np.log(2*S)+sigmal)
-        return wave
+    def eta(S):
+        return -charge2*mu/(hbarc**2*S)
 
     def F(S):
-        func = lambda r: phi3(r)*r**3*coulombfunc(S*r)
-        integral =  4*np.pi/s*sp.integrate.quad(func,0,rmax)[0]
+        func = lambda r: phi3(r)*r**3*2*2*np.exp(-np.pi*eta(S)/2)*abs(sp.special.gamma(1+1+1.j*S))/(sp.special.factorial(2+1))
+        integral =  4*np.pi/3*sp.integrate.quad(func,0,rmax)[0]
         return integral
 
     return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
