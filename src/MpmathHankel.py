@@ -16,6 +16,8 @@ from pylab import plt, mpl
 from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from hankel import HankelTransform     # Import the basic class
 from tqdm import tqdm
+import mpmath
+
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -58,7 +60,7 @@ def diffcross(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*mpmath.cos(theta))
 
     def f(r):
         return S/b*np.exp(-r**2/b**2)
@@ -88,25 +90,26 @@ def diffcross(Egamma,S,b,theta):
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
-
-    print(type(phi))
+    phimp = list(phi)
+    eta = -2*charge2/(hbarc*s**2)
+    etamp = list(eta)
 
     def F(S):
-        func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
-        integral =  4*np.pi/s*quad(func,0,rmax)[0]
+        func = lambda r: phi*r**3*mpmath.coulombf(1,etamp,S*r)
+        integral =  4*np.pi/s*mpmath.quad(func, [0, rmax])
         return integral
 
     def trapzsum(s):
-        r3 = np.linspace(0,rmax,2500)
-        func = phi*r2**3*spherical_jn(1,s*r2)
+        r3 = mpmath.linspace(0,rmax,2500)
+        func = phi.tolist()*r2**3*spherical_jn(1,s*r2)
         int = 4*np.pi/s*integrate.simpson(func,x=r2,dx=0.01)
         return int
 
     return 10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(Egamma,S,b):
-    func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
-    integ = quad(func,0,np.pi)[0]
+    func = lambda theta: 2*np.pi*mpmath.sin(theta)*diffcross(Egamma,S,b,theta)
+    integ = mpmath.quad(func, [0,mpmath.pi])
     return integ
 
 plt.figure(figsize=(9,5.5));

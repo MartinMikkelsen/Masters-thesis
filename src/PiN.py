@@ -86,7 +86,7 @@ phi = res.y.T[:np.size(r),0]
 phi3 = Spline(r,phi)
 def plot():
     plt.figure(figsize=(9,5.5))
-    sns.lineplot(x=res.x,y=-res.y.T[:,0],linewidth=3.5,label=r'$\phi$') #phi
+    sns.lineplot(x=res.x,y=-(res.y.T[:,0]),linewidth=3.5,label=r'$\phi$') #phi
     #sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5,label=r'$\phi´$') #dphi
     #sns.lineplot(x=res.x,y=res.y.T[:,2]/10000,linewidth=3.5,label=r'$E$') ##ddphi
     plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
@@ -94,7 +94,7 @@ def plot():
     plt.xlabel("r [fm]")
     rs = np.linspace(0,5,np.size(res.x))
     plt.tight_layout()
-    save_fig("45.5MeV3.9fm")
+    #save_fig("45.5MeV3.9fm")
     plt.show()
 
 def rms_residuals():

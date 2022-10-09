@@ -60,4 +60,10 @@ sigmal = angle(sp.special.gamma(insidegamma))
 
 C = 2*np.exp(-np.pi*gamma/2)*abs(sp.special.gamma(1+1+1.j*gamma))/(sp.special.factorial(2+1))
 
+def F(eta,rho):
+    F = 0
+    for k in range(10):
+        result += k
+
+
 plt.plot(gamma,C*k**2)
