@@ -12,7 +12,7 @@ from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from scipy.integrate import quad
-
+import scipy as sp
 import seaborn as sns
 import os
 from pylab import plt, mpl
@@ -84,28 +84,18 @@ res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
 phi = res.y.T[:np.size(r),0]
 phi3 = Spline(r,phi)
-def plot():
-    plt.figure(figsize=(9,5.5))
-    sns.lineplot(x=res.x,y=abs(res.y.T[:,0])*res.x,linewidth=3.5,label=r'$\phi$') #phi
 
-    #sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5,label=r'$\phi´$') #dphi
-    #sns.lineplot(x=res.x,y=res.y.T[:,2]/10000,linewidth=3.5,label=r'$E$') ##ddphi
-    plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
-    plt.legend(loc=0,frameon=False);
-    plt.xlabel("r [fm]")
-    rs = np.linspace(0,5,np.size(res.x))
-    plt.tight_layout()
-    #save_fig("45.5MeV3.9fm")
-    plt.show()
+def chargedensity(r):
+    func = lambda r: phi3(r)*r**2
+    integral = quad(func,0,rmax)[0]
+    return integral
 
-def rms_residuals():
-    plt.figure()
-    plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
-    plt.grid(); plt.legend(r"RMS".split(),loc=0);
-    save_fig("rms_residuals")
+R = 3.8
+Q = []
+r1 = R-m/M*r
+r2 = R+m/M*r
 
-plot()
+for i in r1:
+    Q.append(chargedensity(i))
 
-phi_func = lambda r: phi3(r)**2*r**4
-int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]
-print("Norm_integral =",int_phi)
+plt.plot(r,Q)

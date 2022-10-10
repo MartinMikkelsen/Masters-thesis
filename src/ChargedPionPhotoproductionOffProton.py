@@ -44,9 +44,12 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 
+import cProfile
+import re
+cProfile.run('re.compile("foo|bar")', 'restats')
 
 m = 139.57039  #MeV
-mn = 939.565420  #MeV
+mn = 938.272088  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = 2*mu
 hbarc = 197.327 #MeV fm
@@ -96,60 +99,33 @@ def diffcross(Egamma,S,b,theta):
         integral =  4*np.pi/s*quad(func,0,rmax)[0]
         return integral
 
-    def trapzsum(s):
-        r3 = np.linspace(0,rmax,2500)
-        func = phi*r2**3*spherical_jn(1,s*r2)
-        int = 4*np.pi/s*integrate.simpson(func,x=r2,dx=0.01)
-        return int
-
     return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
-plt.figure(figsize=(9,5.5));
-
-angles = np.linspace(0,np.pi,50)
-
-# M = []
-# for i in angles:
-#    M.append(diffcross(155,41.5,3.9,i))
-# plt.plot(angles,M)
-
 def totalcross(Egamma,S,b):
-    func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
-    integ = quad(func,0,np.pi)[0]
-    return integ
+    tot = []
+    for i in tqdm(Egamma):
+        func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta)
+        integ = quad(func,0,np.pi)[0]
+        tot.append(integ)
+    return tot
 
-#plt.title(r"$∫ d^3 r \, |\psi_{\bar{N}\pi}|^2=%0.2f$, $E= %0.2f$"%(totalcross(totalcross,41.5,3.9)[1],totalcross(photonenergies,41.5,3.9)[2]),x=0.3, y=0.8)
 plt.figure(figsize=(9,5.5));
 
-gammaSchmidt = np.array([144.0358208955224, 145.07462686567163, 146.22089552238805, 147.40298507462686, 148.5134328358209, 149.69552238805971, 150.84179104477613, 151.95223880597015, 153.09850746268657, 154.2089552238806, 155.31940298507462, 156.53731343283582, 157.61194029850748, 158.79402985074626, 159.9044776119403, 161.01492537313433, 162.19701492537314, 163.30746268656716, 164.4179104477612, 165.6358208955224, 166.71044776119402, 167.82089552238807])
-
-photonenergies = np.linspace(151.4,180,50)
-N = []
-M = list()
-P = list()
-for i in tqdm(((photonenergies))):
-    N.append(totalcross(i,50,1.5))
-    M.append(totalcross(i,40,1.5))
-    P.append(totalcross(i,30,1.5))
-
-plt.plot(photonenergies,N, label=r'$S=86.2$ MeV, $b=3.8$ fm', color='r')
-plt.plot(photonenergies,M, label=r'$S=45.5$ MeV, $b=3.9$ fm', color='g')
-plt.plot(photonenergies,P, label=r'$S=35.4$ MeV, $b=4.0$ fm', color='navy')
-
-x = [154.03437815975732, 156.01617795753288, 160.02022244691608, 164.994944388271, 170.0505561172902, 175.02527805864509, 179.95955510616784]
-y = [36.41025641025641, 43.93162393162393, 55.72649572649573, 74.52991452991454, 89.05982905982906, 98.97435897435898, 84.44444444444444]
-yprime = [25.470085470085472, 40.85470085470086, 52.991452991452995, 70.5982905982906, 83.58974358974359, 91.7948717948718, 75.8974358974359]
-
+x = np.array([154.03437815975732, 156.01617795753288, 160.02022244691608,164.994944388271, 170.0505561172902, 175.02527805864509, 179.95955510616784])
+y = np.array([36.41025641025641, 43.93162393162393, 55.72649572649573,74.52991452991454, 89.05982905982906, 98.97435897435898, 84.44444444444444])
+yprime = np.array([25.470085470085472, 40.85470085470086, 52.991452991452995,70.5982905982906, 83.58974358974359, 91.7948717948718, 75.8974358974359])
 errorSchmidtmin = np.subtract(y,yprime)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
-plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o");
-
+plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
-plt.legend(loc='best',frameon=False)
-#
+plt.grid()
 
-# plt.grid()
+popt, pcov = curve_fit(totalcross,x,y, sigma=errorSchmidtmin,p0=[100,3],ftol=0.05, xtol=0.05)
+print("popt=",popt)
+print("Error=",np.sqrt(np.diag(pcov)))
 
+photonenergies = np.linspace(151.4,180,25)
+plt.plot(photonenergies,totalcross(photonenergies,popt[0],popt[1]), label=r'$S=%0.2f$ MeV, $b=%0.2f$ fm' %(popt[0],popt[1]), color='r')
 plt.show()
