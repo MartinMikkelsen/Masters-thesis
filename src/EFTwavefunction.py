@@ -91,6 +91,8 @@ res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
 plt.figure(figsize=(9,5.5))
 sns.lineplot(x=res.x,y=-res.y.T[:,0],linewidth=3.5,label=r'$\phi$') #phi
+sns.lineplot(x=res.x,y=-res.y.T[:,0]*res.x,linewidth=3.5,label=r'$\phi$') #phi
+
 #sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5,label=r'$\phi´$') #dphi
 #sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5,label=r'$\phi´´$') ##ddphi
 #sns.lineplot(x=res.x,y=res.y.T[:,3]/10000,linewidth=3.5, label=r'$E/1e4$')
@@ -99,5 +101,5 @@ plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
 plt.legend(loc=0,frameon=False);
 plt.xlabel("r [fm]")
 plt.tight_layout()
-save_fig("EFToperator")
+#save_fig("EFToperator")
 plt.show()

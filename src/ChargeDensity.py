@@ -82,20 +82,12 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
-phi = res.y.T[:np.size(r),0]
+phi = -res.y.T[:np.size(r),0]
 phi3 = Spline(r,phi)
+psi3 = Spline(r,r*phi)
+r1 = R+m/M*r
+r2 = R-mn/M*r
+rcm = 1/M*(m*r1+mn*r2)
+plt.plot(r,abs(r*phi3(r))**2)
 
-def chargedensity(r):
-    func = lambda r: phi3(r)*r**2
-    integral = quad(func,0,rmax)[0]
-    return integral
-
-R = 3.8
-Q = []
-r1 = R-m/M*r
-r2 = R+m/M*r
-
-for i in r1:
-    Q.append(chargedensity(i))
-
-plt.plot(r,Q)
+4*np.pi*quad(lambda rcm: abs(phi3(mn/M*rcm)*rcm)**2*rcm**2,0,rmax)[0]

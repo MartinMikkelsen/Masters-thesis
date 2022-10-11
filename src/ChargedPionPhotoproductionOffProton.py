@@ -111,9 +111,9 @@ def totalcross(Egamma,S,b):
 
 plt.figure(figsize=(9,5.5));
 
-x = np.array([154.03437815975732, 156.01617795753288, 160.02022244691608,164.994944388271, 170.0505561172902, 175.02527805864509, 179.95955510616784])
-y = np.array([36.41025641025641, 43.93162393162393, 55.72649572649573,74.52991452991454, 89.05982905982906, 98.97435897435898, 84.44444444444444])
-yprime = np.array([25.470085470085472, 40.85470085470086, 52.991452991452995,70.5982905982906, 83.58974358974359, 91.7948717948718, 75.8974358974359])
+x = np.array([154.03437815975732, 156.01617795753288, 160.02022244691608,164.994944388271])
+y = np.array([36.41025641025641, 43.93162393162393, 55.72649572649573,74.52991452991454])
+yprime = np.array([25.470085470085472, 40.85470085470086, 52.991452991452995,70.5982905982906])
 errorSchmidtmin = np.subtract(y,yprime)
 errorSchmidtmax = errorSchmidtmin
 sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
@@ -122,7 +122,7 @@ plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.grid()
 
-popt, pcov = curve_fit(totalcross,x,y, sigma=errorSchmidtmin,p0=[100,3],ftol=0.05, xtol=0.05)
+popt, pcov = curve_fit(totalcross,x,y, sigma=errorSchmidtmin)
 print("popt=",popt)
 print("Error=",np.sqrt(np.diag(pcov)))
 

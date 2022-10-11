@@ -2,21 +2,21 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from scipy.integrate import trapz
-from scipy.integrate import quad
 from scipy.optimize import root
-from scipy.integrate import simpson
-from scipy.integrate import solve_bvp
 from scipy.special import spherical_jn
-from scipy.special import jv
+from scipy.special import spherical_jn
+from scipy.integrate import solve_bvp
+from scipy import fft
+from sympy import hankel_transform, inverse_hankel_transform
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+from scipy.interpolate import InterpolatedUnivariateSpline as Spline
+from scipy.integrate import quad
 from scipy.optimize import curve_fit
+from tqdm import tqdm
 import seaborn as sns
 import os
-from scipy import integrate
 from pylab import plt, mpl
-from scipy.interpolate import InterpolatedUnivariateSpline as Spline
-from hankel import HankelTransform     # Import the basic class
-from tqdm import tqdm
-from multiprocessing import Pool
 
 
 mpl.rcParams['font.family'] = 'XCharter'
@@ -40,20 +40,17 @@ if not os.path.exists(DATA_ID):
 def image_path(fig_id):
     return os.path.join(FIGURE_ID, fig_id)
 
+
 def data_path(dat_id):
     return os.path.join(DATA_ID, dat_id)
 
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-
-import cProfile
-import re
-cProfile.run('re.compile("foo|bar")', 'restats')
-
 def diffcross(Egamma,S,b,theta):
 
     m = 134.976  #MeV
+    m = 135.57  #MeV
     mp = 938.272  #MeV
     mu = m*mp/(mp+m) #Reduced mass
     g = 2*mu
@@ -62,40 +59,47 @@ def diffcross(Egamma,S,b,theta):
     charge2 = hbarc/(137)
     Mpip = m+mp
 
-    Eq = Egamma-m-0.5*Egamma**2/(Mpip)
+    Eq = np.array(Egamma-m-0.5*Egamma**2/(Mpip))
     if Eq<0 : return 0
-    k = Egamma/hbarc
-    q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    k = np.array(Egamma/hbarc)
+    q = np.array(np.sqrt(2*mu*Eq)/(hbarc))
+    s = np.array(np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta)))
 
-    def f(r):
+    def f(r): #form factor
         return S/b*np.exp(-r**2/b**2)
 
-    def sys(r,u,E):
-        y,v,I = u
-        dy = v
-        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-        dI = 12*np.pi*f(r)*r**4*y
-        return dy,dv,dI
+    def df(r): #d/dr f(r)
+        return -2*r/b**2*S/b*np.exp(-r**2/b**2)
 
-    def bc(ua, ub,E):
-        ya,va,Ia = ua
-        yb,vb,Ib = ub
-        return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+    def ddf(r): #d^2/dr^2 f(r)
+        return -2/b**4*(b**2-2*r**2)*S/b*np.exp(-r**2/b**2)
+
+    def sys(r,u,E):
+        y,v,z,I = u
+        dy = v
+        dv = z
+        dz = mu/(2*hbarc**2)*(-E-m)*v-mu/(hbarc**2)*2*r/b**2*f(r)
+        dI = 12*np.pi*(2*f(r)*y+r**2*y+2*r*f(r)*v+2*r*df(r)*y+r**2*ddf(r)*y+r**2*df(r)*v+2*r*f(r)*y+r**2*df(r)*v+r**2*f(r)*z)
+        return dy,dv,dz,dI
+
+    def bc(ua, ub, E):
+        ya,va,za,Ia = ua
+        yb,vb,zb,Ib = ub
+        return va, vb+(g*(m+abs(E)))**0.5*yb,yb, Ia, Ib-E
 
     rmax = 5*b
     rmin = 0.01*b
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    r = np.logspace(start,stop,num=50000,base=np.exp(1))
     E = -2
 
-    u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
+    u = [0*r,0*r,0*r,E*r/r[-1]]
+    res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 
-    phi = res.y.T[:np.size(r2),0]
-    phi3 = Spline(r2,phi)
+    phi = res.y.T[:np.size(r),0]
+    phi3 = Spline(r,phi)
 
     def F(S):
         func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
@@ -117,11 +121,11 @@ if __name__ == '__main__':
     errorSchmidtmax = errorSchmidtmin
     sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
     plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",color='b')
-    popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
-    print("popt=",popt)
-    print("Error=",np.sqrt(np.diag(pcov)))
+    #popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
+    #print("popt=",popt)
+    #print("Error=",np.sqrt(np.diag(pcov)))
     photonenergies = np.linspace(144.7,170,25)
-    plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
+    plt.plot(photonenergies,totalcross(photonenergies,75,3.9))
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
     plt.grid()

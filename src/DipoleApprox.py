@@ -58,7 +58,6 @@ charge2 = hbarc/(137)
 Mpip = m+mn
 
 def diffcross(Egamma,S,b):
-
     diff_cross = []
     for i in tqdm(Egamma):
         Eq = i-m-0.5*i**2/(Mpip)

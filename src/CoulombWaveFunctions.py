@@ -12,6 +12,8 @@ import seaborn as sns
 from numpy import frompyfunc
 from scipy.special import gamma, factorial
 from scipy.special import spherical_jn
+from sympy import hyper
+
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -51,7 +53,7 @@ Mpip = m+mp
 def diffcross(Egamma,S,b,theta):
 
     Eq = Egamma-m-0.5*Egamma**2/(Mpip)
-    if Eq.any()<0 : return 0
+    #if Eq.any()<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
     s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
@@ -89,37 +91,10 @@ def diffcross(Egamma,S,b,theta):
         return -charge2*mu/(hbarc**2*S)
 
     def F(S):
-        func = lambda r: phi3(r)*r**3*2*2*np.exp(-np.pi*eta(S)/2)*abs(sp.special.gamma(1+1+1.j*S))/(sp.special.factorial(2+1))
+        func = lambda r: phi3(r)*r**3*hyper(1+1-1.j*eta(s),4,2*1.j*r)
         integral =  4*np.pi/3*sp.integrate.quad(func,0,rmax)[0]
         return integral
 
     return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
-def totalcross(Egamma,S,b):
-    func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
-    integ = sp.integrate.quad(func,0,np.pi)[0]
-    return integ
-
-plt.figure(figsize=(9,5.5));
-
-photonenergies = np.linspace(145.4,180,50)
-
-
-N = []
-# M = []
-# P = []
-for i in tqdm(photonenergies):
-    N.append(totalcross(i,86.2,3.8))
-    # M.append(totalcross(i,100,2))
-    # P.append(totalcross(i,40,3))
-
-plt.plot(photonenergies,N, label=r'$S=86.2$ MeV, $b=3.8$ fm', color='r')
-# plt.plot(photonenergies,M, label=r'$S=45.5$ MeV, $b=3.9$ fm', color='g')
-# plt.plot(photonenergies,P, label=r'$S=35.4$ MeV, $b=4.0$ fm', color='navy')
-
-plt.xlabel(r"$E_\gamma$ [MeV]");
-plt.ylabel(r"$\sigma [\mu b]$");
-plt.legend(loc='best',frameon=False)
-plt.grid()
-
-plt.show()
+diffcross(160,45,3,np.pi)

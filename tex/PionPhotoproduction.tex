@@ -1,0 +1,345 @@
+\chapter{Pion photoproduction}\label{sec:dipoleapprox}
+
+We now consider the case of pion photoproduction. In the model mentioned in section \ref{sec:model} the nucleon is in a superposition of states with an arbitrary number of pions. We can write a general multicomponent wavefunction of the nucleon as 
+\begin{equation}
+    \Psi_N = \mqty[\psi_N \\ \psi_{N\pi} \\
+    \psi_{N\pi \pi} \\
+    \vdots],
+\end{equation}
+\begin{marginfigure}
+\centering
+\input{Figures/Multicomponent}
+\caption{Illustration of the dressed nucleon. In the centre (green) is a nucleon and surrounding it is a cloud of virtual pions (red gradient). }
+\label{Multicomponent}
+\end{marginfigure}
+where $\psi_p$ is the wave function of the isolated nucleon and $\psi_{N\pi}$ is a system consisting of the nucleon and one pion and the same logic applies to the different wavefunctions. We will refer to the systems with one or more pions as dressed nucleon states in the sense that the isolated nucleon is dressed by a cloud of virtual pions--this is illustrated in figure \ref{Multicomponent}. It is important to stress the fact that these are virtual pions. This means in order to generate a pion some energy $ m_\pi c^2 \approx 140$ MeV must be added to the system. Within this framework, pion photoproduction comes naturally through photodisintegration. In order words, we disintegrate the nucleon-pion system and create pions in the process. More specifically we disintegrate a two-body system and this is photoproduction within the framework of this model. The disintegration approach is inspired by another two-component system, the deuteron. We, therefore, expect the same approach to apply here. Deuteron photodisintegration is covered in Appendix \ref{app:deuteron}. We consider an initial (bound) state given by
+\begin{equation} \label{phii}
+    \ket{\Phi_i} = \mqty[\phi_p \\ \phi_{N\pi}],
+\end{equation}
+where $\phi$ represents a bound state. The final state consists of the same superposition but in an unbound system represented by $\psi$, i.e.
+\begin{equation} \label{psif}
+    \ket{\Psi_f} = \mqty[\psi_p \\ \psi_{N\pi}].
+\end{equation}
+Note that we only consider one-pion systems since we expect this to be largest contribution to the dressed nucleon--nontheless this is an approximation. 
+\subsection{Normalization of the initial state}\label{subsec:initial}
+We must also impose some normalization. Starting from \eqref{phii}
+\begin{align}
+    \Phi = \mathcal{N} \mqty[p\uparrow \\ (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \vec{r})p\uparrow \phi(r)],
+\end{align}
+where $\uparrow$ represents the spin state, $\phi(r)$ is the wavefunction from figure  \ref{fig:integralplot} and $\mathcal{N}$ is the normalization constant.
+This leads to
+\begin{align}
+    \braket{\Phi}{\Phi} &= \abs{\mathcal{N}}^2 \big( \braket{\phi_p}{\phi_p}+ \braket{\phi_{N\pi}}{\phi_{N\pi}} \big) \\
+    &= \abs{\mathcal{N}}^2 \big( V+3V\int \text{d}^3r \, r^2 \phi(r)^2 \big)\label{int} \\
+    &\stackrel{!}{=} 1.
+\end{align} 
+This leads to the following normalization constant
+\begin{equation}
+    \mathcal{N} = \frac{1}{\sqrt{V}}\frac{1}{\sqrt{1+\epsilon}},
+\end{equation}
+where $V$ is the volume and $\epsilon$ is the integral in \eqref{int}. To figure out what particle can be knocked out by a photon via photodisintegration we consider the pion channel in \eqref{psif}. 
+This expression is the properly normalized initial state.
+\subsection{Normalization of the final state}\label{subsec:final}
+The final state consists of the unbound system represented by $\psi$. Expanding the terms using the isospin operators yields\footnote{$\tau_0 \pi^0 + \sqrt{2}\tau_+\pi^-+\sqrt{2}\tau_-\pi^+$}
+\begin{equation} \label{phiinitial}
+    \phi_{N\pi} = c(\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \vec{r})p\uparrow \phi(r) = c(p\pi^0+\sqrt{2}n\pi^+)(\vec{\sigma}\cdot \vec{r})\uparrow \phi(r).
+\end{equation}
+From this equation, the first result should be highlighted. We consider two photodisintegration processes
+\begin{align}
+     p\gamma & \rightarrow p\pi^0 \\
+     p\gamma & \rightarrow n \pi^+,
+\end{align}
+where due to orthogonality of the states in isospin space the process involves the neutron is proportional to $\sqrt{2}$. Since this term will exist throughout the calculations we know the ratio between these two processes must be related by a factor of 2. There are also some corrections related to the mass difference between the proton and the neutron. This will be evident when comparing the matrix elements in section \ref{sec:dipoles}. 
+
+\begin{marginfigure}
+	\centering
+	\input{Figures/normsphericalham}
+	\caption{Illustration of the angle between the two vectors $\vec{q}$ and $\vec{r}$ in equation (\ref{expansion})}
+	\label{normsphere}
+\end{marginfigure}
+This expansion will be useful when evaluating matrix elements with the different spin states represented by $(\uparrow \downarrow)$. Considering the final state which consists of a plane wave. It is useful to expand this in terms of spherical harmonics. Using the spherical harmonic decomposition of the plane wave yields
+\begin{align}\label{planewaveexpansion}
+    \frac{1}{\sqrt{V}} \text{e}^{-i\vec{q}\cdot\vec{r}} &= \frac{1}{\sqrt{V}} \sum_{\ell,m} 4\pi i^\ell Y_\ell^{*m}(\vec{q})Y_\ell^m(\vec{r})j_\ell(qr) \\
+    &= \frac{1}{\sqrt{V}} \sum_\ell 4\pi i^\ell j_\ell(qr) \bigg( \frac{2\ell+1}{4\pi}\bigg)P_\ell(\cos\theta),
+\end{align}
+where $\theta$ is the angle between $\vec{q}$ and $\vec{r}$ also illustrated on \ref{normsphere} and $P_\ell$ is the Legendre polynomial of degree $\ell$. For now $\vec{q}$ is some variable related to the energy of the photon and will act as momentum. This is illustrated on figure \ref{fig:qenergy} and is expanded upon in the next section. Also, the spherical harmonic addition theorem has been used.\footnote{$\sum_m Y_\ell^m(\vec{p}')Y_\ell^{*m}(\vec{r})=\big( \frac{2\ell+1}{4\pi}\big)P_\ell(\cos\theta)$} Since we are considering the pion channnel just above the threshold we do the following expansion
+\begin{equation} \label{expansion}
+\frac{1}{\sqrt{V}}\text{e}^{i\vec{q}\cdot \vec{r}} \stackrel{\ell=0}{=} \frac{1}{\sqrt{V}}j_0(qr),    
+\end{equation}
+which is assumed to be the dominant contribution
+\subsection{Photoproduction: dipole approximation}\label{sec:dipoles}
+Having properly normalized the initial and final states we now move on to the actual matrix element we want to calculate. As the normalization of the final state suggests we limit ourselfs to dipole transitions. This is an approximation and contraints the cross section to only be correct for low energies. In order works this should only apply for photon energies just above the threshold. We now want to calculate the matrix element in within the dipole approximation, that is
+\begin{equation}
+    \mel{\Psi_f}{\vec{d}}{\Phi_i},
+\end{equation}
+\begin{marginfigure}
+\centering
+\input{Figures/qenergy}
+\caption{Illustration of the energy levels. Here the energy $E$ refers to the energy shown in \ref{fig:integralplot} and will act as a zero-point energy.}
+\label{fig:qenergy}
+\end{marginfigure}  
+where $\vec{d}$ is the dipole operator, $\ket{\Phi_i}$ and $\ket{\Psi_f}$ are given by \eqref{phii} and \eqref{psif} respectively. As before, we only consider the pion channel. Since we are considering transitions just above the threshold we only consider the contributions from the electric dipole term. This terms is assumed to dominate and higher order terms can be calculated later if necessary. Considering the pion channel for the following process $p \gamma \rightarrow n\pi^+$
+\begin{equation}
+    \mathcal{M}=-i\omega_k\sqrt{\frac{2\pi\hbar}{V\omega_{\vec{k}}}}\vec{e}_{\vec{k},\lambda}\mel*{\frac{1}{\sqrt{V}}\text{e}^{i\vec{q}\cdot \vec{r}}n\pi^+ (\uparrow \downarrow)}{\vec{d}}{(\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \vec{r})p\uparrow \phi(r)\mathcal{N}}
+\end{equation}
+where the two arrows represent the two spin states of the neutron and the proton. Also, $q$ is illustrated in figure \ref{fig:qenergy} where the energy, $E$, is the same as in \eqref{system}. This is the zero point energy in the system we are considering and can be written as 
+\begin{equation}
+    \frac{\hbar^2 q^2}{2\mu_{N\pi}} = \hbar \omega-m_\pi c^2,
+\end{equation}
+where $\mu_{N\pi}$ is the reduced mass of the nucleon-pion system. Compare this equation to \eqref{kq}. The front factor arises from the quantization of the electromagnetic field. Using the results from section \ref{subsec:final} and section \ref{subsec:initial}. The different spin states of the neutron in the final state yields to contributions to the total matrix element given by
+\begin{align}
+    \mathcal{M}^{\uparrow} &=\frac{-i\mathcal{N}\sqrt{2}\omega_k\vec{e}_{\vec{k},\lambda}}{V}\sqrt{\frac{2\pi\hbar}{V\omega_{\vec{k}}}}\mel*{j_0(qr)}{d_0 r_0}{\phi(r)}  \\
+    &= \frac{-i\mathcal{N}\sqrt{2}\omega_k\vec{e}_{\vec{k},\lambda}}{V}\sqrt{\frac{2\pi\hbar}{V\omega_{\vec{k}}}}\sqrt{\frac{4\pi}{3}}\mel*{j_0(qr)}{d_0 r Y_1^0}{\phi(r)} \\
+    \mathcal{M}^{\downarrow} & = \frac{-i\mathcal{N}2\omega_k\vec{e}_{\vec{k},\lambda}}{V}\sqrt{\frac{2\pi\hbar}{V\omega_{\vec{k}}}} \mel{j_0(qr)}{d r_{+}}{\phi(r)}\\
+    &=\frac{-i\mathcal{N}2\omega_k\vec{e}_{\vec{k},\lambda}}{V}\sqrt{\frac{2\pi\hbar}{V\omega_{\vec{k}}}}\sqrt{\frac{4\pi}{3}}\mel*{j_0(qr)}{d_0 r Y_1^1}{\phi(r)}, \\
+\end{align}
+where the spin down state picks up a factor $\sqrt{2}$ from equation \ref{spinmatrix}. Now we calculate the remaining matrix elements,
+\begin{align}
+    \mel{j_0(qr)}{d_0 r_0}{\phi(r)} &= \frac{\mu}{m_\pi}e \mel{j_0(qr)}{r_0r_0}{\phi(r)} \\
+    &= \frac{\mu}{m_\pi}e\frac{4\pi}{3} \mel{j_0}{r^2}{\phi(r)} \\
+    &= \frac{\mu e }{m_\pi} \int_0^\pi \int_0^{2\pi} \int_0^\infty \text{d}r \text{d}\phi \text{d}\theta \, j_0(qr)r^4\cos^2\theta \sin\theta \phi(r) \\
+    &= \frac{4\pi \mu e}{3m_\pi} \underbrace{\int_0^\infty \text{d}r \, j_0(qr)r^4\phi(r)}_{\mathcal{Q}(r)},
+\end{align}
+where the dipole operator has been inserted and the angular integrals calculated. Similarly for the next matrix element,
+\begin{align}
+    \mel{j_0(qr)}{d_{-}r_{+}}{\phi(r)} &= \frac{\mu}{m_\pi}e \mel{j_0(qr)}{r_{-}r_{+}}{\phi(r)} \\
+    &= \frac{4\pi \mu e}{3 m_\pi} \mel{j_0(qr)}{r^2 Y_1^{-1}Y_1^1}{\phi(r)} \\
+    &= \frac{4\pi \mu e}{3 m_\pi} \mathcal{Q}. 
+\end{align}
+This leads to the two final expressions for the two matrix elements
+\begin{equation}
+    \abs{\mathcal{M}^\uparrow} = \bigg( \frac{4\pi \mu e}{3m_\pi}\bigg)^2 \frac{2 \mathcal{N}^2\omega_k (2\pi \hbar)}{V^2}(\vec{e}_{\vec{k},\lambda})^0(\vec{e}_{\vec{k},\lambda}^*)^0 \mathcal{Q}^2 
+\end{equation}
+Similarly for the next matrix element
+\begin{equation}
+    \abs{\mathcal{M}^\downarrow} = \bigg( \frac{4\pi \mu e}{3 m_\pi}\bigg)^2 \frac{4\mathcal{N}\omega_{\vec{k}}(2\pi\hbar)}{V^2}(\vec{e}_{\vec{k},\lambda})^+(\vec{e}_{\vec{k},\lambda}^*)^+ \mathcal{Q}^2.
+\end{equation}
+Calculating the total matrix element using a polarization theorem\footnote{$(\vec{e}_{\vec{k},\lambda}^*\cdot \vec{e}_{\vec{k},\lambda})=\delta_{\lambda,\lambda'}$ and $\vec{e}_{\vec{k},\mp}=\pm\frac{1}{\sqrt{2}}(\vec{e}_{\vec{k},1}\pm i\vec{e}_{\vec{k},2})$. This leads to $(\vec{e}^{0*}_{\vec{k},\lambda}\cdot\vec{e}^{0}_{\vec{k},\lambda'})+(\vec{e}^{0+}_{\vec{k},\lambda}\cdot\vec{e}^{+}_{\vec{k},\lambda'})=\delta_{\lambda,\lambda'}+\frac{1}{2}\delta_{\lambda,\lambda'}$}
+\begin{align}
+    \abs{\mathcal{M}}^2 &= \abs{\mathcal{M}^\uparrow}^2 + \abs{\mathcal{M}^\downarrow}^2 \\
+    &= \frac{2\pi \hbar \omega_k \mathcal{N}^2 e^2}{V^2} \bigg( \frac{4\pi\mu}{3m_\pi}\bigg)^2 \mathcal{Q}^2,
+\end{align}
+\begin{marginfigure}
+\centering
+\input{Figures/diffcros}
+\caption{Illustration of the differential cross section. }
+\label{fig:diffcrossillustration}
+\end{marginfigure}  
+which is the final expression for the matrix element. According to Fermi's golden rule we can calculate the transition probability
+\begin{equation}\label{domega}
+    \text{d}\omega = \frac{2\pi}{\hbar} \abs{\mathcal{M}}^2 \text{d}\rho,
+\end{equation}
+where the density of states is given by
+\begin{equation}\label{densityofstates}
+    \text{d}\rho = \frac{Vqm }{\hbar^2 (2\pi)^3}\text{d}\Omega.
+\end{equation}
+This is related to the differential cross section 
+\begin{equation}\label{diffcrosssection}
+    \frac{\text{d}\sigma}{\text{d}\Omega_q}=\frac{16 \pi}{9} \mathcal{N}^2 \alpha\frac{kq\mu^3_{N\pi}}{m_\pi^2 \hbar c}\mathcal{Q}^2,
+\end{equation}
+and since there is no explicit angular dependency the total cross section is given by
+\begin{align}
+    \sigma_\text{dipole} & = \oint_{4\pi} \frac{\text{d}\sigma}{\text{d}\Omega_q} \text{d}\Omega_q \\
+    &= 4\pi \frac{16 \pi}{9} \mathcal{N}^2 \alpha\frac{kq\mu^3_{N\pi}}{m_\pi^2 \hbar c}\mathcal{Q}^2 \\
+    &= \frac{64\pi^2}{9}\mathcal{N}^2 \alpha \frac{kq\mu^3_{p\pi}}{m_\pi^2 \hbar c} \left( \int_0^\infty \text{d}r \, j_0(qr)r^4 \phi(r)\right)^2 \label{dipoletotalcross}.
+\end{align}
+This is the final expression for the total cross section of protoproduction of charged pions using the dipole approximation. We now perform a fit to experimental data for the parameters $S$ and $b$ and enter in the wave function $\phi(r)$. Here two considerations are needed. Both the dipole approximation and the one-pion approximation limit the validity of the cross section to near threshold. And due to the limited amount of experimental data for charged pion photoproduction the fit is limited to approximately $15$ MeV from the threshold. This means some data points are excluded to constrain the fitted parameters to values that might seems physically realistic. 
+
+The fit is performed and can be seen on figure \ref{fig:dipolefit}.
+\begin{figure}[H]
+    \begin{sidecaption}{The total cross section of the photoproduction process $\gamma p \rightarrow \pi^+ n$ fitted to experimental data. The fit parameters are shown in the figure. The blue data points are included in the fit and the black data points are excluded since these violate both the dipole and the one pion approximation.}[fig:dipolefit]
+    \includegraphics[width=\linewidth]{Figures/dipole_approximation.pdf}
+    \end{sidecaption}
+\end{figure}
+The parameters $S$ and $b$ seem reasonable but more importantly we are interested in the relative weight coming from the $N\pi$ component in the wave function and the virtual pions contribution to the dressed proton. This corresponds to solving the equations in \eqref{system} with the new parameters. The contribution to the wave function is calculated as follows
+\begin{align}
+    \int_V \text{d}^3R \int_V \text{d}^3 r \, \abs{\psi_{N\pi}} &= 4\pi \int_0^\infty \text{d}r \, \phi(r)^2r^2 \\
+    &= 0.69
+\end{align}
+using \eqref{pnpi} and considering only the $\pi^+$ component in $\vec{\pi}$. The energy is calculated which yields
+\begin{equation}
+    E_{\text{virtual pions}} = -449 \, \text{MeV}.
+\end{equation}
+Note here that we have used two approximations that limit \eqref{dipoletotalcross} to energies very close to the treshold. To futher test the validity of the model we need a more general expression for the cross section and more data points. This means we have to consider the exact matrix element for the transition and consider the photoproduction of neutral pions off protons since this is the most experimentally investigated photoproduction process. 
+\section{Pion Photoproduction exact}
+In section \ref{sec:dipoleapprox} we looked at how to use the model described in section \ref{sec:model} to get an expression for the cross-section which was compared to experimental data. More specifically we used the dipole approximation which introduces a trade-off between the difficulty of the calculations and the regime in which our solution is valid. We expect the dipole approximation to hold for low energies just above the threshold. To both validate and generalize this result we now do a different approach and calculate the cross-section exact and also consider recoil effects. Strictly speaking, recoil effects should also be considered in section \ref{sec:dipoleapprox} since the mass ratio between the nucleon and the pion cannot be assumed to yield a stationary nucleon after the pion photoproduction process. To calculate the exact matrix elements we consider a non-relativistic system of particles interacting with the electromagnetic field. The interacting part of the Hamiltonian is given by
+\begin{equation} \label{firstinthamil}
+	H = \frac{1}{2m_\pi} \bigg( \vec{p}-\frac{e}{c}\vec{A}(\vec{r}) \bigg)^2,
+\end{equation}
+where $\vec{p}$ is the momentum operator and $\vec{A}(\vec{r})$ is the quantized vector potential at the point $\vec{r}$. Note that we have already replaced the usual mass by the mass of the pion, $m_\pi$ since we are considering the interaction of a pion with charge $e$ with the electromagnetic field. 
+
+The electromagnetic interaction is relatively weak compared to the strong force. For our problem, this means we can expand the interaction by taking only the lowest non-vanishing order of perturbation into account. Since we later want to consider transition probabilities we only keep the first non-linear term of \eqref{firstinthamil} which yields
+\begin{equation}\label{secondinthamil}
+	V^{(1)} = -\frac{e}{2m_p c}\bigg( \vec{p}\cdot \vec{A}(\vec{r}_p,t)+\vec{A}(\vec{r}_p,t)\cdot \vec{p}\bigg),
+\end{equation}
+\begin{marginfigure}
+	\centering
+	\input{Figures/Jacobi}
+	\caption{Jacobi coordinates illustrating $\vec{r}_\pi$ used in the vector potential in equation \ref{thirdinthamil}. Here we use $\vec{r}=\vec{r}_\pi-\vec{r}_p$ and see that $\vec{r}_\pi = \vec{R}+\vec{r}\frac{m_p}{M_{p \pi}}$, where $M_{p\pi}=m_p+m_\pi$.}
+	\label{JacobiIllustration}
+\end{marginfigure}
+\noindent which also means the interacting part is linear in the creation(annihilation) operators corresponding to single-photon emission(absorption). Our choice of gauge is purely conventional and we choose the radiation gauge which imposes a condition on the vector potential given by
+\begin{equation}
+	\nabla \cdot \vec{A} = 0,
+\end{equation}
+and this is a convenient choice of gauge since the commutator in \eqref{secondinthamil} is $\nabla \cdot \vec{A}$ and we can write
+\begin{equation}\label{thirdinthamil}
+	V^{(1)} = -\frac{e}{m_p c}\vec{A}(\vec{r_p},t)\cdot \vec{p}_p. 
+\end{equation}
+Note that \eqref{thirdinthamil} consists of the pion momentum operator, $\vec{p}_\pi$ and the electromagnetic vector potential at a distance $r_\pi$. This distance was also mentioned in section \ref{sec:model} and can be expressed in term of the Jacobi coordinates illustrated on figure \ref{JacobiIllustration} where the relative coordinate is given by $\vec{r}=\vec{r}_\pi-\vec{r}_p$ which leads to the following transformation of equation \eqref{thirdinthamil}
+\begin{equation}
+	V^{(1)} = -\frac{e}{m_p c}\vec{A}(\vec{r_p},t)\cdot \vec{p}_p = -\frac{e}{m_p c} \vec{A}\bigg( \vec{R}-\frac{m_\pi}{M_{p\pi}}\vec{r},t\bigg)\bigg(\frac{m_p}{M_{p\pi}}\vec{P}-\vec{p}\bigg),
+\end{equation}
+where $M_{p \pi}=m_p+m_\pi$ is the total mass of the system and $\vec{R}$ is the coordinate vector for the center of mass. We now move on from the general theory of the pion interacting with the electromagnetic field and consider the specific case of pion photoproduction. To recap we consider the following processes
+\begin{align}
+	p \gamma & \rightarrow p \pi^0 \label{photo1}\\
+	p \gamma & \rightarrow n \pi^+ \label{photo2}\\
+	n \gamma & \rightarrow n \pi^0 \label{photo3}\\
+	n \gamma & \rightarrow p \pi^- \label{photo4},
+\end{align}
+where the initial states consist of a dressed proton or neutron and a plane wave photon which in the language of 2nd quantization can be written as $a_{\vec{k},\lambda}^\dagger \ket{0}$ corresponding to creating a photon with wave vector $\vec{k}$ and polarization $\lambda$ from the vacuum $\ket{0}$. The final states consists of a nucleon and a pion and no photon, i.e electromagnetic vacuum. This leads to the following expression for the matrix element for the transitions in \eqref{photo1}, \eqref{photo2}, \eqref{photo3} and \eqref{photo4}
+\begin{equation}\label{transitions}
+	\frac{-e}{m_\pi c}\mel*{0}{\vec{A}\big( \vec{R}-\frac{m_\pi}{M_{p\pi}}\vec{r},t\big) a_{\vec{k},\lambda}^\dagger}{0} = \frac{-e}{m_p} \sqrt{\frac{2\pi \hbar}{\omega_{\vec{k}}V}} \vec{e}_{\vec{k},\lambda}\text{e}^{i\vec{k}(\vec{R}-\frac{m_\pi}{M_{p\pi}}\vec{r})-i\omega_k t}.
+\end{equation}
+Completely analogous to section \ref{sec:dipoles} and specifically equation \eqref{domega} we now want to consider the probability of transition per unit time of going from the initial state $\ket{i}$ to $\bra{f}$ according to Fermi's golden rule
+\begin{equation}
+	\text{d}\omega = \frac{2\pi}{\hbar} \abs{\mathcal{M}}^2 \text{d}\rho,
+\end{equation}
+where $\text{d}\rho$ is the density of states also analogous to \eqref{densityofstates}. The difference is that we do not employ the dipole approximation to evaluate the matrix element $\mathcal{M}$ and we also consider recoil. In the following section we focus on pion photoproduction of neutral pion off protons corresponding to the transition in \eqref{photo1}. The choice is due to the fact that there is a lot more experimental data available for pion photoproduction off protons compared to neutrons since it is easier to achive experimentally. We focus on neutral pions since our one-pion approximation is assumed to be valid near the threshold and since we are interested in fitting to experimental data we need as much data near the threshold as possible--and this is the case for neutral pion photoproduction
+\subsection{Neutral Pion Phototoproduction off Protons}
+From \eqref{transitions} we get
+\begin{align}\label{MatrixSpinupdown} 
+	\mathcal{M}^{(\uparrow\downarrow)} & = \frac{e}{m_p} \sqrt{\frac{2\pi\hbar}{\omega_{\vec{k}}V}} \mel*{(\uparrow\downarrow)p\pi^0 \frac{\text{e}^{i\vec{q}\cdot \vec{r}}}{\sqrt{V}}\frac{\text{e}^{i\vec{Q}\cdot \vec{r}}}{\sqrt{V}}}{\text{e}^{i\vec{k}(R-\frac{m_\pi}{M_{p\pi}}\vec{r})}(\vec{e}_{\vec{k},\lambda}\vec{p})}{(\vec{\tau}\cdot\vec{\pi})(\vec{\sigma}\cdot\vec{r})\phi(r) \frac{p\uparrow}{\sqrt{V}}} \\
+	&= \frac{-e}{m_p} \sqrt{\frac{2\pi\hbar}{\omega_{\vec{k}}V}} \mel*{(\uparrow\downarrow) \frac{\text{e}^{i\vec{q}\cdot \vec{r}}}{\sqrt{V}}\frac{\text{e}^{i\vec{Q}\cdot \vec{r}}}{\sqrt{V}}}{\text{e}^{i\vec{k}(R-\frac{m_\pi}{M_{p\pi}}\vec{r})}(\vec{e}_{\vec{k},\lambda}\vec{p})}{(\vec{\sigma}\cdot\vec{r})\phi(r) \frac{\uparrow}{\sqrt{V}}} \label{MatrixSpinupdown2},
+\end{align} 
+\begin{marginfigure}
+	\centering
+	\input{Figures/qk}
+	\caption{Neutral pion photoproduction with conservation of momentum $\vec{k}=\vec{Q}$ illustrated}
+	\label{qkenergy}
+\end{marginfigure}
+where we have used $\int \text{d}^3 r \text{e}^{i\vec{k}\cdot\vec{R}}=V$ and $\mel{p\pi^0}{\vec{\tau}\cdot\vec{\pi}}{p}=1$. Note that $\vec{q}$ is the wave-number of the pion-proton relative momentum and $\vec{Q}$ is originates from conservation of momentum, that is $\vec{Q}=\vec{k}$. Defining a new vector, $\vec{s}=\vec{q}+\frac{m_\pi}{M_{p\pi}}\vec{k}$ yields
+\begin{equation}
+    \mathcal{M}^{(\uparrow\downarrow)} = \frac{-e}{m_\pi} \sqrt{\frac{2\pi\hbar}{\omega_{\vec{k}}}} \frac{1}{V} \mel*{(\uparrow \downarrow)}{\mel*{\text{e}^{i\vec{s}\cdot\vec{r}}}{(\vec{e}_{\vec{k},\lambda}\vec{p})(\vec{\sigma}\cdot\vec{r})}{\phi(r)}}{\uparrow}
+\end{equation}
+Note the different inner products. We now do the plane wave expansion using \eqref{planewaveexpansion} and consider the angular averaging of two coordinates variables\footnote{$\int \text{d}\Omega \, n_k n_l =\frac{4\pi}{3}\delta_{kl}$, which means $\int \text{d}\Omega \, r_k r_l =\frac{4\pi r^2}{3}\delta_{kl}$, where $n$ is a unit vector}
+\begin{align}
+    \mel*{\text{e}^{i\vec{s}\cdot\vec{r}}}{(\vec{e}_{\vec{k},\lambda}\frac{\partial}{\partial \vec{r}})\sigmar}{\phi(r)} &=+i(\vec{e}_{\vec{k},\lambda}\cdot \vec{s}) \int \text{d}^3 r \, \text{e}^{i\vec{s}\cdot\vec{r}}\sigmar \phi(r) \\ 
+    &= -i(\vec{e}_{\vec{k},\lambda}\cdot \vec{s}) \int \text{d}^3 r \, 3 i r j_1(sr) \frac{\vec{s}\cdot \vec{r}}{sr}\sigmar \phi(r) \\
+    &= (\vec{e}_{\vec{k},\lambda}\cdot \vec{s})\sigmar \underbrace{\frac{4\pi}{s} \int_0^\infty \text{d}r \, r^3 j_1(sr) \phi(r)}_{F(s)}  \\
+    &= (\vec{e}_{\vec{k},\lambda}\cdot \vec{s})\sigmar F(s).
+\end{align}
+Returning to the matrix element \eqref{MatrixSpinupdown2}
+\begin{align}
+    \mathcal{M^{(\uparrow\downarrow)}} &= \frac{ie\hbar}{m_p}\sqrt{\frac{2\pi \hbar}{\omega_k}}\frac{1}{V}\mel*{(\uparrow\downarrow)}{(\vec{e}_{\vec{k},\lambda}\cdot\vec{s})F(s)}{\uparrow} \\
+    &=\frac{ie\hbar}{m_p}\sqrt{\frac{2\pi \hbar}{\omega_k}}\frac{1}{V} (\vec{e}_{\vec{k},\lambda}\cdot\vec{s})\mel*{(\uparrow\downarrow)}{\sigmar}{\uparrow}F(s),
+\end{align}
+which leads to the following expression for the norm square\footnote{We do this step already to use a completeness relation for the polarization.}
+\begin{equation} \label{matrixspinupdownabs}
+    \abs{\mathcal{M}^{(\uparrow\downarrow)}}^2 = \frac{2\pi\hbar^3e^2}{m_p^2\omega_k V^2} \abs{\evec\cdot \vec{s}}^2 \abs{\mel*{(\uparrow\downarrow)}{\sigmar}{\uparrow}}^2 F(s)^2,
+\end{equation}
+and now calculating
+\begin{align} \label{sumoverpol}
+    \sum_\lambda &= \abs{(\evec \cdot \vec{s})}^2 = \sum_\lambda (\evec^*\cdot \vec{s})(\evec\cdot\vec{s}) \\
+    &= s^2 -\frac{(\vec{k}\cdot \vec{s})^2}{k^2} \\
+    &= q^2 -\frac{(\vec{k}\cdot \vec{q})^2}{k^2} \\
+    &= q^2 \sin^2(\theta_q),
+\end{align}
+where $\theta_q$ is the angle between $\vec{k}$ and $\vec{q}$ and we now have an angular dependency originating from the dot product. I have added a subscript $q$ to empathize that this relative to the final state momentum $\vec{q}$ located in $(\theta, \phi)$ also illustrated on figure \ref{fig:diffcrossillustration}.
+
+Plugging \eqref{sumoverpol} into \eqref{matrixspinupdownabs} yields
+\begin{equation} \label{absmatrixexact}
+    \frac{1}{2}\sum_{\lambda,(\uparrow\downarrow)} \abs{\mathcal{M}_{fi}}^2 = \frac{\pi e^2\hbar^3}{V^2 m_p^2}\frac{1}{\omega_k} q^2\sin^2(\theta) s^2 F(s)^2.
+\end{equation}
+According to Fermi's golden rule the transition probability is given by
+\begin{align}\label{Fermisgolden}
+    \text{d}\omega &= \frac{2\pi}{\hbar}\abs{\mathcal{M}}^2\text{d}\rho, \quad \text{d}\rho = \frac{V \mu_{p\pi }q}{\hbar^2(2\pi)^3}\text{d}\Omega_q,
+\end{align}
+where the density of states in the final state assumes a non-relativistic expansion. Strictly speaking this is an approximation. Also, $\vec{q}$ denotes the differential angle element to empathize that this is relative to the pion-proton system. Plugging \eqref{absmatrixexact} into \eqref{Fermisgolden}
+\begin{align}
+    \text{d}\omega = \frac{e^2}{8\pi}\frac{\mu_{p\pi }c^2}{m_p^2 c^4 \omega_k}q^3 \sin^2(\theta_q) s^2 F(s)^2 \text{d}\Omega_q
+\end{align}
+which leads to the following expression for the differential cross section by considering the time it takes the photon to cross the volume, $V$.
+\begin{align}\label{exactdiffcross}
+    \frac{\text{d}\sigma}{\text{d}\Omega_q} &= \frac{e^2}{8\pi}\frac{M_{p\pi}c^2}{m_p^2c^4}\frac{q^3}{k}\sin^2(\theta_q) s^2 F(s)^2
+\end{align}
+In \eqref{exactdiffcross} we have an expression for the angular dependency. This means for some photon energy we get an angular distribution. This can also be compared to experimental data. (This can be done for all the figures in \cite[]{Beck_1990} and also for charged pions). Figure \ref{fig:angular151} shows the differential cross section as a function of the angle $\theta_{\text{cm}}$ compared to experimental data.  
+\begin{figure}[H]
+    \begin{sidecaption}{Not fitted parameters! Note the dependency is not $\sin(\theta_q)^2$ since there is a contribution from $F(s)$ as well.}[fig:angular151]
+    \includegraphics[width=\linewidth]{Figures/DiffCross151.pdf}
+    \end{sidecaption}
+\end{figure}
+\begin{figure}[H]
+    \begin{sidecaption}{Multiple energies}[fig:MultipleEnergies]
+    \includegraphics[width=\linewidth]{Figures/MultiDiffcross.pdf}
+    \end{sidecaption}
+\end{figure}
+To get an expression for the total cross section equation the expression is integrated into containing only a radial part using
+\begin{align} \label{exactcross}
+    \sigma & = 2\pi \int_0^\pi \text{d}\theta \, \sin(\theta_q) \frac{\text{d}\sigma}{\text{d}\Omega_q} \\ &= 2\pi \int_0^\pi \text{d}\theta \, \frac{e^2}{8\pi}\frac{\mu_{p\pi}c^2}{m_p^2c^4}\frac{q^3}{k}\sin^3(\theta) s^2 F(s)^2
+\end{align}
+\eqref{exactcross} is fitted to experimental data such that the physical parameters in our model $S$ and $b$ can be extracted. So far the values of these parameters have been chosen at random. However, we do have some intuition about how these two affect the wavefunction of the system from figure \ref{fig:relativistic_expansion}. From \eqref{exactcross} we see that the wave function only enters explicitly in the integral so the general behavior of the cross section is hard to predict. The fit is done and can be seen in figure \ref{fig:crossfit}. Data is from \cite[]{Schmidt_2001}
+\begin{figure}[H]
+    \begin{sidecaption}{Fitted parameters to experimental data for the process $\gamma p \rightarrow \pi^0 p$. The fit parameters for $S,b$ are shown inside the figure.}[fig:crossfit]
+    \includegraphics[width=\linewidth]{Figures/crossfit.pdf}
+    \end{sidecaption}
+\end{figure}
+Note that these expressions are for the production of neutral pions. The same approach can be done for charged pions.
+
+There is some freedom of choice in the fit. The integral is slowly converging and a cut-off must be introduced. This cut-off is arbitrary and does affect the fit. For a larger cut-off the line flattens out before 165 MeV. This leads to a more phenomenological discussion of the model in relation to the cross section as a function of energy. For higher energies we expect more than one pion to contribute to the cross section. This model, however, only takes one pion into account. To describe the behavior at higher energies more pions must be taking into account. This highlights the strengths and weaknesses of using differential equations to describe the physical system. If we take more pions into account this approach is no longer favorable since this leads to too many coupled systems. For more pions one would have to resort to another method.
+
+For neutral pion off neutrons
+\begin{figure}[H]
+    \begin{sidecaption}{The process $\gamma n \rightarrow \pi^0 n$ with the same parameters as for neutral pion photoproduction off protons.}[fig:neutralpionsoffneutrons]
+    \includegraphics[width=\linewidth]{Figures/NeutralPionsOffNeutrons.pdf}
+    \end{sidecaption}
+\end{figure}
+
+
+\section{Nuclear Effective Field Theory operator}
+The construction of the most general chiral Lagrangian is based on the theory of the non-linear realization of a symmetry. The baryon-number-conserving chiral Lagrangian can be split into pieces with even numbers of fermion fields where in this section we will focus on 
+\begin{equation}
+    \mathcal{L} = N^\dagger \left(i\mathcal{D}_0+\frac{\vec{\mathcal{D}}^2}{2m_N} \right)N+\frac{g_A}{2f_\pi}N^\dagger\vec{\tau}N\cdot \vec{D}\vec{\pi},
+\end{equation}
+where the second term is very similar to the creation operator $W$ from equation \eqref{W}--only the $\vec{r}$ is replaced by $\nabla_{\vec{r}}$. The general operator is constructed in such a way that parity, isospin and spin is conserved and there is some freedom in the choice of the distance operator. In this section we explore the differences, if any, by constructing the nuclear model with explicit mesons with the operator as is it defined in chiral effective field theory. We assume the following form of the wave function of the proton and the system consisting of a nucleon and a single pion
+\begin{equation}
+    \psi_p = p\uparrow\frac{1}{\sqrt{V}}, \quad \psi_{N\pi} = (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})p\uparrow \frac{1}{\sqrt{V}}\phi,
+\end{equation}
+where $\vec{\tau}$ and $\vec{\sigma}$ are vectors consistsing of Pauli matrices acting on isospin and spin space on the nucleon respectively. $\vec{\pi}$ is the isovector of pions. We now construct an operator to create and annihilate a pion
+\begin{align}
+    W & = (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})f(r) \\
+    W^\dagger & = \int_V \text{d}^3 r \, (\vec{\tau}\cdot \vec{\pi})^\dagger(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})^\dagger f(r),
+\end{align}
+where $f(r)$ is a form factor. The annihilation operator must contain the integral to remove the coordinate of the pion. This leads to the following Schrödinger equation
+\begin{equation}
+    \mqty[K_{\vec{R}} & W^\dagger \\ W & K_{\vec{R}}+K_{\vec{r}}+m_\pi c^2]\mqty[\psi_p \\ \psi_{N\pi}]=E\mqty[\psi_p \\ \psi_{N\pi}],
+\end{equation}
+which is expanded
+\begin{align}\label{CEFTint}
+    12\pi \int_0^\infty \text{d}r \, \frac{\partial^2}{\partial r^2}r^2f(r)\phi(r) =E \\
+    \frac{\partial}{\partial r}f(r)-\frac{2\hbar^2}{\mu_{N\pi}} \frac{\partial^3}{\partial r^3}\phi(r) = (E-m_\pi c^2)\frac{\partial}{\partial r}\phi(r)\label{CEFT2}.
+\end{align}
+Assume the form factor is on the following form
+\begin{equation}
+    f(r) = \frac{S}{b}\text{e}^{-r^2/b^2}
+\end{equation}
+which yields
+\begin{equation}
+    \frac{\partial}{\partial r} f(r) = \frac{-2r}{b^2}f(r), \quad \frac{\partial^2}{\partial r^2}=-\frac{2(b^2-2r^22)}{b^4}f(r).
+\end{equation}
+The terms inside the integral in equation \eqref{CEFTint} 
+\begin{align}
+    \frac{\partial^2}{\partial r^2}(r^2f(r)\phi(r)) & = 2rf(r)\phi(r)+2rf^\prime(r)\phi(r)+r^2f(r)\phi ^\prime(r)
+    \\&+2rf^\prime(r)\phi(r)+r^2f^{\prime\prime(r)}\phi(r)+r^2f^\prime(r)\phi^\prime(r)\\
+    &+2rf(r)\phi(r)+r^2f^\prime(r)\phi^\prime (r)+r^2f(r)\phi^{\prime\prime}(r) \\&\equiv Y(r)
+\end{align}
+Considering the limits of \eqref{CEFT2} which for large $r$ is
+\begin{equation}
+    -\frac{2\hbar^2}{\mu_{N\pi}}\phi^{\prime\prime\prime}(r) =(E-m_\pi c^2)\phi^\prime(r)
+\end{equation}
+The solution is shown on \ref{fig:EFTplot}
+\begin{figure}[H]
+    \begin{sidecaption}{Fitted parameters to experimental data. The fit parameters for $S,b$ are shown inside the figure.}[fig:EFTplot]
+    \includegraphics[width=\linewidth]{Figures/EFToperator.pdf}
+    \end{sidecaption}
+\end{figure}
