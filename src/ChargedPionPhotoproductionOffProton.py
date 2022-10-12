@@ -16,6 +16,8 @@ from pylab import plt, mpl
 from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from hankel import HankelTransform     # Import the basic class
 from tqdm import tqdm
+from lmfit import Model
+
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -101,9 +103,9 @@ def diffcross(Egamma,S,b,theta):
 
     return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
-def totalcross(Egamma,S,b):
+def totalcross(x,S,b):
     tot = []
-    for i in tqdm(Egamma):
+    for i in tqdm(x):
         func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta)
         integ = quad(func,0,np.pi)[0]
         tot.append(integ)
@@ -122,10 +124,10 @@ plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.grid()
 
-popt, pcov = curve_fit(totalcross,x,y, sigma=errorSchmidtmin)
-print("popt=",popt)
-print("Error=",np.sqrt(np.diag(pcov)))
+gmodel = Model(totalcross)
+result = gmodel.fit(y, x=x, S=45.6,b=3.9)
+print(result.fit_report())
 
 photonenergies = np.linspace(151.4,180,25)
-plt.plot(photonenergies,totalcross(photonenergies,popt[0],popt[1]), label=r'$S=%0.2f$ MeV, $b=%0.2f$ fm' %(popt[0],popt[1]), color='r')
+#plt.plot(photonenergies,totalcross(photonenergies,popt[0],popt[1]), label=r'$S=%0.2f$ MeV, $b=%0.2f$ fm' %(popt[0],popt[1]), color='r')
 plt.show()

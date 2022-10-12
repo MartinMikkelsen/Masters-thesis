@@ -82,12 +82,22 @@ u = [0*r,0*r,E*r/r[-1]]
 res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
-phi = -res.y.T[:np.size(r),0]
-phi3 = Spline(r,phi)
-psi3 = Spline(r,r*phi)
-r1 = R+m/M*r
-r2 = R-mn/M*r
-rcm = 1/M*(m*r1+mn*r2)
-plt.plot(r,abs(r*phi3(r))**2)
+R = 0.0
+phi = res.y.T[:np.size(r),0]
 
-4*np.pi*quad(lambda rcm: abs(phi3(mn/M*rcm)*rcm)**2*rcm**2,0,rmax)[0]
+r_pi = R+mn/M*r
+r_N = R-m/M*r
+r_cm = (m*r_pi-mn*r_N)/(M)
+
+phi3 = Spline(r,phi)
+
+plt.figure(figsize=(9,5.5));
+
+plt.plot(r_cm,4*np.pi* abs(M / mn * r_pi * phi3(m / M * r_cm)) ** 2,label=r'$q_1$',linewidth=2.5)
+#plt.plot(r_cm,4*np.pi* abs(M / mn * r_pi * phi3(m / M * r_cm)) ** 2,label=r'$q_2$',linewidth=2.5)
+plt.xlabel(r"$r_{cm}$ [fm]");
+plt.ylabel(r"$\rho(r_{cm})$");
+plt.grid()
+plt.legend(frameon=False);
+#integraltest = quad(lambda r_cm: 4*np.pi* abs(M / mn * r_pi * phi3(mn / M * r_cm)) ** 2,0,rmax)[0]
+#print("The integral is =",integraltest)

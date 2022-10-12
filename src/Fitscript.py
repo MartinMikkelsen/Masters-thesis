@@ -17,6 +17,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from hankel import HankelTransform     # Import the basic class
 from tqdm import tqdm
 from multiprocessing import Pool
+from lmfit import Model
 
 
 mpl.rcParams['font.family'] = 'XCharter'
@@ -104,8 +105,8 @@ def diffcross(Egamma,S,b,theta):
 
     return np.array(10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2)
 
-def totalcross(Egamma,S,b):
-    tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(Egamma)]
+def totalcross(x,S,b):
+    tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
     return tot
 
 if __name__ == '__main__':
@@ -117,11 +118,15 @@ if __name__ == '__main__':
     errorSchmidtmax = errorSchmidtmin
     sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
     plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",color='b')
-    popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
-    print("popt=",popt)
-    print("Error=",np.sqrt(np.diag(pcov)))
+    #popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
+    #print("popt=",popt)
+    #print("Error=",np.sqrt(np.diag(pcov)))
+    #gmodel = Model(totalcross)
+    #result = gmodel.fit(sigmaSchmidt, x=gammaSchmidt, S=45.6,b=3.9)
+    #print(result.fit_report())
     photonenergies = np.linspace(144.7,170,25)
-    plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
+    #plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
+    plt.plot(photonenergies,totalcross(photonenergies,79.0622971,3.91269467))
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
     plt.grid()
