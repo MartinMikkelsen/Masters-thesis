@@ -121,12 +121,13 @@ if __name__ == '__main__':
     #popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
     #print("popt=",popt)
     #print("Error=",np.sqrt(np.diag(pcov)))
-    #gmodel = Model(totalcross)
-    #result = gmodel.fit(sigmaSchmidt, x=gammaSchmidt, S=45.6,b=3.9)
-    #print(result.fit_report())
+    gmodel = Model(totalcross)
+    result = gmodel.fit(sigmaSchmidt, x=gammaSchmidt, S=80.6,b=3.9)
+    print(result.fit_report())
+
     photonenergies = np.linspace(144.7,170,25)
-    #plt.errorbar(gammaSchmidt,sigmaSchmidt,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
-    plt.plot(photonenergies,totalcross(photonenergies,79.0622971,3.91269467))
+    #plt.plot(photonenergies,totalcross(photonenergies,popt[0],popt[1]))
+    plt.plot(photonenergies, result.best_fit, '-', label='best fit')
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
     plt.grid()

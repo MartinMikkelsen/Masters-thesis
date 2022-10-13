@@ -46,65 +46,72 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b =  3.9    #fm
-S = 45.5    #MeV
+
 m = 135.57  #MeV
-mn = 939.272  #MeV
+mn = 938.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
 g = (2*mu)
 hbarc = 197.3 #MeV fm
 
-def f(r): #form factor
-    return S/b*np.exp(-r**2/b**2)
+def phifunc(S,b):
+    def f(r): #form factor
+        return S/b*np.exp(-r**2/b**2)
 
-def sys(r,u,E):
-    y,v,I = u
-    dy = v
-    dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-    dI = 12*np.pi*f(r)*r**4*y
-    return dy,dv,dI
+    def sys(r,u,E):
+        y,v,I = u
+        dy = v
+        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+        dI = 12*np.pi*f(r)*r**4*y
+        return dy,dv,dI
 
-def bc(ua, ub,E):
-    ya,va,Ia = ua
-    yb,vb,Ib = ub
-    return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+    def bc(ua, ub,E):
+        ya,va,Ia = ua
+        yb,vb,Ib = ub
+        return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-rmax = 5*b
-rmin = 0.01*b
-base1 = np.exp(1)
-start = np.log(rmin)
-stop = np.log(rmax)
-r = np.logspace(start,stop,num=50000,base=np.exp(1))
-E = -2
+    rmax = 5*b
+    rmin = 0.01*b
+    base1 = np.exp(1)
+    start = np.log(rmin)
+    stop = np.log(rmax)
+    r = np.logspace(start,stop,num=50000,base=np.exp(1))
+    E = -2
 
-u = [0*r,0*r,E*r/r[-1]]
-res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
-#print(res.message,", E: ",res.p[0])
+    u = [0*r,0*r,E*r/r[-1]]
+    res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+    #print(res.message,", E: ",res.p[0])
 
-phi = res.y.T[:np.size(r),0]
-phi3 = Spline(r,phi)
-def plot():
-    plt.figure(figsize=(9,5.5))
-    sns.lineplot(x=res.x,y=abs(res.y.T[:,0])*res.x,linewidth=3.5,label=r'$\phi$') #phi
+    phi = res.y.T[:np.size(r),0]
+    phi3 = Spline(r,phi)
 
-    #sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5,label=r'$\phi´$') #dphi
-    #sns.lineplot(x=res.x,y=res.y.T[:,2]/10000,linewidth=3.5,label=r'$E$') ##ddphi
-    plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
-    plt.legend(loc=0,frameon=False);
-    plt.xlabel("r [fm]")
-    rs = np.linspace(0,5,np.size(res.x))
-    plt.tight_layout()
-    #save_fig("45.5MeV3.9fm")
-    plt.show()
+    def rms_residuals():
+        plt.figure()
+        plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
+        plt.grid(); plt.legend(r"RMS".split(),loc=0);
+        save_fig("rms_residuals")
 
-def rms_residuals():
-    plt.figure()
-    plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
-    plt.grid(); plt.legend(r"RMS".split(),loc=0);
-    save_fig("rms_residuals")
 
-plot()
+    return res.x,res.y.T[:,0],res.y.T[:,1],res.y.T[:,2]
+
+plt.figure(figsize=(9,5.5))
+S1,b1 = 10,1
+S2,b2 = 15,1
+S3,b3 = 10,1.5
+S4,b4 = 15,1.5
+
+sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S1,b1))
+sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S2,b2))
+sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S3,b3))
+sns.lineplot(x=phifunc(S4,b4)[0],y=-phifunc(S4,b4)[1]*phifunc(S4,b4)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S4,b4))
+
+plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
+#plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
+plt.legend(loc=0,frameon=False);
+plt.xlabel("r [fm]")
+plt.tight_layout()
+#save_fig("multiwavefunction")
+#plt.show()
 
 phi_func = lambda r: phi3(r)**2*r**4
 int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]

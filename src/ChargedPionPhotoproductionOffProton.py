@@ -91,7 +91,7 @@ def diffcross(Egamma,S,b,theta):
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
@@ -104,30 +104,30 @@ def diffcross(Egamma,S,b,theta):
     return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(x,S,b):
-    tot = []
-    for i in tqdm(x):
-        func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta)
-        integ = quad(func,0,np.pi)[0]
-        tot.append(integ)
+    tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
     return tot
 
-plt.figure(figsize=(9,5.5));
+if __name__ == '__main__':
 
-x = np.array([154.03437815975732, 156.01617795753288, 160.02022244691608,164.994944388271])
-y = np.array([36.41025641025641, 43.93162393162393, 55.72649572649573,74.52991452991454])
-yprime = np.array([25.470085470085472, 40.85470085470086, 52.991452991452995,70.5982905982906])
-errorSchmidtmin = np.subtract(y,yprime)
-errorSchmidtmax = errorSchmidtmin
-sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
-plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
-plt.xlabel(r"$E_\gamma$ [MeV]");
-plt.ylabel(r"$\sigma [\mu b]$");
-plt.grid()
+    plt.figure(figsize=(9,5.5));
 
-gmodel = Model(totalcross)
-result = gmodel.fit(y, x=x, S=45.6,b=3.9)
-print(result.fit_report())
+    x = np.array([154.03437815975732, 156.01617795753288, 160.02022244691608,164.994944388271,164.994944388271, 170.0505561172902, 175.02527805864509, 179.95955510616784])
+    y = np.array([36.41025641025641, 43.93162393162393, 55.72649572649573,74.52991452991454,74.52991452991454, 89.05982905982906, 98.97435897435898,84.44444444444444])
+    yprime = np.array([25.470085470085472, 40.85470085470086, 52.991452991452995,70.5982905982906,70.5982905982906, 83.58974358974359, 91.7948717948718,75.8974358974359])
 
-photonenergies = np.linspace(151.4,180,25)
-#plt.plot(photonenergies,totalcross(photonenergies,popt[0],popt[1]), label=r'$S=%0.2f$ MeV, $b=%0.2f$ fm' %(popt[0],popt[1]), color='r')
-plt.show()
+    errorSchmidtmin = np.subtract(y,yprime)
+    errorSchmidtmax = errorSchmidtmin
+    sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
+    plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
+    plt.xlabel(r"$E_\gamma$ [MeV]");
+    plt.ylabel(r"$\sigma [\mu b]$");
+    plt.grid()
+
+    #gmodel = Model(totalcross)
+    #result = gmodel.fit(y, x=x, S=57,b=3.9)
+    #print(result.fit_report())
+
+    photonenergies = np.linspace(151.4,180,25)
+    plt.plot(photonenergies,totalcross(photonenergies,59.6754266,3.91077185))
+    plt.plot(photonenergies,totalcross(photonenergies,57.9783878,3.97276793))
+    plt.show()

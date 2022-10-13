@@ -46,7 +46,7 @@ def save_fig(fig_id):
 b = 1     #fm
 S = 10    #MeV
 m = 135.57  #MeV
-mn = 939.272  #MeV
+mn = 938.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
 g = (2*mu)
@@ -91,7 +91,7 @@ def gaussian():
 
 def yukawa():
     def f(r): #form factor
-        return (S/b)*np.exp(-1.407*r)/r
+        return (S/b)*np.exp(-(hbarc/m)*r)/r
 
     def sys(r,u,E):
         y,v,I = u
@@ -164,4 +164,4 @@ def exponent():
 
 plt.figure(figsize=(9,5.5))
 yukawa()
-save_fig("yukawa")
+#save_fig("yukawa")
