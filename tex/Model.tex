@@ -62,6 +62,12 @@ Note the different derivatives--here $\vec{R}$ is the center-of-mass coordinate 
 \end{equation}
 where the ground state is the bare nucleon surrounded by virtual pions. The ground state energy in the rest frame of the nucleon gives the mass of the physical nucleon. Within the framework of this model, one can generate a physical pion by supplying enough energy such that the pion is no longer virtual. The pion is trapped behind a potential barrier of height $m_\pi c^2 = 140$ MeV and cannot leave unless this or more energy is supplied to the system.  
 \section{Dressing of the nucleon in the one pion approximation}\label{dressnuc}
+\begin{marginfigure}
+	\centering
+	\input{Figures/UnderBarrier}
+	\caption{Illustration of the virtual pion}
+	\label{fig:Underbarrier}
+\end{marginfigure}
 We now consider the scenario where a photon interacts with the nucleon-pion systems and generates a physical pion. This means the energy is higher than the potential barrier also when taking recoil effects into account. This also hints at how a pion photoproduction process would emerge naturally as a disintegration process in this nuclear model. To generate more pions the photon energy would have to be increased by the same amount. This also means one could assume the first pion is responsible for the largest contribution to the nucleon dressing.  This will be referred to as the one pion approximation.  As a proof-of-concept we constrain ourselves to the one pion approximation and adding more pions should in principle be straight forward extension of the following calculations.
 
 Returning to \eqref{superposition} and enforcing the one pion approximation yields
@@ -173,74 +179,116 @@ Figure \ref{fig:multiwavefunction} also illustrates the behaviour of the radial 
 \begin{equation} \label{key}
 	\int_V \text{d}^3R \int_V \text{d}^3r \, \abs{ \psi_{N\pi}}^2,
 \end{equation}
-which means the wave function $\phi(r)$ must have dimensions of fm$^{-5/2}$ and the radial wave function $r\phi(r)$ must have dimensions of fm$^{-3/2}$.
+which means the wave function $\phi(r)$ must have dimensions of fm$^{-5/2}$ and the radial wave function $r\phi(r)$ must have dimensions of fm$^{-3/2}$. Note here the two integrals come from the annihilation of a pion and the normalization of one particle per unit volume respectively.
 
 \subsection{Different form factors}
-Compared to conventional interaction models of the nucleus this model has the advantage of having very few parameters. The phenomenological form factor $f(r)$ only consists of an interaction strength $S$ and a range parameter $b$. Essentially all the complicated interactions from other nuclear models are hidden in these two parameters and their behavior as a function of the nuclear length, $r$. We do, however, not know the exact way in which these are related and we must therefore make an educated guess. 
-On figure \ref{fig:integralplotYukawa} the same problem is solved as in \ref{sec:numericalconsiderations} but the form factor is Yukawa-like, that is
+Compared to conventional interaction models of the nucleus this model has the advantage of having very few parameters. The phenomenological form factor $f(r)$ only consists of an interaction strength $S$ and a range parameter $b$. The form factor can take many different forms yielding different wave function solutions which in turn changed the energy. The formalism in \ref{sec:numericalconsiderations} is very flexible so changes in the form factor and here we explore how different form factors impact the wave function. The form factors must all decrease as a function of $r$ since we constrain the system to short-range forces. The solutions on figure \ref{fig:multiwavefunction} assumes the form factor from equation \ref{formfactoreq} which is Gaussian. A priori we do now know anything about the form factor and it might as well be Yukawa like
 \begin{equation}
-	f(r) = \frac{S}{b}\frac{\exp{-1.4r}}{r}
+	f(r) = \frac{S}{b}\frac{\exp{-\frac{r}{b}}}{r}.
 \end{equation}
+Figure \ref{integralplotYukawa} shows the radial wave functions if the form factor is Yukawa like
 \begin{figure}[H]
-	\begin{sidecaption}{Boundary value problem solutions for a Yukawa-like form factor. The plot is generated using a tolerance of $10^{-6}$. The RMS values of the relative residuals over each mesh intervals is shown in the Appendix. For clarity, the energy is scaled.}[fig:integralplotYukawa]
-		\includegraphics[width=\linewidth]{Figures/yukawa.pdf}
+	\begin{sidecaption}{}[fig:integralplotYukawa]
+		\includegraphics[width=\linewidth]{Figures/multiwavefunctionYukawa.pdf}
 	\end{sidecaption}
 \end{figure}
-Note the scaling of the exponential is somewhat arbitrary.
-
-
-
-
+The shapes of the radial wave functions are similar to the Gaussian case but the energies do not match due to the $r^2/b^2$ dependency in the Gaussian case. One could argue for a Yukawa-like form factor but with a gaussian exponential and the energies are the same within a few MeV but this defeats the purpose of a Yukawa form. An exponential form factor would make the radial wave function too long to describe the nuclear range since we are constrained to about 10 MeV.  
 \subsection{Relativistic Expansion}
- It is customary to assume a nonrelativistic limit when considering regular quantum mechanics. To account for relativistic effects we can replace the kinetic term, $K_{\vec{r}}$ in \eqref{SE}
- \begin{equation}
-     K_{\vec{r}}\rightarrow K_{\vec{r},\text{rel}} = \sqrt{p^2 c^2+\mu_{N\pi}^2 c^4} = \mu_{N\pi} c^2 \bigg(\sqrt{1+\frac{p^2}{\mu_{N\pi}^2 c^2}}-1 \bigg),
- \end{equation}
- where $\mu_{N\pi}$ is the reduces mass of the nucleon-pion system. This leads to a new systems of equations and these solutions can be compared found in the nonrelativistic limit to deduce with relativistic regime dominates the physical setup. More specifically we can compare the energy ratios denoted by $E_R$. Starting from \eqref{SE2}
- \begin{equation}
-     f(r) (\vec{\tau} \cdot \vec{\pi})(\vec{\sigma}\cdot \vec{r})\psi_p + \mu_{N\pi} c^2 \bigg(\sqrt{1+\frac{p^2}{\mu_{N\pi}^2 c^2}}-1 \bigg)\psi_{N\pi} = (E-m_{\pi}c^2)\psi_{N\pi},
- \end{equation}
- This equation turns out to be divergent and we must therefor resort to an approximation. The kinetic energy is expanded
- \begin{equation}
-     K_{\vec{r},\text{rel}} = \mu_{N\pi} c^2\sqrt{1+\frac{p^2}{\mu_{N\pi}^2}}-\mu_{N\pi} c^2 \approx \frac{p^2}{2\mu_{N\pi}}-\frac{p^4}{8\mu_{N\pi}^3 c^2}
- \end{equation}
- This means we get an extra term in \eqref{SE22} yielding
- \begin{equation}
-     f(r)\vec{r}-\bigg( \frac{p^2}{2\mu_{N\pi}}-\frac{p^4}{8\mu_{N\pi}^3 c^3} \bigg)\vec{r}\phi(r) = (E-m_\pi c^2)\vec{r}\phi(r)
- \end{equation}
- Using the vector operators yields the following expression\footnote{\begin{align*}
-     \nabla^4(\vec{r}\phi(r))&=\nabla^2(r\phi''+4\phi') \\
-     &= 2\phi''''+2(\nabla\phi''\cdot\nabla)r+4\phi''') \\
-     &=r\phi''''+6\phi'''
- \end{align*}}
- \begin{equation}
-    f(r)-\frac{\hbar^2}{2\mu_{N\pi}}\bigg( \phi^{(2)}(r)+\frac{4}{r}\phi^{(1)}(r) \bigg)+\frac{\hbar^3}{8\mu_{N\pi}^3 c^3}\bigg(\phi^{(4)}(r)+\frac{6}{r}\phi^{(3)}(r)\bigg)=(E-m_\pi c^2)\phi(r),
- \end{equation}
- where the exponent, $(n)$, is the order the differentiation. This leads to a system of equations given by
- \begin{equation} \label{systemrel}
- \left.
-    \begin{array}{ll}
-            12\pi \int_0^\infty  \text{d}r \, f(r) \phi(r) r^4  = E \\
-               f(r)-\frac{\hbar^2}{2\mu_{N\pi}}\big( \phi^{(2)}(r)+\frac{4}{r}\phi^{(1)}(r) \big)+\frac{\hbar^4}{8\mu_{N\pi}^3 c^3}\big(\phi^{(4)}(r)+\frac{6}{r}\phi^{(3)}(r)\big)=(E-m_\pi c^2)\phi(r)
-    \end{array}
-\right \} 
-\end{equation}
-This system is a fourth order differential equation coupled to an integrodifferential equation and is solved using the boundary value problem technique. The boundary conditions can be found using the same considerations as in the previous section. For $r\rightarrow \infty$ the dominating terms are 
+As described in section \ref{sec:model} we are using the Schrödinger equation which hints at a nonrelativistic limit of the pion-nucleon system. We also know the pion is virtual which means under a potential barrier. An avant-garde idea is to do relativistic expansion of the kinetic term which depends on the relative coordinate $\vec{r}$. The pion is virtual which makes the velocity of the particle hard to estimate--nonetheless we can do an expansion of the kinetic operator and see how this affects the model. To account for relativistic effects we can replace the kinetic term, $K_{\vec{r}}$ in \eqref{SE}
 \begin{equation}
-    \phi^{(4)}(r) = 8\mu_{N\pi}^3(E-m_\pi c^2) \phi^{(1)}(r)+4\mu_{N\pi} \phi^{(2)}(r)
+	K_{\vec{r}}\rightarrow K_{\vec{r},\text{rel}} = \sqrt{p^2 c^2+\mu_{N\pi}^2 c^4} = \mu_{N\pi} c^2 \bigg(\sqrt{1+\frac{p^2}{\mu_{N\pi}^2 c^2}}-1 \bigg),
+\end{equation}
+where $\mu_{N\pi}$ is the reduced mass of the nucleon-pion system. This leads to a new system of equations and these solutions can be compared to the nonrelativistic limit to deduce with the relativistic regime dominates the physical setup. More specifically we can compare the energy ratios denoted by $E_R$. Starting from \eqref{SE2}
+\begin{equation}
+	f(r) (\vec{\tau} \cdot \vec{\pi})(\vec{\sigma}\cdot \vec{r})\psi_p + \mu_{N\pi} c^2 \bigg(\sqrt{1+\frac{p^2}{\mu_{N\pi}^2 c^2}}-1 \bigg)\psi_{N\pi} = (E-m_{\pi}c^2)\psi_{N\pi},
+\end{equation}
+This equation turns out to be divergent and we must therefore resort to an approximation. The kinetic energy is expanded
+\begin{equation}
+	K_{\vec{r},\text{rel}} = \mu_{N\pi} c^2\sqrt{1+\frac{p^2}{\mu_{N\pi}^2}}-\mu_{N\pi} c^2 \approx \frac{p^2}{2\mu_{N\pi}}-\frac{p^4}{8\mu_{N\pi}^3 c^2}
+\end{equation}
+This means we get an extra term in \eqref{SE22} yielding
+\begin{equation}
+	f(r)\vec{r}-\bigg( \frac{p^2}{2\mu_{N\pi}}-\frac{p^4}{8\mu_{N\pi}^3 c^3} \bigg)\vec{r}\phi(r) = (E-m_\pi c^2)\vec{r}\phi(r)
+\end{equation}
+Using the vector operators yields the following expression\footnote{\begin{align*}
+		\nabla^4(\vec{r}\phi(r))&=\nabla^2(r\phi''+4\phi') \\
+		&=r\phi''''+6\phi'''
+\end{align*}}
+\begin{equation}
+	f(r)-\frac{\hbar^2}{2\mu_{N\pi}}\bigg( \phi^{(2)}(r)+\frac{4}{r}\phi^{(1)}(r) \bigg)+\frac{\hbar^3}{8\mu_{N\pi}^3 c^3}\bigg(\phi^{(4)}(r)+\frac{6}{r}\phi^{(3)}(r)\bigg)=(E-m_\pi c^2)\phi(r),
+\end{equation}
+where the exponent, $(n)$, is the order of the differentiation. This leads to a system of equations given by
+\begin{equation} \label{systemrel}
+	\left.
+	\begin{array}{ll}
+		12\pi \int_0^\infty  \text{d}r \, f(r) \phi(r) r^4  = E \\
+		f(r)-\frac{\hbar^2}{2\mu_{N\pi}}\big( \phi^{(2)}(r)+\frac{4}{r}\phi^{(1)}(r) \big)+\frac{\hbar^4}{8\mu_{N\pi}^3 c^3}\big(\phi^{(4)}(r)+\frac{6}{r}\phi^{(3)}(r)\big)=(E-m_\pi c^2)\phi(r)
+	\end{array}
+	\right \} 
+\end{equation}
+This system is a fourth-order differential equation coupled to an integrodifferential equation and is solved using the boundary value problem technique. The boundary conditions can be found using the same considerations as in the previous section. For $r\rightarrow \infty$ the dominating terms are 
+\begin{equation}
+	\phi^{(4)}(r) = 8\mu_{N\pi}^3(E-m_\pi c^2) \phi^{(1)}(r)+4\mu_{N\pi} \phi^{(2)}(r)
 \end{equation}
 The solutions are shown in figure \ref{fig:integralplot_relativistic}
 \begin{figure}[H]
-    \begin{sidecaption}{Boundary value problem solutions for the relativistic expansion. The plot is generated using a tolerance of $10^{-3}$. The energy convergence is scaled.}[fig:integralplot_relativistic]
-    \includegraphics[width=\linewidth]{Figures/Integralplot_relativistic.pdf}
-    \end{sidecaption}
+	\begin{sidecaption}{Boundary value problem solutions for the relativistic expansion. The plot is generated using a tolerance of $10^{-3}$. The energy convergence is scaled.}[fig:integralplot_relativistic]
+		\includegraphics[width=\linewidth]{Figures/Integralplot_relativistic.pdf}
+	\end{sidecaption}
 \end{figure}
-Since we ultimately want to get values for $S$ and $b$ it is nice to get some intuition behind the behavior of the solutions as we vary these two parameters. This is shown in figure \ref{fig:relativistic_expansion}.
+Since we ultimately want to get values for $S$ and $b$ it is nice to get some intuition behind the behaviour of the solutions as we vary these two parameters. This is shown in figure \ref{fig:relativistic_expansion}.
 \begin{figure}[H]
-    \begin{sidecaption}{Plots for different values of the parameters $S$ and $b$ to illustrate the difference between the nonrelativistic equations and the relativistic equations. }[fig:relativistic_expansion]
-    \includegraphics[width=\linewidth]{Figures/RelativisticExpansion.pdf}
-    \end{sidecaption}
+	\begin{sidecaption}{Plots for different values of the parameters $S$ and $b$ to illustrate the difference between the nonrelativistic equations and the relativistic equations. }[fig:relativistic_expansion]
+		\includegraphics[width=\linewidth]{Figures/RelativisticExpansion.pdf}
+	\end{sidecaption}
 \end{figure}
-From figure \ref{fig:relativistic_expansion} one can also deduce the effect of changing the parameters $S,b$. Increasing the parameter $b$ will flatten the wavefunction which will decrease the energy. This corresponds to increasing the distance between the pion and the nucleus. Increasing the coupling strength $S$ will increase the amplitude of the wave function. In \eqref{formfactoreq} we assumed a form but this could might as well be an exponential or even Yukawa-like. We should keep in mind that this form factor greatly impacts the behavior of the system; both in relation to the boundary conditions and the length scale of the wave function. 
+From figure \ref{fig:relativistic_expansion} one can also deduce the effect of changing the parameters $S,b$. Increasing the parameter $b$ will flatten the wavefunction which will decrease the energy. This corresponds to increasing the distance between the pion and the nucleus. Increasing the coupling strength $S$ will increase the amplitude of the wave function. In \eqref{formfactoreq} we assumed a form but this could as well be an exponential or even Yukawa-like. We should keep in mind that this form factor greatly impacts the behaviour of the system; both concerning the boundary conditions and the length scale of the wave function. 
 
+\subsection{Nuclear Effective Field Theory operator}
+The construction of the most general chiral Lagrangian is based on the theory of the non-linear realization of symmetry. The baryon-number-conserving chiral Lagrangian can be split into pieces with even numbers of fermion fields where in this section we will focus on 
+\begin{equation}
+	\mathcal{L} = N^\dagger \left(i\mathcal{D}_0+\frac{\vec{\mathcal{D}}^2}{2m_N} \right)N+\frac{g_A}{2f_\pi}N^\dagger\vec{\tau}N\cdot \vec{D}\vec{\pi},
+\end{equation}
+where the second term is very similar to the creation operator $W$ from equation \eqref{W}--only the $\vec{r}$ is replaced by $\nabla_{\vec{r}}$. The general operator is constructed in such a way that parity, isospin and spin are conserved and there is some freedom in the choice of the distance operator. In this section, we explore the differences, if any, by constructing the nuclear model with explicit mesons with the operator as is it defined in chiral effective field theory. We assume the following form of the wave function of the proton and the system consisting of a nucleon and a single pion
+\begin{equation}
+	\psi_p = p\uparrow\frac{1}{\sqrt{V}}, \quad \psi_{N\pi} = (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})p\uparrow \frac{1}{\sqrt{V}}\phi,
+\end{equation}
+where $\vec{\tau}$ and $\vec{\sigma}$ are vectors consisting of Pauli matrices acting on isospin and spin space on the nucleon respectively. $\vec{\pi}$ is the isovector of pions. We now construct an operator to create and annihilate a pion
+\begin{align}
+	W & = (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})f(r) \\
+	W^\dagger & = \int_V \text{d}^3 r \, (\vec{\tau}\cdot \vec{\pi})^\dagger(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})^\dagger f(r),
+\end{align}
+where $f(r)$ is a form factor. The annihilation operator must contain the integral to remove the coordinate of the pion. This leads to the following Schrödinger equation
+\begin{equation}
+	\mqty[K_{\vec{R}} & W^\dagger \\ W & K_{\vec{R}}+K_{\vec{r}}+m_\pi c^2]\mqty[\psi_p \\ \psi_{N\pi}]=E\mqty[\psi_p \\ \psi_{N\pi}],
+\end{equation}
+which is expanded
+\begin{align}\label{CEFTint}
+	12\pi \int_0^\infty \text{d}r \, \frac{\partial^2}{\partial r^2}r^2f(r)\phi(r) =E \\
+	\frac{\partial}{\partial r}f(r)-\frac{2\hbar^2}{\mu_{N\pi}} \frac{\partial^3}{\partial r^3}\phi(r) = (E-m_\pi c^2)\frac{\partial}{\partial r}\phi(r)\label{CEFT2}.
+\end{align}
+Assume the form factor is on the following form
+\begin{equation}
+	f(r) = \frac{S}{b}\text{e}^{-r^2/b^2}
+\end{equation}
+which yields
+\begin{equation}
+	\frac{\partial}{\partial r} f(r) = \frac{-2r}{b^2}f(r), \quad \frac{\partial^2}{\partial r^2}=-\frac{2(b^2-2r^22)}{b^4}f(r).
+\end{equation}
+The terms inside the integral in equation \eqref{CEFTint} 
+\begin{align}
+	\frac{\partial^2}{\partial r^2}(r^2f(r)\phi(r)) & = 2rf(r)\phi(r)+2rf^\prime(r)\phi(r)+r^2f(r)\phi ^\prime(r)
+	\\&+2rf^\prime(r)\phi(r)+r^2f^{\prime\prime(r)}\phi(r)+r^2f^\prime(r)\phi^\prime(r)\\
+	&+2rf(r)\phi(r)+r^2f^\prime(r)\phi^\prime (r)+r^2f(r)\phi^{\prime\prime}(r) \\&\equiv Y(r)
+\end{align}
+Considering the limits of \eqref{CEFT2} which for large $r$ is
+\begin{equation}
+	-\frac{2\hbar^2}{\mu_{N\pi}}\phi^{\prime\prime\prime}(r) =(E-m_\pi c^2)\phi^\prime(r)
+\end{equation}
+The solution is shown on \ref{fig:EFTplot}
+\begin{figure}[H]
+	\begin{sidecaption}{Fitted parameters to experimental data. The fit parameters for $S,b$ are shown inside the figure.}[fig:EFTplot]
+		\includegraphics[width=\linewidth]{Figures/EFToperator.pdf}
+	\end{sidecaption}
+\end{figure}
 

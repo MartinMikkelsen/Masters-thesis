@@ -46,8 +46,8 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b =  3.9    #fm
-S = 45.5    #MeV
+b = 3.9   #fm
+S = 45    #MeV
 m = 135.57  #MeV
 mn = 939.272  #MeV
 mu = m*mn/(mn+m) #Reduced mass
@@ -90,13 +90,12 @@ res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 #print(res.message,", E: ",res.p[0])
 
 plt.figure(figsize=(9,5.5))
-sns.lineplot(x=res.x,y=-res.y.T[:,0],linewidth=3.5,label=r'$\phi$') #phi
+#sns.lineplot(x=res.x,y=-res.y.T[:,0],linewidth=3.5,label=r'$\phi$') #phi
 sns.lineplot(x=res.x,y=-res.y.T[:,0]*res.x,linewidth=3.5,label=r'$\phi$') #phi
 
 #sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5,label=r'$\phi´$') #dphi
 #sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5,label=r'$\phi´´$') ##ddphi
 #sns.lineplot(x=res.x,y=res.y.T[:,3]/10000,linewidth=3.5, label=r'$E/1e4$')
-print("E=",res.y.T[-1,3])
 plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
 plt.legend(loc=0,frameon=False);
 plt.xlabel("r [fm]")

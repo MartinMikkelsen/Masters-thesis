@@ -13,6 +13,7 @@ from numpy import frompyfunc
 from scipy.special import gamma, factorial
 from scipy.special import spherical_jn
 from sympy import hyper
+from scipy.integrate import quad
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -90,11 +91,28 @@ def diffcross(Egamma,S,b,theta):
     def eta(S):
         return -charge2*mu/(hbarc**2*S)
 
-    def F(S):
-        func = lambda r: phi3(r)*r**3*hyper(1+1-1.j*eta(s),4,2*1.j*r)
-        integral =  4*np.pi/3*sp.integrate.quad(func,0,rmax)[0]
-        return integral
+    def complex_quadrature(func, a, b, **kwargs):
+        def real_func(x):
+            return np.real(func(x))
+        def imag_func(x):
+            return np.imag(func(x))
+        real_integral = quad(real_func, a, b, **kwargs)
+        imag_integral = quad(imag_func, a, b, **kwargs)
+        return (real_integral[0] + 1j*imag_integral[0], real_integral[1:], imag_integral[1:])
 
-    return 2*10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    def CoulombWave(l,eta,rho):
+        First = rho**(l+1)*2**l*np.exp(1j*rho-(np.pi*eta/2),dtype='complex_')/(abs(gamma(l+1+1j*eta)))
+        integral = complex_quadrature(lambda t: np.exp(-2*1j*rho*t,dtype='complex_')*t**(l+1j*eta)*(1-t)**(l-1j*eta),0,1)[0]
+        return np.array(First*integral,dtype='complex_')
 
-diffcross(160,45,3,np.pi)
+    def C(l,eta):
+        return 2**l*np.exp(-np.pi*eta/2)*(abs(gamma(l+1+1j*eta))/(factorial(2*l+1)))
+
+    test1 = np.linspace(0,10,100)
+    tot = [C(1,0)*CoulombWave(1,0,i) for i in test1]
+    plt.plot(test1,spherical_jn(1,test1))
+    plt.plot(test1,tot)
+
+    return
+
+diffcross(160,45,3.9,np.pi)

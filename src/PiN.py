@@ -55,7 +55,7 @@ g = (2*mu)
 hbarc = 197.3 #MeV fm
 
 def phifunc(S,b):
-    def f(r): #form factor
+    def f(r):
         return S/b*np.exp(-r**2/b**2)
 
     def sys(r,u,E):
@@ -92,27 +92,27 @@ def phifunc(S,b):
         save_fig("rms_residuals")
 
 
-    return res.x,res.y.T[:,0],res.y.T[:,1],res.y.T[:,2]
+    return res.x,res.y.T[:,0],res.y.T[:,1],res.y.T[:,2], res.p[0]
 
 plt.figure(figsize=(9,5.5))
 S1,b1 = 10,1
 S2,b2 = 15,1
 S3,b3 = 10,1.5
-S4,b4 = 15,1.5
+S4,b4 = 45,3.9
 
-sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S1,b1))
-sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S2,b2))
-sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S3,b3))
-sns.lineplot(x=phifunc(S4,b4)[0],y=-phifunc(S4,b4)[1]*phifunc(S4,b4)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm'%(S4,b4))
+sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S1,b1,phifunc(S1,b1)[4]))
+sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
+sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S3,b3,phifunc(S3,b3)[4]))
+sns.lineplot(x=phifunc(S4,b4)[0],y=-phifunc(S4,b4)[1]*phifunc(S4,b4)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S4,b4,phifunc(S4,b4)[4]))
 
 plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
 #plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)
 plt.legend(loc=0,frameon=False);
 plt.xlabel("r [fm]")
 plt.tight_layout()
-#save_fig("multiwavefunction")
+#save_fig("multiwavefunctionYukawa")
 #plt.show()
 
-phi_func = lambda r: phi3(r)**2*r**4
-int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]
-print("Norm_integral =",int_phi)
+# phi_func = lambda r: phi3(r)**2*r**4
+# int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]
+# print("Norm_integral =",int_phi)

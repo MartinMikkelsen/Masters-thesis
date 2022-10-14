@@ -118,16 +118,17 @@ if __name__ == '__main__':
     errorSchmidtmin = np.subtract(y,yprime)
     errorSchmidtmax = errorSchmidtmin
     sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
-    plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
+    plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o");
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
-    plt.grid()
 
     #gmodel = Model(totalcross)
     #result = gmodel.fit(y, x=x, S=57,b=3.9)
     #print(result.fit_report())
 
-    photonenergies = np.linspace(151.4,180,25)
-    plt.plot(photonenergies,totalcross(photonenergies,59.6754266,3.91077185))
-    plt.plot(photonenergies,totalcross(photonenergies,57.9783878,3.97276793))
-    plt.show()
+    photonenergies1 = np.linspace(151.4,180,50)
+
+    plt.plot(photonenergies1,totalcross(photonenergies1,59.6754266,3.91077185),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(59.6754266,3.91077185),color='r')
+    plt.legend(loc='best',frameon=False)
+    save_fig("ChargedPionOffProtonExact")
+    #plt.show()
