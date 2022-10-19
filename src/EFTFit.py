@@ -2,21 +2,22 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from scipy.integrate import trapz
-from scipy.optimize import root
-from scipy.special import spherical_jn
-from scipy.special import spherical_jn
-from scipy.integrate import solve_bvp
-from scipy import fft
-from sympy import hankel_transform, inverse_hankel_transform
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
-from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from scipy.integrate import quad
+from scipy.optimize import root
+from scipy.integrate import simpson
+from scipy.integrate import solve_bvp
+from scipy.special import spherical_jn
+from scipy.special import jv
 from scipy.optimize import curve_fit
-from tqdm import tqdm
 import seaborn as sns
 import os
+from scipy import integrate
 from pylab import plt, mpl
+from scipy.interpolate import InterpolatedUnivariateSpline as Spline
+from hankel import HankelTransform     # Import the basic class
+from tqdm import tqdm
+from multiprocessing import Pool
+from lmfit import Model
 
 
 mpl.rcParams['font.family'] = 'XCharter'
@@ -40,7 +41,6 @@ if not os.path.exists(DATA_ID):
 def image_path(fig_id):
     return os.path.join(FIGURE_ID, fig_id)
 
-
 def data_path(dat_id):
     return os.path.join(DATA_ID, dat_id)
 
@@ -50,7 +50,6 @@ def save_fig(fig_id):
 def diffcross(Egamma,S,b,theta):
 
     m = 134.976  #MeV
-    m = 135.57  #MeV
     mp = 938.272  #MeV
     mu = m*mp/(mp+m) #Reduced mass
     g = 2*mu
@@ -59,11 +58,11 @@ def diffcross(Egamma,S,b,theta):
     charge2 = hbarc/(137)
     Mpip = m+mp
 
-    Eq = np.array(Egamma-m-0.5*Egamma**2/(Mpip))
+    Eq = Egamma-m-0.5*Egamma**2/(Mpip)
     if Eq<0 : return 0
-    k = np.array(Egamma/hbarc)
-    q = np.array(np.sqrt(2*mu*Eq)/(hbarc))
-    s = np.array(np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta)))
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/(hbarc)
+    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
 
     def f(r): #form factor
         return S/b*np.exp(-r**2/b**2)
@@ -85,18 +84,18 @@ def diffcross(Egamma,S,b,theta):
     def bc(ua, ub, E):
         ya,va,za,Ia = ua
         yb,vb,zb,Ib = ub
-        return va, vb+(g*(m+abs(E)))**0.5*yb,yb, Ia, Ib-E
+        return va, zb-mu/2*(hbarc)*(E-m)*vb,yb, Ia, Ib-E
 
     rmax = 5*b
     rmin = 0.01*b
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r = np.logspace(start,stop,num=50000,base=np.exp(1))
+    r = np.logspace(start,stop,num=10000,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,0*r,E*r/r[-1]]
-    res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
+    res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-8,max_nodes=100000)
 
     phi = res.y.T[:np.size(r),0]
     phi3 = Spline(r,phi)
@@ -108,8 +107,8 @@ def diffcross(Egamma,S,b,theta):
 
     return np.array(10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2)
 
-def totalcross(Egamma,S,b):
-    tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(Egamma)]
+def totalcross(x,S,b):
+    tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
     return tot
 
 if __name__ == '__main__':
@@ -124,8 +123,16 @@ if __name__ == '__main__':
     #popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
     #print("popt=",popt)
     #print("Error=",np.sqrt(np.diag(pcov)))
-    photonenergies = np.linspace(144.7,170,25)
-    plt.plot(photonenergies,totalcross(photonenergies,75,3.9))
+    #gmodel = Model(totalcross)
+    #result = gmodel.fit(sigmaSchmidt, x=gammaSchmidt,S=75,b=3.8)
+    #print(result.fit_report())
+
+    # S:  80.6206811 +/- 2544.60122 (3156.26%) (init = 80.6)
+    # b:  3.89999505 +/- 0.65185960 (16.71%) (init = 3.9)
+    #21.8647968,3.74417660
+    photonenergies = np.linspace(144.7,170,50)
+    plt.plot(photonenergies,totalcross(photonenergies,21.8647968,3.74417660))
+    #plt.plot(photonenergies, result.best_fit, '-', label='best fit')
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
     plt.grid()

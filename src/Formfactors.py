@@ -91,7 +91,7 @@ def gaussian():
 
 def yukawa():
     def f(r): #form factor
-        return (S/b)*np.exp(-(hbarc/m)*r)/r
+        return (S/b)*np.exp(-r/b)/r
 
     def sys(r,u,E):
         y,v,I = u

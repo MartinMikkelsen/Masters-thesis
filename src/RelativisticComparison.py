@@ -10,6 +10,7 @@ from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import seaborn as sns
 import os
 from pylab import plt, mpl
+from tqdm import tqdm
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -62,19 +63,19 @@ def relativistic(S,b):
     def bc(ua, ub,E):
         ya,va,za,la,Ia = ua
         yb,vb,zb,lb,Ib = ub
-        return va, vb,la,lb-8*mu**3*(E-m)*yb+4*mu**2*zb, Ia, Ib-E,
+        return va, vb,la,la-8/hbarc**4*mu**3*(E-m)*yb-4*mu**2/hbarc**2*vb, Ia, Ib-E,
 
     rmax = 5*b
     rmin = 0.01*b
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r = np.logspace(start,stop,num=50000,base=np.exp(1))
+    r = np.logspace(start,stop,num=3000,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,0*r,0*r,E*r/r[-1]]
 
-    res2 = solve_bvp(sys,bc,r,u,p=[E],tol=1e-3,max_nodes=100000)
+    res2 = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
     #print(res2.message,"The relativistic energy is: ",res2.p[0])
     return res2.x, res2.y.T[:,0], res2.y.T[:,1],res2.y.T[:,2],res2.p[0]
 
@@ -99,79 +100,62 @@ def nonrelativistic(S,b):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r = np.logspace(start,stop,num=50000,base=np.exp(1))
+    r = np.logspace(start,stop,num=3000,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,E*r/r[-1]]
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
     return res.x, res.y.T[:,0], res.y.T[:,1],res.y.T[:,2],res.p[0]
 
-[a1,a2,a3,a4,a5] = relativistic(100.36,1.98)
-[b1,b2,b3,b4,b5] = nonrelativistic(100.36,1.98)
+plt.figure(figsize=(9,5.5));
+[a1,a2,a3,a4,a5] = relativistic(41.5,3.9)
+[b1,b2,b3,b4,b5] = nonrelativistic(41.5,3.9)
+S_values = [15,30,45]
+b_values = [2.5,3.5,4.5]
 print('The energy ratio is:', a5/b5)
-plt.plot(a1, a2,linewidth=3.5,linestyle='dashed', color='g')
-plt.plot(b1, b2,linewidth=3.5, color='g')
-plt.plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
-plt.plot(b1, b3,linewidth=3.5, color='b')
-print("Energy=",b5)
-plt.legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
+plt.plot(relativistic(S_values[0],b_values[0])[0], -relativistic(S_values[0],b_values[0])[0]*relativistic(S_values[0],b_values[0])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[0],b_values[0]),color='r')
+plt.plot(nonrelativistic(S_values[0],b_values[0])[0], -nonrelativistic(S_values[0],b_values[0])[0]*nonrelativistic(S_values[0],b_values[0])[1],linewidth=3.5,label=r'non-relativistic',color='r')
+
+plt.plot(relativistic(S_values[1],b_values[1])[0], -relativistic(S_values[1],b_values[1])[0]*relativistic(S_values[1],b_values[1])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[1],b_values[1]),color='g')
+plt.plot(nonrelativistic(S_values[1],b_values[1])[0], -nonrelativistic(S_values[1],b_values[1])[0]*nonrelativistic(S_values[1],b_values[1])[1],linewidth=3.5,label=r'non-relativistic',color='g')
+
+plt.plot(relativistic(S_values[2],b_values[2])[0], -relativistic(S_values[2],b_values[2])[0]*relativistic(S_values[2],b_values[2])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[2],b_values[2]),color='navy')
+plt.plot(nonrelativistic(S_values[2],b_values[2])[0], -nonrelativistic(S_values[2],b_values[2])[0]*nonrelativistic(S_values[2],b_values[2])[1],linewidth=3.5,label=r'non-relativistic',color='navy')
+plt.legend(loc='best',frameon=False)
+plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
+plt.xlabel("r [fm]")
+save_fig("rela_vs_nonrela_radial")
+
+#plt.plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
+#plt.plot(b1, b3,linewidth=3.5, color='b')
 
 
-
-
-# [c1,c2,c3,c4,c5] = relativistic(45.5,3.9)
-# [d1,d2,d3,d4,d5] = nonrelativistic(45.5,3.9)
-# print('The energy ratio is:', c5/d5)
-# [e1,e2,e3,e4,e5] = relativistic(35.4,4.0)
-# [f1,f2,f3,f4,f5] = nonrelativistic(35.4,4.0)
-# print('The energy ratio is:', e5/f5)
-# [g1,g2,g3,g4,g5] = relativistic(100.36,1.98)
-# [h1,h2,h3,h4,h5] = nonrelativistic(100.36,1.98)
-# print('The energy ratio is:', g5/h5)
-
-# fig, axs = plt.subplots(2, 2,figsize=(15,12))
-# axs[0, 0].plot(a1, a2,linewidth=3.5,linestyle='dashed', color='g')
-# axs[0, 0].plot(b1, b2,linewidth=3.5, color='g')
-# axs[0, 0].plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
-# axs[0, 0].plot(b1, b3,linewidth=3.5, color='b')
-# axs[0, 0].set_title(r"$S=10$ MeV, $b=1$ fm, $E_R=%.3f$" %(a5/b5), x=0.5, y=0.9)
-# axs[0, 0].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
-# axs[0, 0].set_xlabel("r [fm]")
-# axs[0, 0].set_ylim([-0.012,0.0075])
-# axs[0, 1].plot(c1, c2,linewidth=3.5,linestyle='dashed',color='g')
-# axs[0, 1].plot(d1, d2,linewidth=3.5,color='g')
-# axs[0, 1].plot(c1, c3,linewidth=3.5,linestyle='dashed', color='b')
-# axs[0, 1].plot(d1, d3,linewidth=3.5, color='b')
-# axs[0, 1].set_title(r"$S=10$ MeV, $b=2$ fm, $E_R=%.3f$" %(c5/d5), x=0.5, y=0.9)
-# axs[0, 1].set_xlabel("r [fm]")
-# axs[0, 1].set_ylim([-0.012,0.0075])
-# axs[0, 1].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
-# axs[1, 0].plot(e1, e2,linewidth=3.5,linestyle='dashed',color='g')
-# axs[1, 0].plot(f1, f2,linewidth=3.5, color='g')
-# axs[1, 0].plot(e1, e3,linewidth=3.5,linestyle='dashed', color='b')
-# axs[1, 0].plot(f1, f3,linewidth=3.5, color='b')
-# axs[1, 0].set_title(r"$S=15$ MeV, $b=1$ fm, $E_R=%.3f$" %(e5/f5), x=0.5, y=0.9)
-# axs[1, 0].set_xlabel("r [fm]")
-# axs[1, 0].set_ylim([-0.02,0.012])
-# axs[1, 0].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
-# axs[1, 1].plot(g1, g2,linewidth=3.5,linestyle='dashed',color='g')
-# axs[1, 1].plot(h1, h2,linewidth=3.5,color='g')
-# axs[1, 1].plot(g1, g3,linewidth=3.5,linestyle='dashed', color='b')
-# axs[1, 1].plot(h1, h3,linewidth=3.5, color='b')
-# axs[1, 1].set_title(r"$S=15$ MeV, $b=2$ fm, $E_R=%.3f$" %(g5/h5), x=0.5, y=0.9)
-# axs[1, 1].set_xlabel("r [fm]");
-# axs[1, 1].set_ylim([-0.02,0.012])
-# axs[1, 1].legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
-# fig.tight_layout()
-# #save_fig("RelativisticExpansion");
 #
-# # plt.figure(figsize=(9,5.5))
-# # plt.plot(a1, a2,linewidth=3.5,linestyle='dashed', color='g')
-# # plt.plot(b1, b2,linewidth=3.5, color='g')
-# # plt.plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
-# # plt.plot(b1, b3,linewidth=3.5, color='b')
-# # plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(10,1,a5/b5), x=0.5, y=0.8)
-# # plt.legend(r"$\phi_{rel}$ $\phi_{nonrel}$ $\phi'_{rel}$ $\phi'_{nonrel}$".split(),loc=4, frameon=False);
-# # plt.xlabel("r [fm]")
-# # plt.tight_layout()
-# # save_fig("Single_comparision");
+# Ss = np.linspace(10,100,50)
+# bs = np.linspace(1,5,50)
+#
+# S_energy1 = [relativistic(i,2.5)[4]/nonrelativistic(i,2.5)[4] for i in tqdm(Ss)]
+# b_energy1 = [relativistic(15,i)[4]/nonrelativistic(15,i)[4] for i in tqdm(bs)]
+# S_energy2 = [relativistic(i,3.5)[4]/nonrelativistic(i,3.5)[4] for i in tqdm(Ss)]
+# b_energy2 = [relativistic(30,i)[4]/nonrelativistic(30,i)[4] for i in tqdm(bs)]
+# S_energy3 = [relativistic(i,4.5)[4]/nonrelativistic(i,4.5)[4] for i in tqdm(Ss)]
+# b_energy3 = [relativistic(45,i)[4]/nonrelativistic(45,i)[4] for i in tqdm(bs)]
+#
+# plt.figure(figsize=(9,5.5));
+# plt.scatter(bs,b_energy1,label=r'$S=15$')
+# plt.scatter(bs,b_energy2,label=r'$S=30$')
+# plt.scatter(bs,b_energy3,label=r'$S=45$')
+# plt.legend(loc='best',frameon=False)
+# plt.hlines(1,1,5,linestyle='dashed',color='r')
+# plt.xlabel(r'$b$ [fm]')
+# plt.ylabel(r'$E_R$')
+# #save_fig("bconvergenceYukawa")
+# plt.figure(figsize=(9,5.5));
+# plt.scatter(Ss,S_energy1,label=r'$b=2.5$')
+# plt.scatter(Ss,S_energy2,label=r'$b=3.5$')
+# plt.scatter(Ss,S_energy3,label=r'$b=4.5$')
+# plt.xlabel(r'$S$ [MeV]')
+# plt.ylabel(r'$E_R$')
+# plt.legend(loc='best',frameon=False)
+# plt.hlines(1,10,100,linestyle='dashed',color='r')
+# # save_fig("SconvergenceYukawa")

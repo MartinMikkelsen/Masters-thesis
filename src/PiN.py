@@ -12,7 +12,6 @@ from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from scipy.integrate import quad
-
 import seaborn as sns
 import os
 from pylab import plt, mpl
@@ -95,13 +94,13 @@ def phifunc(S,b):
     return res.x,res.y.T[:,0],res.y.T[:,1],res.y.T[:,2], res.p[0]
 
 plt.figure(figsize=(9,5.5))
-S1,b1 = 10,1
-S2,b2 = 15,1
-S3,b3 = 10,1.5
-S4,b4 = 45,3.9
+S1,b1 = 79.1,3.9
+S2,b2 = 79.7,3.8
+S3,b3 = 29.4,4.0
+S4,b4 = 41.5,3.9
 
 sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S1,b1,phifunc(S1,b1)[4]))
-sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
+sns.lineplot(x=phifunc(S2,b2)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
 sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S3,b3,phifunc(S3,b3)[4]))
 sns.lineplot(x=phifunc(S4,b4)[0],y=-phifunc(S4,b4)[1]*phifunc(S4,b4)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S4,b4,phifunc(S4,b4)[4]))
 

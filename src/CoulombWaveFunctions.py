@@ -100,7 +100,7 @@ def diffcross(Egamma,S,b,theta):
         imag_integral = quad(imag_func, a, b, **kwargs)
         return (real_integral[0] + 1j*imag_integral[0], real_integral[1:], imag_integral[1:])
 
-    def CoulombWave(l,eta,rho):
+    def RegularCoulomb(l,eta,rho):
         First = rho**(l+1)*2**l*np.exp(1j*rho-(np.pi*eta/2),dtype='complex_')/(abs(gamma(l+1+1j*eta)))
         integral = complex_quadrature(lambda t: np.exp(-2*1j*rho*t,dtype='complex_')*t**(l+1j*eta)*(1-t)**(l-1j*eta),0,1)[0]
         return np.array(First*integral,dtype='complex_')
@@ -108,11 +108,17 @@ def diffcross(Egamma,S,b,theta):
     def C(l,eta):
         return 2**l*np.exp(-np.pi*eta/2)*(abs(gamma(l+1+1j*eta))/(factorial(2*l+1)))
 
-    test1 = np.linspace(0,10,100)
-    tot = [C(1,0)*CoulombWave(1,0,i) for i in test1]
-    plt.plot(test1,spherical_jn(1,test1))
-    plt.plot(test1,tot)
+    def IrregularCoulomb(l,eta,rho):
+        First = np.exp(-1j*rho)*rho**(-l)/(factorial(2*l+1)*C(l,eta))
+        integral = quad(lambda t: np.exp(-t)*t**(-l-1j*eta)*(t+2*1j*rho)**(l+1j*eta),0,np.infty)[0]
+        return First*integral
 
+    xes = np.linspace(0,10,100)
+    coulombfwave = [RegularCoulomb(1,-2,i) for i in xes]
+
+    F1 = lambda x: mpmath.coulombf(1,-2,x)
+    mpmath.plot([F1], [0,10])
+    plt.plot(xes,coulombfwave)
     return
 
 diffcross(160,45,3.9,np.pi)
