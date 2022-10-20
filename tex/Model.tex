@@ -263,19 +263,32 @@ We can apply the same logic to the system of equations with a Yukawa-like form f
 \end{figure}
 The pion is virtual and hence in a classically forbidden region but we can still estimate which relativistic regime dominates the system. Both in terms of the radial wave function and in terms of the energy ratio relativistic effects are negligible. This result holds for different form factors since they most all decrease a function of $r$. 
 
+Considering figure \ref{fig:b_convergence} we see the maximum discrepancy between the relativistic and the non-relativistic energy is about 10 percent and decreases rapidly. This means relativistic effects vanish as we increase the range parameter $b$. A physical explanation of this could be that as we increase the spatial dimension a virtual pion with the same kinetic energy would have a lower velocity and hence less relativistic. This analysis is supported if the same behaviour is not present when we hold $b$ fixed an increase $S$ since. This is shown on figure \ref{fig:Sconvergence} for the Gaussian form factor 
+\begin{figure}[H]
+	\begin{sidecaption}{The energy ratio $E_\text{rel}/E_\text{nonrel}$ shown as a function of the strength parameter $b$ for a Yukawa-like form factor given by equation \eqref{YukawaForm}}[fig:Sconvergence]
+		\includegraphics[width=\linewidth]{Figures/Sconvergence.pdf}
+	\end{sidecaption}
+\end{figure}
+A similar plot for the Yukawa-like form factor 
+\begin{figure}[H]
+	\begin{sidecaption}{The energy ratio $E_\text{rel}/E_\text{nonrel}$ shown as a function of the strength parameter $S$ for a Yukawa-like form factor given by equation \eqref{YukawaForm}}[fig:SconvergenceYukawa]
+		\includegraphics[width=\linewidth]{Figures/SconvergenceYukawa.pdf}
+	\end{sidecaption}
+\end{figure}
+
 \subsection{Nuclear Effective Field Theory operator}
 The construction of the most general chiral Lagrangian is based on the theory of the non-linear realization of symmetry. The baryon-number-conserving chiral Lagrangian can be split into pieces with even numbers of fermion fields where in this section we will focus on 
 \begin{equation}
 	\mathcal{L} = N^\dagger \left(i\mathcal{D}_0+\frac{\vec{\mathcal{D}}^2}{2m_N} \right)N+\frac{g_A}{2f_\pi}N^\dagger\vec{\tau}N\cdot \vec{D}\vec{\pi},
 \end{equation}
 where the second term is very similar to the creation operator $W$ from equation \eqref{W}--only the $\vec{r}$ is replaced by $\nabla_{\vec{r}}$. The general operator is constructed in such a way that parity, isospin and spin are conserved and there is some freedom in the choice of the distance operator. In this section, we explore the differences, if any, by constructing the nuclear model with explicit mesons with the operator as is it defined in chiral effective field theory. We assume the following form of the wave function of the proton and the system consisting of a nucleon and a single pion
-\begin{equation}
+\begin{equation}\label{EFT1}
 	\psi_p = p\uparrow\frac{1}{\sqrt{V}}, \quad \psi_{N\pi} = (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})p\uparrow \frac{1}{\sqrt{V}}\phi,
 \end{equation}
 where $\vec{\tau}$ and $\vec{\sigma}$ are vectors consisting of Pauli matrices acting on isospin and spin space on the nucleon respectively. $\vec{\pi}$ is the isovector of pions. We now construct an operator to create and annihilate a pion
-\begin{align}
+\begin{align}\label{EFT2}
 	W & = (\vec{\tau}\cdot \vec{\pi})(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})f(r) \\
-	W^\dagger & = \int_V \text{d}^3 r \, (\vec{\tau}\cdot \vec{\pi})^\dagger(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})^\dagger f(r),
+	W^\dagger & = \int_V \text{d}^3 r \, (\vec{\tau}\cdot \vec{\pi})^\dagger(\vec{\sigma}\cdot \frac{\partial}{\partial\vec{r}})^\dagger f(r), \label{EFT3}
 \end{align}
 where $f(r)$ is a form factor. The annihilation operator must contain the integral to remove the coordinate of the pion. This leads to the following Schrödinger equation
 \begin{equation}
@@ -298,7 +311,7 @@ The terms inside the integral in equation \eqref{CEFTint}
 \begin{align}
 	\frac{\partial^2}{\partial r^2}(r^2f(r)\phi(r)) & = 2rf(r)\phi(r)+2rf^\prime(r)\phi(r)+r^2f(r)\phi ^\prime(r)
 	\\&+2rf^\prime(r)\phi(r)+r^2f^{\prime\prime(r)}\phi(r)+r^2f^\prime(r)\phi^\prime(r)\\
-	&+2rf(r)\phi(r)+r^2f^\prime(r)\phi^\prime (r)+r^2f(r)\phi^{\prime\prime}(r) \\&\equiv Y(r)
+	&+2rf(r)\phi(r)+r^2f^\prime(r)\phi^\prime (r)+r^2f(r)\phi^{\prime\prime}(r) \\&\equiv Y(r) \label{manyterms}
 \end{align}
 Considering the limits of \eqref{CEFT2} which for large $r$ is
 \begin{equation}
@@ -310,4 +323,12 @@ The solution is shown on \ref{fig:EFTplot}
 		\includegraphics[width=\linewidth]{Figures/EFTradial.pdf}
 	\end{sidecaption}
 \end{figure}
-
+The parameters $S$ and $b$ in the radial wave functions are not the same as in figure \ref{fig:multiwavefunction} and figure \ref{fig:integralplotYukawa} but should better represented actual parameter values when performing the fit to the total cross-section data. This is done to better highlight the validity of this model and some of it's disadvantages. The energies are within the same order of magnitude as when using the model as described in section \ref{sec:DressingofProton}. There is a difference in energy and this model could be investigated further -- however, this model using the operator from nuclear effective field theory is a lot more intensive numerically. Due to the derivative in equation \eqref{EFT1}, \eqref{EFT2} and \eqref{EFT3} we got many more terms as seen in \eqref{manyterms} which all have to be integrated numerically. Perhaps another numerical method is better suited for this operator type.
+\subsection{Charge density}
+Using 
+\begin{align}
+\rho_q(\vec{r}_\text{rm}) &= q_1 \int \text{d}^3 r_\pi \text{d}^3 r_N \abs{\psi(r_\pi,r_N)}^2 \delta(\vec{r_\pi}-\vec{R},\vec{r}_\text{cm}) \\
+&= q_1 \int \text{d}^3 r_\pi \text{d}^3 r_N \abs{\psi(\vec{R}+\frac{m_N}{M}\vec{r},\vec{R}-\frac{m_\pi}{M}\vec{R})}^2 \delta(\vec{R}+\frac{m_n}{M}\vec{r}-\vec{R},\vec{r}_\text{cm}) \\
+&= q_1 \int \text{d}^3 R \abs{r\psi(\frac{m_N}{M}\vec{r}_{cm})}^2 \\
+&= q_1 \abs{\vec{r}\phi(\frac{m_N}{M}\vec{r}_\text{cm})}^2
+\end{align}

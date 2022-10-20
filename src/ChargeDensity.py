@@ -70,7 +70,7 @@ def bc(ua, ub,E):
     yb,vb,Ib = ub
     return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
 
-rmax = 5*b
+rmax = 20*b
 rmin = 0.01*b
 base1 = np.exp(1)
 start = np.log(rmin)
@@ -93,8 +93,8 @@ phi3 = Spline(r,phi)
 
 plt.figure(figsize=(9,5.5));
 
-plt.plot(r_cm,4*np.pi* abs(M / mn * r_pi * phi3(m / M * r_cm)) ** 2,label=r'$q_1$',linewidth=2.5)
-#plt.plot(r_cm,4*np.pi* abs(M / mn * r_pi * phi3(m / M * r_cm)) ** 2,label=r'$q_2$',linewidth=2.5)
+plt.plot(r_cm,4*np.pi* abs(M / mn * r_pi * phi3(M / mn * r_cm)) ** 2,label=r'$q_1$',linewidth=2.5)
+plt.plot(r_cm,4*np.pi* abs(M / m * r_pi * phi3(M / m * r_cm)) ** 2,label=r'$q_2$',linewidth=2.5)
 plt.xlabel(r"$r_{cm}$ [fm]");
 plt.ylabel(r"$\rho(r_{cm})$");
 plt.grid()
