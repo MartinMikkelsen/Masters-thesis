@@ -90,14 +90,15 @@ r_N = R-m/M*r
 r_cm = (m*r_pi-mn*r_N)/(M)
 
 phi3 = Spline(r,phi)
-
+print(r_cm)
 plt.figure(figsize=(9,5.5));
 
-plt.plot(r_cm,4*np.pi* abs(M / mn * r_pi * phi3(M / mn * r_cm)) ** 2,label=r'$q_1$',linewidth=2.5)
-plt.plot(r_cm,4*np.pi* abs(M / m * r_pi * phi3(M / m * r_cm)) ** 2,label=r'$q_2$',linewidth=2.5)
+plt.plot(r_cm,4*np.pi*abs(M / mn * r * phi3(M / mn * r_cm))**2,label=r'$\pi^+$',linewidth=2.5,color='g')
+plt.plot(r_cm,4*np.pi*abs(M /m * r * phi3(M / m * r_cm))**2,label=r'$p$',linewidth=2.5,color='r')
 plt.xlabel(r"$r_{cm}$ [fm]");
 plt.ylabel(r"$\rho(r_{cm})$");
-plt.grid()
 plt.legend(frameon=False);
-#integraltest = quad(lambda r_cm: 4*np.pi* abs(M / mn * r_pi * phi3(mn / M * r_cm)) ** 2,0,rmax)[0]
-#print("The integral is =",integraltest)
+plt.xlim([0,10])
+plt.show()
+integraltest = quad(lambda r_cm: r_cm**2*abs(M / mn * r_cm * phi3(mn / M * r_cm)) ** 2,0,rmax)[0]
+print("The integral is =",integraltest)

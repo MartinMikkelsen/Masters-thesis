@@ -1,5 +1,4 @@
 \chapter{The nuclear model with explicit mesons}\label{Decsofmodel}
-
 We consider a nuclear model where the nucleus is held together by emitting and absorbing mesons, and the mesons are treated explicitly \cite[]{Mesons}. We are considering the regime of low-energy nuclear physics, and this model is different from conventional interaction models in several ways. Firstly, the nucleons interact by emitting and absorbing mesons and not via a phenomenological potential. Conceptually this is similar to the one-boson-exchange model. Secondly, the number of parameters is greatly reduced. Regardless of the meson type, the number of parameters is two; the range and the strength of the meson-nucleon coupling are denoted $b$ and $S$, respectively. In the case of the pion, the central force, tensor force and the three-body force are all concealed within these two parameters. This model should be able to reproduce phenomena within the realm of low-energy nuclear physics, such as the deuteron, nucleon-nucleon scattering, pion-nucleon scattering and pion photoproduction. The low energy regime also enables the use of the Schrödinger equation to describe the equations of motion. The model must be constructed in a way such that usual quantum numbers are conserved; this means conservation of isospin, angular momentum and parity. 
 
 \section{Nuclear interacting model with explicit pions }\label{sec:model}
@@ -218,11 +217,13 @@ This means we get an extra term in \eqref{SE22} yielding
 Using the vector operators yields the following expression\footnote{\begin{align*}
 		\nabla^4(\vec{r}\phi(r))=\vec{r}\left(\phi^{(4)}+\frac{6}{r}\phi^{(3)}\right)
 \end{align*}}
-\begin{equation}
-	f(r)-\frac{\hbar^2}{2\mu_{N\pi}}\bigg( \phi^{(2)}(r)+\frac{4}{r}\phi^{(1)}(r) \bigg)-\frac{\hbar^4}{8\mu_{N\pi}^3 c^3}\bigg(\phi^{(4)}(r)+\frac{6}{r}\phi^{(3)}(r)\bigg)=(E-m_\pi c^2)\phi(r),
+\begin{equation}\begin{split}
+	f(r)-\frac{\hbar^2}{2\mu_{N\pi}}\bigg( \phi^{(2)}(r)+\frac{4}{r}\phi^{(1)}(r) \bigg)&-\frac{\hbar^4}{8\mu_{N\pi}^3 c^3}\bigg(\phi^{(4)}(r)+\frac{6}{r}\phi^{(3)}(r)\bigg) \\
+	&=(E-m_\pi c^2)\phi(r),
+\end{split}
 \end{equation}
 where the exponent, $(n)$, is the order of the differentiation. This leads to a system of equations given by
-\begin{equation} \label{systemrel}
+\begin{equation}\label{systemrel}
 	\left.
 	\begin{array}{ll}
 		12\pi \int_0^\infty  \text{d}r \, f(r) \phi(r) r^4  = E \\

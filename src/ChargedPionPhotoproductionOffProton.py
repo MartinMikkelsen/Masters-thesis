@@ -17,7 +17,8 @@ from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from hankel import HankelTransform     # Import the basic class
 from tqdm import tqdm
 from lmfit import Model
-
+from multiprocessing import Pool
+import time
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)
@@ -44,11 +45,6 @@ def data_path(dat_id):
 
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
-
-
-import cProfile
-import re
-cProfile.run('re.compile("foo|bar")', 'restats')
 
 m = 139.57039  #MeV
 mn = 938.272088  #MeV
@@ -87,25 +83,37 @@ def diffcross(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=3500,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=10000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
 
     def F(S):
+        start = time.time()
         func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
         integral =  4*np.pi/s*quad(func,0,rmax)[0]
+        #print(f"F took: {time.time()-start}")
         return integral
 
-    return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return 10000*charge2/2/np.pi*mu/m**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(x,S,b):
     tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
     return tot
+
+
+
+# def totalcross(x,S,b):
+#     def fag(i):
+#         return quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0]
+#     with Pool(8) as p:
+#         tot = p.map(fag, x)
+#     return tot
+
 
 if __name__ == '__main__':
 
@@ -121,14 +129,17 @@ if __name__ == '__main__':
     plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o");
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
+    #popt, pcov = curve_fit(totalcross,x,y,bounds=(0, [150,5]))
+    #print("popt=",popt)
+    #print("Error=",np.sqrt(np.diag(pcov)))
 
     #gmodel = Model(totalcross)
-    #result = gmodel.fit(y, x=x, S=57,b=3.9)
+    #result = gmodel.fit(y, x=x, S=30,b=3.8)
     #print(result.fit_report())
 
     photonenergies1 = np.linspace(151.4,180,50)
 
-    plt.plot(photonenergies1,totalcross(photonenergies1,59.6754266,3.91077185),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(59.6754266,3.91077185),color='r')
-    plt.legend(loc='best',frameon=False)
-    save_fig("ChargedPionOffProtonExact")
+    plt.plot(photonenergies1,totalcross(photonenergies1,12.08086184,3.23287641),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(59.6754266,3.91077185),color='r')
+    #plt.legend(loc='best',frameon=False)
+    #save_fig("ChargedPionOffProtonExact")
     #plt.show()
