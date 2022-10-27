@@ -56,14 +56,13 @@ hbarc = 197.327 #MeV fm
 alpha = 1/137
 charge2 = hbarc/(137)
 Mpip = m+mn
-
 def diffcross(Egamma,S,b):
     diff_cross = []
     for i in tqdm(Egamma):
         Eq = i-m-0.5*i**2/(Mpip)
         k = i/hbarc
         q = np.sqrt(2*mu*Eq)/(hbarc)
-
+        print("lambda=",1/q)
         def f(r):
             return S/b*np.exp(-r**2/b**2)
 
@@ -121,7 +120,7 @@ sigmaErrorSchmidt = [errorSchmidtmin, errorSchmidtmax]
 plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o",label='Included');
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
-plt.grid()
+#plt.grid()
 
 popt, pcov = curve_fit(totalcross, x,y, sigma=errorSchmidtmin ,p0=[100,2],bounds=(0,[150,4]),maxfev=1500)
 print("popt=",popt)
@@ -138,4 +137,4 @@ errexl = errorexl
 errorexcludeddata = [errorexl, errorexl]
 plt.errorbar(xexcluded,yexcluded,yerr=errorexl,fmt="o",color='k',label='Excluded');
 plt.legend(loc='best',frameon=False)
-save_fig('dipole_approximation')
+#save_fig('dipole_approximation')

@@ -17,7 +17,6 @@ import seaborn as sns
 import os
 from pylab import plt, mpl
 
-
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
 sns.set_theme(style="ticks", rc=custom_params)

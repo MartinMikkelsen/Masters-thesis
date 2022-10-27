@@ -55,6 +55,7 @@ alpha = 1/137
 charge2 = hbarc/(137)
 Mpip = m+mn
 
+
 def diffcross(Egamma,S,b,theta):
 
     Eq = Egamma-m-0.5*Egamma**2/(Mpip)
@@ -62,6 +63,7 @@ def diffcross(Egamma,S,b,theta):
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
     s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
         return S/b*np.exp(-r**2/b**2)
@@ -83,11 +85,11 @@ def diffcross(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3500,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=10000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
@@ -95,25 +97,67 @@ def diffcross(Egamma,S,b,theta):
     def F(S):
         start = time.time()
         func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
-        integral =  4*np.pi/s*quad(func,0,rmax)[0]
+        integral =  4*np.pi/s*quad(func,0,rmax,limit=100)[0]
         #print(f"F took: {time.time()-start}")
         return integral
 
-    return 10000*charge2/2/np.pi*mu/m**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+
+def diffcross_rel(Egamma,S,b,theta):
+
+    Eq = Egamma-m-0.5*Egamma**2/(Mpip)
+    if Eq<0 : return 0
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/(hbarc)
+    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
+
+    def f(r):
+        return S/b*np.exp(-r**2/b**2)
+
+    def sys(r,u,E):
+        y,v,I = u
+        dy = v
+        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+        dI = 12*np.pi*f(r)*r**4*y
+        return dy,dv,dI
+
+    def bc(ua, ub,E):
+        ya,va,Ia = ua
+        yb,vb,Ib = ub
+        return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+
+    rmax = 5*b
+    rmin = 0.01*b
+    base1 = np.exp(1)
+    start = np.log(rmin)
+    stop = np.log(rmax)
+    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    E = -2
+
+    u = [0*r2,0*r2,E*r2/r2[-1]]
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
+
+    phi = res.y.T[:np.size(r2),0]
+    phi3 = Spline(r2,phi)
+
+    def F(S):
+        start = time.time()
+        func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
+        integral =  4*np.pi/s*quad(func,0,rmax,limit=100)[0]
+        #print(f"F took: {time.time()-start}")
+        return integral
+
+    return 10000*charge2/4/np.pi*dp2dEq/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(x,S,b):
     tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
     return tot
 
 
-
-# def totalcross(x,S,b):
-#     def fag(i):
-#         return quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0]
-#     with Pool(8) as p:
-#         tot = p.map(fag, x)
-#     return tot
-
+def totalcross_rel(x,S,b):
+    tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross_rel(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
+    return tot
 
 if __name__ == '__main__':
 
@@ -129,17 +173,23 @@ if __name__ == '__main__':
     plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o");
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
-    #popt, pcov = curve_fit(totalcross,x,y,bounds=(0, [150,5]))
+    #initial = [50,3.5]
+    #popt, pcov = curve_fit(totalcross_rel,x,y,initial)
     #print("popt=",popt)
     #print("Error=",np.sqrt(np.diag(pcov)))
 
-    #gmodel = Model(totalcross)
+    #gmodel = Model(totalcross_rel)
     #result = gmodel.fit(y, x=x, S=30,b=3.8)
     #print(result.fit_report())
 
     photonenergies1 = np.linspace(151.4,180,50)
 
-    plt.plot(photonenergies1,totalcross(photonenergies1,12.08086184,3.23287641),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(59.6754266,3.91077185),color='r')
-    #plt.legend(loc='best',frameon=False)
+    plt.plot(photonenergies1,totalcross_rel(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(69.33526458,3.60628741),color='r')
+    #plt.plot(photonenergies1,totalcross(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(69.33526458,3.60628741),linestyle='dashed',color='r')
+    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(57.9783878,3.97276793),color='g')
+    #plt.plot(photonenergies1,totalcross(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(57.9783878,3.97276793),linestyle='dashed',color='g')
+
+    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
+    plt.legend(loc='best',frameon=False)
     #save_fig("ChargedPionOffProtonExact")
-    #plt.show()
+    plt.show()

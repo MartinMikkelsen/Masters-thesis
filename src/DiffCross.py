@@ -64,6 +64,7 @@ def diffcross(Egamma,S,b,theta):
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
     s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    dp2dEq = ((Eq**2+2*Eq*mp+2*mp**2+2*Eq*m+2*mp*m)*(Eq**2+2*Eq*mp+2*m**2+2*Eq*m+2*mp*m))/(2*(Eq+mp+m)**3)
 
     def f(r):
         return S/b*np.exp(-r**2/b**2)
@@ -105,7 +106,7 @@ def diffcross(Egamma,S,b,theta):
         int = 4*np.pi/s*integrate.simpson(func,x=r2,dx=0.01)
         return int
 
-    return 10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return 10000*charge2/8/np.pi*dp2dEq/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def PlotC(EgammaPlot,S,b):
     angles = np.linspace(0,np.pi,150)
@@ -126,8 +127,8 @@ def PlotC(EgammaPlot,S,b):
     plt.tight_layout()
     plt.plot(np.rad2deg(angles),0.06*np.sin(angles)**2,'--', label=r'$0.06\sin(\theta)^2$')
     plt.legend(loc='upper left',frameon=False)
-    plt.grid()
-    save_fig("DiffCross151")
+    #plt.grid()
+    save_fig("DiffCross151_rel")
 
 
 PlotC(151.4,86.2,3.8)

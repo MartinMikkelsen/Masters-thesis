@@ -60,6 +60,7 @@ def diffcross(Egamma,S,b,theta):
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
     s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    dp2dEq = ((Eq**2+2*Eq*mp+2*mp**2+2*Eq*m+2*mp*m)*(Eq**2+2*Eq*mp+2*m**2+2*Eq*m+2*mp*m))/(2*(Eq+mp+m)**3)
 
     def f(r):
         return S/b*np.exp(-r**2/b**2)
@@ -107,7 +108,7 @@ angles = np.linspace(0,np.pi,150)
 
 O = []
 for i in angles:
-   O.append(diffcross(Egammas[2],Ss[0],bs[0],i))
+   O.append(diffcross(Egammas[2],Ss[1],bs[1],i))
 fig = plt.figure(figsize=(9,5.5))
 ax = plt.axes(polar=False)
 ax.plot(np.rad2deg(angles), O,label=r'$E_\gamma=%0.1f$ MeV' %(Egammas[2]),color='g')
@@ -122,7 +123,7 @@ plt.errorbar(AngleBeckD,DiffCrossBeckD,yerr=ErrorBeckD,fmt="o",color="g");
 
 M = []
 for i in angles:
-   M.append(diffcross(Egammas[0],Ss[0],bs[0],i))
+   M.append(diffcross(Egammas[0],Ss[1],bs[1],i))
 
 ax.plot(np.rad2deg(angles), M,label=r'$E_{\gamma}=%0.1f$ MeV' %(Egammas[0]),color='b')
 AngleBeck = np.array([12.542955326460481, 20.61855670103093, 28.694158075601376, 36.597938144329895, 44.50171821305842, 52.40549828178694, 60.48109965635739, 68.21305841924399, 76.11683848797252, 84.02061855670104, 92.09621993127148, 100.34364261168385, 108.07560137457045, 116.1512027491409, 124.22680412371135, 132.3024054982818, 148.28178694158075, 156.18556701030928, 164.26116838487974])
@@ -136,7 +137,7 @@ plt.errorbar(AngleBeck,DiffCrossBeck,yerr=ErrorBeck,fmt="o",color='b');
 
 N = []
 for i in angles:
-   N.append(diffcross(Egammas[1],Ss[0],bs[0],i))
+   N.append(diffcross(Egammas[1],Ss[1],bs[1],i))
 ax.plot(np.rad2deg(angles), N,label=r'$E_\gamma=%0.1f$ MeV' %(Egammas[1]),color='r')
 AngleBeckB = np.array([12.06140350877193, 20.175438596491226, 28.07017543859649, 35.96491228070175, 44.07894736842105, 51.973684210526315, 59.868421052631575, 68.2017543859649, 76.09649122807018, 83.7719298245614, 91.8859649122807, 100, 107.89473684210526, 115.78947368421052, 124.12280701754385, 132.01754385964912, 140.1315789473684, 147.80701754385964, 156.140350877193, 164.25438596491227])
 DiffCrossBeckB = np.array([0.019025522041763342, 0.05359628770301624, 0.056380510440835266, 0.0642691415313225, 0.08445475638051043, 0.08329466357308585, 0.10208816705336426, 0.07378190255220418, 0.09466357308584687, 0.11693735498839908, 0.07424593967517401, 0.05916473317865429, 0.08607888631090488, 0.08468677494199536, 0.06194895591647332, 0.09466357308584687, 0.060556844547563805, 0.11670533642691415, 0.05568445475638051, 0.06960556844547564])
@@ -149,45 +150,6 @@ plt.legend(loc="best",frameon=False)
 plt.xlabel(r"$\theta_q$ [deg]");
 plt.ylabel(r"$d\sigma$/d$\Omega_q$ [$\mu$b/sr]");
 plt.tight_layout()
-plt.title("$S=%s$ MeV, $b=%s$ fm" %(Ss[0],bs[0]), x=0.25, y=0.9)
-#save_fig("MultiDiffcross")
+plt.title("$S=%s$ MeV, $b=%s$ fm" %(Ss[1],bs[1]), x=0.25, y=0.9)
+save_fig("MultiDiffcross_nonrel_2")
 plt.figure()
-
-def polarplot():
-    angles = np.linspace(0,np.pi,150)
-    M = []
-    for i in angles:
-       M.append(diffcross(Egammas[1],Ss[0],bs[0],i))
-    fig = plt.figure(figsize=(9,5.5))
-    ax = plt.axes(polar=False)
-    ax.plot(np.rad2deg(angles), M,label=r'$E_\gamma=%0.1f$ MeV, $S=%0.1f$ MeV, $b=%0.1f$ fm' %(Egammas[0],Ss[0],bs[0]),color='r')
-    N = []
-    for i in angles:
-       N.append(diffcross(Egammas[1],Ss[0],bs[0]+0.25,i))
-    ax.plot(np.rad2deg(angles), N,label=r'$E_\gamma=%0.1f$ MeV, $S=%0.1f$ MeV, $b=%0.1f$ fm' %(Egammas[1],Ss[1],bs[1]),color='r')
-    O = []
-    for i in angles:
-       O.append(diffcross(Egammas[1],Ss[0],bs[0]-0.25,i))
-    ax.plot(np.rad2deg(angles), O,label=r'$E_\gamma=%0.1f$ MeV, $S=%0.1f$ MeV, $b=%0.1f$ fm' %(Egammas[2],Ss[2],bs[2]),color='r')
-    plt.fill_between(np.rad2deg(angles),N,O)
-
-    # P = []
-    # for i in angles:
-    #    P.append(diffcross(Egammas[1],Ss[0],bs[0],i))
-    # ax.plot(angles, P,label=r'$E_\gamma=%0.1f$ MeV, $S=%0.1f$ MeV, $b=%0.1f$ fm' %(Egammas[0],Ss[0],bs[0]),color='g',linestyle='dashed')
-    # Q = []
-    # for i in angles:
-    #    Q.append(diffcross(Egammas[1],Ss[0]+3,bs[0],i))
-    # ax.plot(angles, Q,label=r'$E_\gamma=%0.1f$ MeV, $S=%0.1f$ MeV, $b=%0.1f$ fm' %(Egammas[1],Ss[1],bs[1]),color='g',linestyle='dashed')
-    # R = []
-    # for i in angles:
-    #    R.append(diffcross(Egammas[1],Ss[0]-3,bs[0]-0.1,i))
-    # ax.plot(angles, R,label=r'$E_\gamma=%0.1f$ MeV, $S=%0.1f$ MeV, $b=%0.1f$ fm' %(Egammas[2],Ss[2],bs[2]),color='g',linestyle='dashed')
-    #
-    plt.xlabel(r"$\theta_q$ [deg]");
-    plt.ylabel(r"$d\sigma$/d$\Omega_q$ [$\mu$b/sr]");
-    #ax.legend(loc="lower left",bbox_to_anchor=(.5 + np.cos(legendangle)/2, .5 + np.sin(legendangle)/2))
-    #ax.set_thetamin(0)
-    #ax.set_thetamax(180)
-
-polarplot()

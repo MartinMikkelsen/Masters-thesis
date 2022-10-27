@@ -27,15 +27,15 @@ The electromagnetic interaction is relatively weak, and its strength is given by
 \end{equation}
 where the $(1)$ represents the first non-vanishing order. Due to our choice of gauge equation \eqref{RadiationGauge} the two terms in \eqref{RadLin} commute and we are left with
 \begin{equation} \label{RadiationHamil}
-	H = - \sum_i \frac{e_i}{m_i c} \vec{A}(\vec{r},t)\vec{p}.
+	H = - \sum_i \frac{e_i}{m_i c} \vec{A}(\vec{r}_i,t)\vec{p}_i.
 \end{equation}
 For the type of problems we will be solving in \ref{sec:PionPhotoproduction} we will be working mainly with one charged particle, and we can ignore the sum in \eqref{RadiationHamil}.
-\section{Density of states}
+\section{Density of States}
 As mentioned in section \ref{RadMatter} the electromagnetic interaction strength is related to the fine structure constant. In section \ref{sec:PionPhotoproduction} we want to do perturbation theory to get an expression for the total cross-section as a function of energy which the relatively weak fine structure constant allows. From perturbation theory, the transition rate is described by Fermi's golden rule given by
 \begin{equation} \label{FermiGolden}
 	\text{d}\omega = \frac{2\pi}{\hbar}\abs{\mathcal{M}}^2 \text{d}\rho,
 \end{equation}
-where the matrix element $\mathcal{M}$ is the subject in section \ref{sec:PionPhotoproduction} and $\text{d}\rho$ is the density of states in the final states. In this section, we will derive general results of the density of states in a non-relativistic and relativistic limit. The density of states is defined by
+where the matrix element $\mathcal{M}$ is the subject in section \ref{sec:PionPhotoproduction} and $\text{d}\rho$ is the density of states in the final states. In this section, we will derive general results of the density of states in the non-relativistic and relativistic limit. The density of states is defined by
 \begin{marginfigure}
 	\centering
 	\input{Figures/diffcros}
@@ -57,11 +57,11 @@ In section \ref{sec:PionPhotoproduction} we are interested in the number of poss
 \begin{equation} \label{densityenergy}
 	\rho(E_f) = \frac{V p_f^2}{(2\pi \hbar)^3} \frac{\text{d}p_f}{\text{d}E_f} \, \text{d}\Omega_q.
 \end{equation}
-This is the final expression non-relativistically. However, we want to generalize this result to also account for relativistic effects since we do not know what relativistic regime will dominate the process. For a general pion photoproduction process, we can write
+This is the final expression non-relativistically. However, we want to generalize this result to account for relativistic effects since we have yet to determine what relativistic regime will dominate the process. For a general pion photoproduction process, we can write
 \begin{equation} \label{twobody}
 	N + \gamma \rightarrow N+\pi,
 \end{equation}
-where $N$ is the nucleon. The final state energy is then given by
+where $N$ is the nucleon. The final state energy is then given by \cite{Kernebog}
 \begin{equation} \label{Ef}
 	E_f = E_N + E_\pi = \sqrt{p_f^2 c^2 +m_N^2c^4} + \sqrt{p_f^2c^2 + m^2_\pi c^4}.
 \end{equation}
@@ -70,27 +70,30 @@ We now change the notation to match the variables used later in section \ref{sec
 
 From conservation of energy, we get the following expression for the energy of the relative pion-nucleon motion denoted $E_q$. 
 \begin{equation} \label{Eq}
-	E_q = \sqrt{m_N^2 c^4+(\hbar c)^2q^2} + \sqrt{m_\pi c^4+()\hbar c)^2 q^2}-m_N c^2-m_\pi c^2.
+	E_q = \sqrt{m_N^2 c^4+(\hbar c)^2q^2} + \sqrt{m_\pi c^4+(\hbar c)^2 q^2}-m_N c^2-m_\pi c^2.
 \end{equation}
-The density of states around $q$ is given by
+
 \begin{marginfigure}
 	\centering
 	\input{Figures/qenergy}
 	\caption{Energy diagram of the system. Here $\mu_{N\pi}$ is the reduced mass of the pion-nucleon system}
 	\label{fig:qenergy}
 \end{marginfigure}
-Looking at \eqref{densityenergy} we want to get an expression for the final state momentum in terms of the wave number
+Looking at \eqref{densityenergy} we want to get an expression for the final state momentum in terms of the wave number. The density of states around $\vec{q}$ is given by
 \begin{equation} \label{DensityEQ}
 	\text{d}\rho_f = \frac{Vq}{(2\pi)^3}\frac{1}{2}\frac{\text{d}q^2}{\text{d}E_q} \text{d}\Omega_q.
 \end{equation}
-We now solve for $(\hbar c)^2q^2$ in \ref{Eq}, which yields the following result
+We now solve for $(\hbar c)^2q^2$ in \eqref{Eq}, which yields the following result\footnote{It is also possible to use the approximation that $\sqrt{x^2+y^2}\simeq 0.96x+0.4y$ giving an error of only $4\%$.}
 \begin{equation} \label{hbarc-q}
 	(\hbar c)^2 q^2 = \frac{E_q(E_q+2m_N c^2)(E_q+2m\pi c^2)(E_q+2m_N c^2+2m_\pi c^2)}{4(E_q+m_N c^2+m_\pi c^2)^2},
 \end{equation}
-and we are now able to calculate the derivative from equation \eqref{hbarc-q}
+and we are now able to calculate the derivative of equation \eqref{hbarc-q}
 \begin{equation}\begin{split} \label{derivative}
 		(\hbar c)^2\frac{\text{d}q^2}{\text{d}E_q} &= \frac{(E_q^2+2E_q m_N c^2+2m_N^2 c^4+2E_q m_\pi c^2+2m_N m_\pi c^4)}{2(E_q+m_N c^2+m_\pi c^2)^3} \\
 		& \, \times \frac{(E_q^2+2E_q m_N c^2 +2m_\pi^2 c^4 +2E_q m_\pi c^2+2m_N m_\pi c^4)}{2(E_q+m_N c^2+m_\pi c^2)^3},
 	\end{split}
 \end{equation} 
-which yields the final expression for the relativistic density of states by plugging equation \eqref{derivative} into equation \eqref{DensityEQ}.
+which yields the final expression for the relativistic density of states by plugging equation \eqref{derivative} into equation \eqref{DensityEQ}. Non-relativistically, the density of states in terms of $E_q$ and $q$ is given by the following using 
+\begin{equation}\label{nonreladensity}
+	\text{d}\rho = \frac{Vq\mu_{N_\pi}}{(2\pi)^3\hbar^2} \text{d}\,\Omega_q
+\end{equation}

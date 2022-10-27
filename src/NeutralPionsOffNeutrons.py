@@ -94,35 +94,98 @@ def diffcross(Egamma,S,b,theta):
         integral =  4*np.pi/s*quad(func,0,rmax)[0]
         return integral
 
-    return 10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return np.array(10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2)
+
+def diffcross_rel(Egamma,S,b,theta):
+
+    Eq = Egamma-m-0.5*Egamma**2/(Mpip)
+    if Eq<0 : return 0
+    k = Egamma/hbarc
+    q = np.sqrt(2*mu*Eq)/(hbarc)
+    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    dp2dEq = ((Eq**2+2*Eq*mp+2*mp**2+2*Eq*m+2*mp*m)*(Eq**2+2*Eq*mp+2*m**2+2*Eq*m+2*mp*m))/(2*(Eq+mp+m)**3)
+
+    def f(r):
+        return S/b*np.exp(-r**2/b**2)
+
+    def sys(r,u,E):
+        y,v,I = u
+        dy = v
+        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+        dI = 12*np.pi*f(r)*r**4*y
+        return dy,dv,dI
+
+    def bc(ua, ub,E):
+        ya,va,Ia = ua
+        yb,vb,Ib = ub
+        return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+
+    rmax = 5*b
+    rmin = 0.01*b
+    base1 = np.exp(1)
+    start = np.log(rmin)
+    stop = np.log(rmax)
+    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    E = -2
+
+    u = [0*r2,0*r2,E*r2/r2[-1]]
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
+
+    phi = res.y.T[:np.size(r2),0]
+    phi3 = Spline(r2,phi)
+
+    def F(S):
+        func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
+        integral =  4*np.pi/s*quad(func,0,rmax)[0]
+        return integral
+
+    def trapzsum(s):
+        r3 = np.linspace(0,rmax,2500)
+        func = phi*r2**3*spherical_jn(1,s*r2)
+        int = 4*np.pi/s*integrate.simpson(func,x=r2,dx=0.01)
+        return int
+
+    return 10000*charge2/8/np.pi*dp2dEq/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(Egamma,S,b):
     func = lambda theta: 2*np.pi*np.sin(theta)*diffcross(Egamma,S,b,theta)
     integ = quad(func,0,np.pi)[0]
     return integ
 
-plt.figure(figsize=(9,5.5));
+def totalcross_rel(Egamma,S,b):
+    func = lambda theta: 2*np.pi*np.sin(theta)*diffcross_rel(Egamma,S,b,theta)
+    integ = quad(func,0,np.pi)[0]
+    return integ
 
+plt.figure(figsize=(9,5.5));
 
 photonenergies = np.linspace(144.7,180,50)
 N = []
+N_rel = []
 M = []
+M_rel = []
 P = []
-for i in tqdm(((photonenergies))):
+P_rel = []
+for i in tqdm(photonenergies):
+    N_rel.append(totalcross_rel(i,86.2,3.8))
     N.append(totalcross(i,86.2,3.8))
+    M_rel.append(totalcross_rel(i,45.5,3.9))
     M.append(totalcross(i,45.5,3.9))
+    P_rel.append(totalcross_rel(i,35.4,4.0))
     P.append(totalcross(i,35.4,4.0))
 
-plt.plot(photonenergies,N, label=r'$S=86.2$ MeV, $b=3.8$ fm', color='r')
-plt.plot(photonenergies,M, label=r'$S=45.5$ MeV, $b=3.9$ fm', color='g')
-plt.plot(photonenergies,P, label=r'$S=35.4$ MeV, $b=4.0$ fm', color='navy')
 
+plt.plot(photonenergies,N,color='r',linestyle='dashed')
+plt.plot(photonenergies,N_rel, label=r'$S=86.2$ MeV, $b=3.8$ fm, rel', color='r')
+plt.plot(photonenergies,M,color='g',linestyle='dashed')
+plt.plot(photonenergies,M_rel, label=r'$S=45.5$ MeV, $b=3.9$ fm, rel', color='g')
+plt.plot(photonenergies,P,color='navy',linestyle='dashed')
+plt.plot(photonenergies,P_rel, label=r'$S=35.4$ MeV, $b=4.0$ fm, rel', color='navy')
 
 plt.xlabel(r"$E_\gamma$ [MeV]");
 plt.ylabel(r"$\sigma [\mu b]$");
 plt.legend(loc='best',frameon=False)
-plt.grid()
 
-#save_fig('NeutralPionsOffNeutrons')
+save_fig('NeutralPionsOffNeutrons')
 
 plt.show()

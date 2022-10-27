@@ -41,7 +41,7 @@ The Coulomb wave function for a charged particle with arbitrary angular momentum
 \end{equation}
 where $\mu$ is the reduced mass of the system. The radial wave function $u(r)$ satisfied the following differential equation
 \begin{equation} \label{Coulomb2}
-	\frac{\text{d}^2 u\ell}{\text{d}r^2}+\left( k^2-\frac{\ell(\ell+1)}{r^2}-\frac{2\mu}{\hbar^2}\frac{Ze^2}{r}\right),
+	\frac{\text{d}^2 u_\ell}{\text{d}r^2}+\left( k^2-\frac{\ell(\ell+1)}{r^2}-\frac{2\mu}{\hbar^2}\frac{Ze^2}{r}\right)u_\ell=0,
 \end{equation}
 where $Z$ is the product of the charges. Two independent solutions can be found to equation \eqref{Coulomb2}--these are called the regular and irregular Coulomb wave functions denoted $F_\ell(r)$ and $G_\ell(r)$ respectively. The regular Coulomb wave function $F_\ell(r)$ is a real function that vanishes at $r=0$ and the behaviour of the function is described using a parameter $\eta$ which describes how strongly the Coulomb interaction is
 \begin{equation} \label{etafactor}
@@ -66,7 +66,7 @@ For particles without charge, we can ignore the Coulomb interaction in equation 
 where $J_{\ell+1/2}$ is a Bessel function. Equation \eqref{solcharge} is nothing but a spherical Bessel function. This means in the limit where the particles become chargeless the solution must reduce to a plane wave solution. 
 
 \chapter{Three component wavefunction}\label{ThreeComponentWavefunction}
-Strictly speaking, the nuclear model should be consistent with other results from nuclear physics. In particular, the mass difference between the charged pion and the neutral pion. A priori we do not know the impact on the wave function of the nucleon-pion system and in this appendix, we wish to estimate how the wave function changes when we take the different properties of the pion into account. Starting from \eqref{pnpi}
+Strictly speaking, the nuclear model should be consistent with other results from nuclear physics. In particular, the mass difference between the charged pion and the neutral pion. A priori we do not know the impact on the wave function of the nucleon-pion system and in this appendix, we wish to estimate how the wave function changes when we take the different properties of the pion into account. Starting from \eqref{bareproton} and \eqref{pionnuc}
 \begin{equation}\label{pnpipi}
 	\psi_p = p\uparrow\frac{1}{\sqrt{V}}, \quad \psi_{N\pi^0}=(\vec{\tau\cdot\vec{\pi}})(\vec{\sigma}\cdot\vec{r})\phi_0(r) p\uparrow\frac{1}{\sqrt{V}}, \quad \psi_{N\pi^+}=(\vec{\tau\cdot\vec{\pi}})(\vec{\sigma}\cdot\vec{r})\phi_+(r) p\uparrow\frac{1}{\sqrt{V}},
 \end{equation}
@@ -97,3 +97,37 @@ Physically, we have added another pion wave function to our original model yet i
 	\end{sidecaption}
 \end{figure}
 Compared to \ref{fig:integralplot} the difference is negligible even accounting for the mass difference for the pions and nucleons ($m_N, m_P$). This means we can to a good estimation continue using only one pion wave function in our nuclear model. 
+\chapter{Angular distribution}
+\begin{figure}[H]
+	\begin{sidecaption}{Angular distribution with the parameters $S=86.2$ MeV and $b=3.8$ fm using the relativistic density of states }[fig:Angular1]
+		\includegraphics[width=\linewidth]{Figures/MultiDiffcross_rel.pdf}
+	\end{sidecaption}
+\end{figure}
+\begin{figure}[H]
+	\begin{sidecaption}{Angular distribution with the parameters $S=45.4$ MeV and $b=3.9$ fm using the relativistic density of state}[fig:Angular1]
+		\includegraphics[width=\linewidth]{Figures/MultiDiffcross_rel_2.pdf}
+	\end{sidecaption}
+\end{figure}
+\begin{figure}[H]
+	\begin{sidecaption}{Angular distribution with the parameters $S=35$ MeV and $b=4.0$ fm using the relativistic density of state}[fig:Angular3]
+		\includegraphics[width=\linewidth]{Figures/MultiDiffcross_rel_3.pdf}
+	\end{sidecaption}
+\end{figure}
+
+
+\begin{figure}[H]
+	\begin{sidecaption}{Angular distribution with the parameters $S=86.2$ MeV and $b=3.8$ fm using the non-relativistic density of states }[fig:Angular1]
+		\includegraphics[width=\linewidth]{Figures/MultiDiffcross_nonrel_1.pdf}
+	\end{sidecaption}
+\end{figure}
+\begin{figure}[H]
+	\begin{sidecaption}{Angular distribution with the parameters $S=45.4$ MeV and $b=3.9$ fm using the non-relativistic density of state}[fig:Angular1]
+		\includegraphics[width=\linewidth]{Figures/MultiDiffcross_nonrel_2.pdf}
+	\end{sidecaption}
+\end{figure}
+\begin{figure}[H]
+	\begin{sidecaption}{Angular distribution with the parameters $S=35$ MeV and $b=4.0$ fm using the non-relativistic density of state}[fig:Angular3]
+		\includegraphics[width=\linewidth]{Figures/MultiDiffcross_nonrel_3.pdf}
+	\end{sidecaption}
+\end{figure}
+
