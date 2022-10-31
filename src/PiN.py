@@ -79,18 +79,15 @@ def phifunc(S,b):
 
     u = [0*r,0*r,E*r/r[-1]]
     res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
-    #print(res.message,", E: ",res.p[0])
+    print(res.message,", E: ",res.p[0])
 
     phi = res.y.T[:np.size(r),0]
     phi3 = Spline(r,phi)
 
-    def rms_residuals():
-        plt.figure()
-        plt.plot(res.x[0:np.size(res.rms_residuals)],res.rms_residuals,linewidth=2.5)
-        plt.grid(); plt.legend(r"RMS".split(),loc=0);
-        save_fig("rms_residuals")
-
-
+    phi_func = lambda r: phi3(r)**2*r**4
+    int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]
+    print("Norm_integral =",int_phi)
+    print(res.p[0])
     return res.x,res.y.T[:,0],res.y.T[:,1],res.y.T[:,2], res.p[0]
 
 plt.figure(figsize=(9,5.5))
@@ -99,10 +96,13 @@ S2,b2 = 79.7,3.8
 S3,b3 = 29.4,4.0
 S4,b4 = 41.5,3.9
 
-sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S1,b1,phifunc(S1,b1)[4]))
-sns.lineplot(x=phifunc(S2,b2)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
-sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S3,b3,phifunc(S3,b3)[4]))
-sns.lineplot(x=phifunc(S4,b4)[0],y=-phifunc(S4,b4)[1]*phifunc(S4,b4)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S4,b4,phifunc(S4,b4)[4]))
+
+phifunc(45.5,3.9)
+
+# sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S1,b1,phifunc(S1,b1)[4]))
+# sns.lineplot(x=phifunc(S2,b2)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
+# sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S3,b3,phifunc(S3,b3)[4]))
+# sns.lineplot(x=phifunc(S4,b4)[0],y=-phifunc(S4,b4)[1]*phifunc(S4,b4)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S4,b4,phifunc(S4,b4)[4]))
 
 plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
 #plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8)

@@ -64,7 +64,7 @@ def diffcross(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = np.array(Egamma/hbarc)
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(np.square(q)+np.square(k)*np.square(m/Mpip)+2*q*k*(m/Mpip)*np.cos(theta))
+    s = np.sqrt(np.square(q)+np.square(k)*np.square(mn/Mpip)+2*q*k*(mn/Mpip)*np.cos(theta))
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
@@ -87,11 +87,11 @@ def diffcross(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3500,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
@@ -113,7 +113,7 @@ def diffcross(Egamma,S,b,theta):
         integral =  quad(func,0,rmax,limit=100)[0]
         return integral
 
-    return 10000*charge2/4/np.pi*dp2dEq/(mn)**2*np.power(q,3)/k*np.power(np.sin(theta),2)*(4*np.pi)**2*np.power(F(s),2)
+    return 10000*charge2/(4*np.pi)*dp2dEq/(m**2)*np.power(q,3)/k*np.power(np.sin(theta),2)*(4*np.pi)**2*np.power(F(s),2)
 
 def totalcross(x,S,b):
     tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
@@ -122,9 +122,9 @@ def totalcross(x,S,b):
 if __name__ == '__main__':
 
     plt.figure(figsize=(9,5.5));
-    x = [149.67462039045554, 152.3644251626898, 154.96746203904556, 157.5704989154013, 160.26030368763557, 162.51626898047724]
-    y = [31.363636363636363, 55.45454545454545, 70.9090909090909, 82.95454545454545, 93.18181818181817, 100.45454545454545]
-    yprime = [21.818181818181817, 46.36363636363636, 61.13636363636363, 72.5, 82.5, 89.0909090909091]
+    x = [149.69199178644763, 152.36139630390144, 155.03080082135523, 157.5770020533881, 158.31622176591375, 160.32854209445586, 162.4229979466119, 162.99794661190964, 168.2546201232033,175.078125, 175.8984375]
+    y = [31.942446043165468, 56.115107913669064, 71.22302158273381, 83.3093525179856, 80.28776978417265, 93.45323741007194, 100.79136690647482, 105.53956834532373, 106.61870503597122,109.82142857142857, 130.8379120879121]
+    yprime = [22.230215827338128, 46.83453237410072, 61.72661870503597, 72.73381294964028, 75.75539568345323, 83.09352517985612, 89.35251798561151, 99.92805755395683, 101.0071942446043,89.01098901098901, 121.56593406593406]
 
     errorSchmidtmin = np.subtract(y,yprime)
     errorSchmidtmax = errorSchmidtmin
@@ -141,8 +141,8 @@ if __name__ == '__main__':
     # y = [31.942446043165468, 56.115107913669064, 71.22302158273381, 83.3093525179856, 80.28776978417265, 93.45323741007194, 100.79136690647482, 105.53956834532373, 106.61870503597122,109.82142857142857, 130.8379120879121]
     # yprime = [22.230215827338128, 46.83453237410072, 61.72661870503597, 72.73381294964028, 75.75539568345323, 83.09352517985612, 89.35251798561151, 99.92805755395683, 101.0071942446043,89.01098901098901, 121.56593406593406]
 
-    photonenergies1 = np.linspace(148.4,165,50)
-    #plt.plot(photonenergies1,totalcross(photonenergies1,9.9681908,9.08173499),color='r',label=r"$S=$%0.2f, $b=$%0.2f" %(78.105,7.504))
+    photonenergies1 = np.linspace(148.4,176,25)
+    #plt.plot(photonenergies1,totalcross(photonenergies1,8.45995544,3.87503802),color='r',label=r"$S=$%0.2f, $b=$%0.2f" %(8.45995544,3.87503802))
     plt.plot(photonenergies1,totalcross(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
     plt.legend(loc='best',frameon=False)
     #save_fig("ChargedPionOffNeutron")

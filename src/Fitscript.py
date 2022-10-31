@@ -103,6 +103,10 @@ def diffcross(Egamma,S,b,theta):
         integral =  4*np.pi/s*quad(func,0,rmax)[0]
         return integral
 
+    phi_func = lambda r: phi3(r)**2*r**4
+    int_phi = 4*np.pi*quad(phi_func,0,rmax)[0]
+    print("Norm_integral =",int_phi)
+
     return np.array(10000*charge2/4/np.pi*mu/mp**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2)
 
 def totalcross(x,S,b):
@@ -121,13 +125,13 @@ if __name__ == '__main__':
     #popt, pcov = curve_fit(totalcross,gammaSchmidt,sigmaSchmidt, sigma=errorSchmidtmin)
     #print("popt=",popt)
     #print("Error=",np.sqrt(np.diag(pcov)))
-    gmodel = Model(totalcross)
-    result = gmodel.fit(sigmaSchmidt, x=gammaSchmidt, S=80.6,b=3.9)
-    print(result.fit_report())
+    #gmodel = Model(totalcross)
+    #result = gmodel.fit(sigmaSchmidt, x=gammaSchmidt, S=80.6,b=3.9)
+    #print(result.fit_report())
 
     photonenergies = np.linspace(144.7,170,25)
     #plt.plot(photonenergies,totalcross(photonenergies,popt[0],popt[1]))
-    plt.plot(photonenergies, result.best_fit, '-', label='best fit')
+    #plt.plot(photonenergies, result.best_fit, '-', label='best fit')
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
     plt.grid()

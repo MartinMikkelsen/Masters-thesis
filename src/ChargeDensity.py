@@ -92,8 +92,8 @@ phi3 = Spline(r,phi)
 print(r_cm)
 plt.figure(figsize=(9,5.5));
 
-plt.plot(r_cm,4*np.pi*abs(M / mn * r * phi3(M / mn * r_cm))**2,label=r'$\pi^+$',linewidth=2.5,color='g')
-plt.plot(r_cm,4*np.pi*abs(M /m * r * phi3(M / m * r_cm))**2,label=r'$p$',linewidth=2.5,color='r')
+plt.plot(r_cm,4*np.pi*abs(M / mn* r* phi3(M / mn * r_cm))**2,label=r'$\pi^+$',linewidth=2.5,color='g')
+plt.plot(r_cm,4*np.pi*abs(M /m * r* phi3(M / m * r_cm))**2,label=r'$p$',linewidth=2.5,color='r')
 plt.xlabel(r"$r_{cm}$ [fm]");
 plt.ylabel(r"$\rho(r_{cm})$");
 plt.legend(frameon=False);
