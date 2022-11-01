@@ -99,7 +99,7 @@ def diffcross(Egamma,S,b,theta):
 def diffcross_rel(Egamma,S,b,theta):
 
     Eq = Egamma-m-0.5*Egamma**2/(Mpip)
-    if Eq<0 : return 0
+    if Eq.any()<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
     s = np.sqrt(q**2+k**2*(mp/Mpip)**2+2*q*k*(mp/Mpip)*np.cos(theta))

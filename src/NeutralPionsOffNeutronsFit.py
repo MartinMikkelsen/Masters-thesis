@@ -47,7 +47,7 @@ def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
 m = 139.57039  #MeV
-mn = 938.272088  #MeV
+mn = 939.56542052 #MeV
 mu = m*mn/(mn+m) #Reduced mass
 g = 2*mu
 hbarc = 197.327 #MeV fm
@@ -55,15 +55,13 @@ alpha = 1/137
 charge2 = hbarc/(137)
 Mpip = m+mn
 
-
 def diffcross(Egamma,S,b,theta):
 
     Eq = Egamma-m-0.5*Egamma**2/(Mpip)
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
-    dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
+    s = np.sqrt(q**2+k**2*(mn/Mpip)**2-2*q*k*(mn/Mpip)*np.cos(theta))
 
     def f(r):
         return S/b*np.exp(-r**2/b**2)
@@ -109,7 +107,7 @@ def diffcross_rel(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    s = np.sqrt(q**2+k**2*(mn/Mpip)**2-2*q*k*(mn/Mpip)*np.cos(theta))
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
@@ -132,11 +130,11 @@ def diffcross_rel(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=5000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-3,max_nodes=1000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
@@ -169,10 +167,10 @@ if __name__ == '__main__':
 
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
-    initial = [50,3.5]
-    popt, pcov = curve_fit(totalcross_rel,xSAID,ySAID)
-    print("popt=",popt)
-    print("Error=",np.sqrt(np.diag(pcov)))
+    #initial = [50,3.5]
+    #popt, pcov = curve_fit(totalcross_rel,xSAID,ySAID)
+    #print("popt=",popt)
+    #print("Error=",np.sqrt(np.diag(pcov)))
 
     photonenergies1 = np.linspace(144.7,180,50)
 
@@ -181,7 +179,8 @@ if __name__ == '__main__':
     #plt.plot(photonenergies1,totalcross_rel(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(57.9783878,3.97276793),color='g')
     #plt.plot(photonenergies1,totalcross(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(57.9783878,3.97276793),linestyle='dashed',color='g')
 
-    plt.plot(photonenergies1,totalcross_rel(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
+    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
+    plt.plot(photonenergies1,totalcross_rel(photonenergies1,13.43211784,2.38721894),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(13.43211784,2.38721894),color='r')
     plt.scatter(xSAID,ySAID)
     plt.legend(loc='best',frameon=False)
     #save_fig("ChargedPionOffProtonExact")

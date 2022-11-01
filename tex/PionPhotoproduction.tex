@@ -177,17 +177,17 @@ using \eqref{pionnuc} and considering only the $\pi^+$ component in $\vec{\pi}$.
 \end{equation}
 Note here that we have used two approximations that limit \eqref{dipoletotalcross} to energies very close to the threshold. We need a more general expression for the cross-section and more data points to test the model's validity further. This means we have to consider the exact matrix element for the transition and consider the photoproduction of neutral pions off protons since this is the most experimentally investigated photoproduction process. 
 \section{Exact Matrix Element}\label{sec:exact}
-In section \ref{sec:dipoleapprox} we looked at how to use the model described in section \ref{sec:model} to get an expression for the cross-section which was compared to experimental data. More specifically we used the dipole approximation which introduces a trade-off between the difficulty of the calculations and the regime in which our solution is valid. We expect the dipole approximation to hold for energies just above the threshold. To both validate and generalize this result we now do a different approach and calculate the exact cross-section and also consider recoil effects and apply this approach to the four photoproduction processes using the density of states in the non-relativistic and relativistic limit. Strictly speaking, recoil effects should also be considered in section \ref{sec:dipoleapprox} since the mass ratio between the nucleon and the pion cannot be assumed to yield a stationary nucleon after the pion photoproduction process.  
+In section \ref{sec:dipoleapprox} we looked at how to use the model described in section \ref{sec:model} to get an expression for the cross-section, which was compared to experimental data. More specifically, we used the dipole approximation, which introduces a trade-off between the difficulty of the calculations and the regime in which our solution is valid. We expect the dipole approximation to hold for energies just above the threshold. To both validate and generalize this result, we now make a different approach and calculate the exact cross-section and also consider recoil effects and apply this approach to the four photoproduction processes using the density of states in the non-relativistic and relativistic limit. Strictly speaking, recoil effects should also be considered in section \ref{sec:dipoleapprox} since the mass ratio between the nucleon and the pion cannot be assumed to yield a stationary nucleon after the pion photoproduction process.  
 \begin{marginfigure}
 	\centering
 	\input{Figures/Jacobi}
 	\caption{Sketch of the system. Here $\vec{r}_N$ is the coordinate of the proton and $\vec{r}_\pi$ is the coordinate of the pion. The relative coordinate is given by $\vec{r}=\vec{r}_\pi-\vec{r}_p$ and the coordinate of the center-of-mass is $\vec{R}=(m_p \vec{r}_p+m_\pi\vec{r}_\pi)/(m_p+m_\pi)$. The total mass is denoted $M_{p\pi}=m_p+m_\pi$.}
 	\label{JacobiIllustration}
 \end{marginfigure}
-To calculate the exact matrix elements we consider a non-relativistic system of particles interacting with the electromagnetic field as described in section \ref{RadMatter}. We have to keep in mind that equation \eqref{RadiationHamil} describes how a particle with charge interacts with the electromagnetic field. This means if we consider a process where the initial state is a dressed neutron the pion must be responsible for the interaction with the electromagnetic field. We will consider the four pion photoproduction processes separately even though the calculations are very similar. In general we will consider a system illustrated on figure \ref{JacobiIllustration} which shows the pion-nucleon system and in terms of the Jacobi coordinates we get the following expressions for the coordinates of the particles
+To calculate the exact matrix elements we consider a non-relativistic system of particles interacting with the electromagnetic field as described in section \ref{RadMatter}. We have to keep in mind that equation \eqref{RadiationHamil} describes how a particle with charge interacts with the electromagnetic field. This means if we consider a process where the initial state is a dressed neutron, the pion must be responsible for the interaction with the electromagnetic field. We will consider the four pion photoproduction processes separately even though the calculations are very similar. In general, we will consider a system illustrated in figure \ref{JacobiIllustration}, which shows the pion-nucleon system, and in terms of the Jacobi coordinates, we get the following expressions for the coordinates of the particles
 \begin{align} \label{Coordinates}
 	\vec{r}_N = \vec{R}-\frac{m_\pi}{M_{N\pi}}\vec{r} \\
-		\vec{r}_\pi = \vec{R}+\frac{m_N}{M_{N\pi}}\vec{r},
+	\vec{r}_\pi = \vec{R}+\frac{m_N}{M_{N\pi}}\vec{r},
 \end{align}
 where $\vec{R}$ is the coordinate of the center of mass of the pion-nucleon system given by
 \begin{equation} \label{Rvec}
@@ -197,10 +197,11 @@ The relative coordinate is given by
 \begin{equation} \label{rvec}
 	\vec{r} = \vec{r}_\pi-\vec{r}_N.
 \end{equation}
-The general approach is the same as in section \ref{sec:DressingofProton} where we want to use Fermi's golden rule to calculate the total cross-section. In this section we also consider the impact of changing the density of states to the relativistic case. 
-
-
-
+The general approach is the same as in section \ref{sec:DressingofProton} where we want to use Fermi's golden rule to calculate the total cross-section. In this section, we also consider the impact of changing the density of states to the relativistic case. Furthermore, we estimate the relative weight of the pion component in the wave function of the dressed nucleon. We do this by introducing the following
+\begin{equation} \label{relativeweight}
+	C(\psi_{N\pi}) = \int_V \text{d}^3 R \int_V \text{d}^3 r \, \abs{\psi_{N\pi}}^2,
+\end{equation}
+where per construction of the model, this is dimensionless. We also introduce a parameter to estimate the virtual pions' contribution to the mass of the dressed nucleon. This will be denoted $\Pi$ and corresponds to the energy found by solving \eqref{system}.
 
 \subsection{Neutral Pion Phototoproduction off Protons}\label{sec:NeutralOffProton}
 We are considering the process 
@@ -245,7 +246,7 @@ We now have an expression for the innermost matrix element in equation \eqref{do
 	\mathcal{M^{(\uparrow\downarrow)}} &= \frac{ie\hbar}{m_p}\sqrt{\frac{2\pi \hbar}{\omega_k}}\frac{1}{V}\mel*{(\uparrow\downarrow)}{(\vec{e}_{\vec{k},\lambda}\cdot\vec{s})F(s)}{\uparrow} \\
 	&=\frac{ie\hbar}{m_p}\sqrt{\frac{2\pi \hbar}{\omega_k}}\frac{1}{V} (\vec{e}_{\vec{k},\lambda}\cdot\vec{s})\mel*{(\uparrow\downarrow)}{\sigmar}{\uparrow}F(s),
 \end{align}
-which leads to the following expression for the norm square of equation \eqref{doublematrix}. We do this step already to use a completeness relation for the polarisation.
+which leads to the following expression for the norm square of equation \eqref{doublematrix}. We do this step already to use a completeness relation for the polarization.
 \begin{equation} \label{matrixspinupdownabs}
 	\abs{\mathcal{M}^{(\uparrow\downarrow)}}^2 = \frac{2\pi\hbar^3e^2}{m_p^2\omega_k V^2} \abs{\evec\cdot \vec{s}}^2 \abs{\mel*{(\uparrow\downarrow)}{(\vec{\sigma}\cdot \vec{s})}{\uparrow}}^2 F(s)^2,
 \end{equation}
@@ -256,7 +257,7 @@ and now calculating
 	&= q^2 -\frac{(\vec{k}\cdot \vec{q})^2}{k^2} \\
 	&= q^2 \sin^2(\theta_q),\label{finalsum}
 \end{align}
-where $\theta_q$ is the angle between $\vec{k}$ and $\vec{q}$, and we now have an angular dependency originating from the dot product. This step also assumes the target is unpolarised since we sum over the spin states of the proton. The subscript $q$ is used to emphasise that this is relative to the final state momentum, also mentioned in section \ref{sec:densityofstates}. The final missing term is calculated by summing over the final proton spin states using \eqref{spinmatrix}
+where $\theta_q$ is the angle between $\vec{k}$ and $\vec{q}$, and we now have an angular dependency originating from the dot product. This step also assumes the target is unpolarised since we sum over the spin states of the proton. The subscript $q$ is used to emphasize that this is relative to the final state momentum, also mentioned in section \ref{sec:densityofstates}. The final missing term is calculated by summing over the final proton spin states using \eqref{spinmatrix}
 \begin{equation} \label{spinsum}
 	\sum_{(\uparrow\downarrow)} \abs{\mel*{(\uparrow\downarrow)}{(\vec{\sigma}\cdot\vec{s})}{\uparrow}}^2 = s^2
 \end{equation}
@@ -329,26 +330,41 @@ We now consider the process
 \begin{equation} \label{process2}
 	n\gamma \rightarrow \pi^0 n,
 \end{equation}
-which is very similar to the process in section \ref{sec:NeutralOffProton}. The key difference is that new the pion is responsible for the interaction with the electromagnetic field and hence equation \eqref{RadiationHamil} depends on the pion 
+which is very similar to the process in section \ref{sec:NeutralOffProton}. The key difference is that now the pion is responsible for the interaction with the electromagnetic field, and hence equation \eqref{RadiationHamil} depends on the pion 
 \begin{equation} \label{RadiNeutron}
 	H^{(1)} = -\frac{e}{m_\pi c}\vec{A}(\vec{r}_\pi,t)\cdot\vec{p}_\pi	
 \end{equation}
-This changes two things in compared to equation \eqref{exactdiffcross}. The mass of the proton becomes the mass of the pion and the wave number vector becomes $\vec{s}=\vec{q}-\frac{m_n}{M_{n\pi}}\vec{k}$, where $n$ is the mass of the neutron. Therefore the final expression for the total cross-section becomes 
+This changes two things in comparison to equation \eqref{exactdiffcross}. The mass of the proton becomes the mass of the pion, and the wave number vector becomes $\vec{s}=\vec{q}-\frac{m_n}{M_{n\pi}}\vec{k}$, where $n$ is the mass of the neutron. Therefore the final expression for the total cross-section becomes 
 \begin{equation} \label{totalcrossneutron}
-		\frac{\text{d}\sigma^0(E_q,\theta_q)}{\text{d}\Omega_q} = \frac{e^2}{8\pi}\frac{1}{m_\pi^2c^4}\frac{q^3}{k}\frac{\text{d}(\hbar c q)^2}{\text{d}E_q}\sin^2(\theta_q) s^2 F(s)^2.
+	\frac{\text{d}\sigma^0(E_q,\theta_q)}{\text{d}\Omega_q} = \frac{e^2}{8\pi}\frac{1}{m_\pi^2c^4}\frac{q^3}{k}\frac{\text{d}(\hbar c q)^2}{\text{d}E_q}\sin^2(\theta_q) s^2 F(s)^2.
 \end{equation}
-Unfortunately, there exists no experimental data such that a fit can be performed. To test the validity of equation \ref{totalcrossneutron} a comparison with other theoretical models is done. Specifically, we test if the expression can replicate other theoretical predictions for a given set of $S$ and $b$. The other models are \cite{MAINZA2} and \cite{MAID2017}.
+Unfortunately, no experimental data exists such that a fit can be performed. A comparison with other theoretical models is made to test the validity of equation \ref{totalcrossneutron}. Specifically, we test if the expression can replicate other theoretical predictions for a given set of $S$ and $b$. The other models are \cite{MAINZA2} and \cite{MAID2017}.
 \begin{figure}[H]
     \begin{sidecaption}{The process $\gamma n \rightarrow \pi^0 n$ with the same parameters as for neutral pion photoproduction off protons.}[fig:neutralpionsoffneutrons]
     \includegraphics[width=\linewidth]{Figures/NeutralPionsOffNeutrons.pdf}
     \end{sidecaption}
 \end{figure}
 \subsection{Charged Pion Phototoproduction off Protons}
+We now consider the process involving charged pions. Specifically,
+\begin{equation} \label{charged1}
+	p\gamma \rightarrow \pi^+ n,
+\end{equation}
+which is very similar to equation \eqref{prod1} except we have to consider the isospin coefficient. We do this by considering equation \eqref{isocoeff} which brings a factor 2 to the differential cross-section. This means the total cross-section is given by
+\begin{equation} \label{totcross3}
+	\sigma^+ =  2\pi \int_0^\pi \text{d}\theta_q \, \frac{e^2}{4\pi}\frac{1}{m_p^2c^4}\frac{q^3}{k}\frac{\text{d}(\hbar c q)^2}{\text{d}E_q}\sin^3(\theta_q) s^2 F(s)^2,
+\end{equation}
+where the $+$ indicates the production of positively charged pions. We once again fit equation \eqref{totcross3} to experimental data. The result can be seen on figure \ref{fig:ChargedPionOffProton} where the data is from 
 \begin{figure}[H]
 	\begin{sidecaption}{Data from \cite{PionOffNeutron2}}[fig:ChargedPionOffProton]
 		\includegraphics[width=\linewidth]{Figures/ChargedPionOffProtonExact.pdf}
 	\end{sidecaption}
 \end{figure}
+Figure \ref{fig:ChargedPionOffProton} shows the model has some difficu
+\begin{figure}[H]
+	\begin{sidecaption}{Contributions}[fig:ContributionPlotPlus]
+		\includegraphics[width=\linewidth]{Figures/ContributionPlotPiPlus.pdf}
+	\end{sidecaption}
+\end{figure}}
 \subsection{Charged Pion Phototoproduction off Neutrons}
 \begin{figure}[H]
 	\begin{sidecaption}{d.}[fig:ChargedPionOffNeutron]

@@ -62,7 +62,7 @@ def diffcross(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    s = np.sqrt(q**2+k**2*(mn/Mpip)**2-2*q*k*(mn/Mpip)*np.cos(theta))
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
@@ -85,11 +85,11 @@ def diffcross(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=10000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-3,max_nodes=100)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
@@ -101,7 +101,7 @@ def diffcross(Egamma,S,b,theta):
         #print(f"F took: {time.time()-start}")
         return integral
 
-    return 10000*charge2/2/np.pi*mu/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return 10000*charge2/2/np.pi*mu/m**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def diffcross_rel(Egamma,S,b,theta):
 
@@ -109,7 +109,7 @@ def diffcross_rel(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
+    s = np.sqrt(q**2+k**2*(mn/Mpip)**2-2*q*k*(mn/Mpip)*np.cos(theta))
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
@@ -132,7 +132,7 @@ def diffcross_rel(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=3000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=10000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
@@ -142,10 +142,8 @@ def diffcross_rel(Egamma,S,b,theta):
     phi3 = Spline(r2,phi)
 
     def F(S):
-        start = time.time()
         func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
         integral =  4*np.pi/s*quad(func,0,rmax,limit=100)[0]
-        #print(f"F took: {time.time()-start}")
         return integral
 
     return 10000*charge2/8/np.pi*dp2dEq/m**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
@@ -164,12 +162,12 @@ if __name__ == '__main__':
 
 
     xMAID = [144.6694214876033, 146.5702479338843, 148.1818181818182, 149.71074380165288, 151.28099173553719, 152.8512396694215, 154.4214876033058, 155.86776859504133, 157.39669421487605, 158.96694214876032, 160.45454545454547, 162.02479338842974, 163.51239669421489, 164.83471074380165, 166.28099173553719, 167.76859504132233, 169.17355371900825, 170.49586776859505, 171.8595041322314, 173.22314049586777, 174.58677685950414, 175.9090909090909, 177.1900826446281, 178.4297520661157, 179.7520661157025]
-    yMAID = [-0.01440922190201729, 0.21613832853025935, 0.37463976945244953, 0.5187319884726225, 0.6772334293948127, 0.8357348703170029, 1.0230547550432276, 1.2103746397694524, 1.397694524495677, 1.6138328530259365, 1.8299711815561959, 2.0605187319884726, 2.319884726224784, 2.5504322766570606, 2.780979827089337, 3.0979827089337175, 3.357348703170029, 3.6455331412103744, 3.9481268011527377, 4.265129682997118, 4.596541786743516, 4.927953890489913, 5.259365994236311, 5.605187319884726, 5.965417867435158]
+    yMAID = [0, 0.21613832853025935, 0.37463976945244953, 0.5187319884726225, 0.6772334293948127, 0.8357348703170029, 1.0230547550432276, 1.2103746397694524, 1.397694524495677, 1.6138328530259365, 1.8299711815561959, 2.0605187319884726, 2.319884726224784, 2.5504322766570606, 2.780979827089337, 3.0979827089337175, 3.357348703170029, 3.6455331412103744, 3.9481268011527377, 4.265129682997118, 4.596541786743516, 4.927953890489913, 5.259365994236311, 5.605187319884726, 5.965417867435158]
 
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
     initial = [50,3.5]
-    popt, pcov = curve_fit(totalcross_rel,xMAID,yMAID)
+    popt, pcov = curve_fit(totalcross_rel,xMAID,yMAID,initial)
     print("popt=",popt)
     print("Error=",np.sqrt(np.diag(pcov)))
 
