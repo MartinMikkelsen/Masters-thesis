@@ -325,6 +325,35 @@ For the three sets of parameters shown in figure \ref{fig:crossfitrel}, the cont
 		\includegraphics[width=\linewidth]{Figures/ContributionPlot.pdf} 
 	\end{sidecaption}
 \end{figure}
+The contribution to the total wave function is in principle the relative weight of the two-component wave function in equation \eqref{superposition}. We now know for a given set of parameters how much the pion-nucleon system contributes to the total wave function and this can be related to something observable. The two-component wave function contains the wave function $\psi_{N\pi}(\vec{r}_\pi,\vec{r}_N)$ which is a two-dimensional position wave function. This is means the probability density in a volume $\text{d}\vec{r}_\pi \, \text{d}\vec{r}_p$ at position $(\vec{r}_\pi,\vec{r}_p)$ is given by
+\begin{equation}\label{probdens}
+ \rho(\vec{r}_\pi,\vec{r}_p) = \abs{\psi_{N\pi}(\vec{r}_\pi,\vec{r}_p)}^2,
+\end{equation}
+and the probability of finding the pion at position $\vec{r}_\pi$ is then
+\begin{equation}\label{posirpi}
+	\rho_\pi(\vec{r}_\pi) = \int \text{d}\vec{r}_p \abs{\psi(\vec{r}_\pi,\vec{r}_p)}^2,
+\end{equation}
+where we now omit the index and remind ourself that the radial wave function is given by $\psi=r\phi$ from section \ref{sec:numericalconsiderations}. This leads to the following expression for the total charge density of the pion-nucleon system
+\begin{equation}\label{pionnuccharge}
+	\rho(\vec{r}) = q_\pi \int \text{d}\vec{r}_\pi \text{d}\vec{r}_p \, \abs{\psi(\vec{r}_\pi,\vec{r}_p)}^2+q_p \int \text{d}\vec{r}_\pi \text{d}\vec{r}_p \, \abs{\psi(\vec{r}_\pi,\vec{r}_p)}^2,
+\end{equation}
+where $q_\pi$ and $q_p$ is the charge of the pion and the proton, respectively. We now calculate the two integrals in the center of mass using the relative coordinates illustrated in figure \ref{JacobiIllustration}.
+\begin{align}
+		\rho_\pi(\vec{r}_\text{cm}) &= q_\pi \int \text{d}\vec{r}_\pi \text{d} \vec{r}_p \, \abs{\psi(\vec{r}_\pi,\vec{r}_p)}^2 \delta(\vec{r_\pi-\vec{R}},\vec{r}_\text{cm}) \\
+		&= q_\pi \int \text{d}\vec{r} \,\text{d}\vec{R} \, \bigg\lvert\vec{r}\phi\bigg(\vec{R}+\frac{m_p}{M_{p\pi}}\vec{r},\vec{R}-\frac{m_\pi}{M_{p\pi}}\bigg)\bigg\rvert^2 \delta(\vec{R}+\frac{m_p}{M_{p\pi}}\vec{r}-\vec{R},\vec{r}_\text{cm}) \\
+			&= q_\pi \bigg \lvert\frac{M_{p\pi}}{m_p}\vec{r}_\text{cm}\phi\bigg(\frac{M_{p\pi}}{m_p}\vec{r}_{\text{cm}}\bigg) \bigg\rvert^2.
+\end{align}
+The charge density can be calculated in a similar manner. This means we can plot equation \eqref{pionnuccharge} which is shown in figure \ref{fig:chargedensity} as a function of the absolute radius from the center of mass.
+\begin{figure}[H]
+	\begin{sidecaption}{Charge density for the parameters $S=45.5$ MeV and $b=3.9$ fm.}[fig:chargedensity]
+		\includegraphics[width=\linewidth]{Figures/ChargeDensity.pdf} 
+	\end{sidecaption}
+\end{figure}
+To complete the picture using the two-component wave function \eqref{superposition} we can imagine the bare proton as a delta function at $\vec{r}_\text{cm}=0$ and the probability density of the proton in the pion-nucleon system moved a distance to the left on the figure. The distance corresponds to the distance away from the center of mass due to the mass difference between the proton and the pion. 
+
+This also concludes the treatment of neutral pion photoproduction off protons. This section described the general framework of how to calculate the total cross-section and the charge density. These two observables are shown in figure \ref{fig:crossfitrel} and figure \ref{fig:chargedensity}, respectively.
+
+
 \subsection{Neutral Pion Phototoproduction off Neutrons}
 We now consider the process 
 \begin{equation} \label{process2}
@@ -338,7 +367,7 @@ This changes two things in comparison to equation \eqref{exactdiffcross}. The ma
 \begin{equation} \label{totalcrossneutron}
 	\frac{\text{d}\sigma^0(E_q,\theta_q)}{\text{d}\Omega_q} = \frac{e^2}{8\pi}\frac{1}{m_\pi^2c^4}\frac{q^3}{k}\frac{\text{d}(\hbar c q)^2}{\text{d}E_q}\sin^2(\theta_q) s^2 F(s)^2.
 \end{equation}
-Unfortunately, no experimental data exists such that a fit can be performed. A comparison with other theoretical models is made to test the validity of equation \ref{totalcrossneutron}. Specifically, we test if the expression can replicate other theoretical predictions for a given set of $S$ and $b$. The other models are \cite{MAINZA2} and \cite{MAID2017}.
+Unfortunately, no experimental data exists such that a fit can be performed. A comparison with other theoretical models is made to test the validity of equation \eqref{totalcrossneutron}. Specifically, we test if the expression can replicate other theoretical predictions for a given set of $S$ and $b$. The other models are \cite{MAINZA2} and \cite{MAID2017}.
 \begin{figure}[H]
     \begin{sidecaption}{The process $\gamma n \rightarrow \pi^0 n$ with the same parameters as for neutral pion photoproduction off protons.}[fig:neutralpionsoffneutrons]
     \includegraphics[width=\linewidth]{Figures/NeutralPionsOffNeutrons.pdf}
@@ -364,7 +393,7 @@ Figure \ref{fig:ChargedPionOffProton} shows the model has some difficu
 	\begin{sidecaption}{Contributions}[fig:ContributionPlotPlus]
 		\includegraphics[width=\linewidth]{Figures/ContributionPlotPiPlus.pdf}
 	\end{sidecaption}
-\end{figure}}
+\end{figure}
 \subsection{Charged Pion Phototoproduction off Neutrons}
 \begin{figure}[H]
 	\begin{sidecaption}{d.}[fig:ChargedPionOffNeutron]

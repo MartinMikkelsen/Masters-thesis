@@ -325,11 +325,3 @@ The solution is shown on \ref{fig:EFTplot}
 	\end{sidecaption}
 \end{figure}
 The parameters $S$ and $b$ in the radial wave functions are not the same as in figure \ref{fig:multiwavefunction} and figure \ref{fig:integralplotYukawa} but should better represent actual parameter values when performing the fit to the total cross-section data. This is done to better highlight this model's validity and some of its disadvantages. The energies are within the same order of magnitude as when using the model described in section \ref{sec:DressingofProton}. There is a difference in energy, and this model could be investigated further -- however, this model using the nuclear effective field theory's operator is a lot more numerically intensive. Due to the derivative in equation \eqref{EFT1}, \eqref{EFT2} and \eqref{EFT3}, we got many more terms as seen in \eqref{manyterms}, which all have to be integrated numerically. Perhaps another numerical method is better suited for this operator type.
-\subsection{Charge density}
-Using 
-\begin{align}
-	\rho_q(\vec{r}_\text{rm}) &= q_1 \int \text{d}^3 r_\pi \text{d}^3 r_N \abs{\psi(r_\pi,r_N)}^2 \delta(\vec{r_\pi}-\vec{R},\vec{r}_\text{cm}) \\
-	&= q_1 \int \text{d}^3 r_\pi \text{d}^3 r_N \abs{\psi(\vec{R}+\frac{m_N}{M}\vec{r},\vec{R}-\frac{m_\pi}{M}\vec{R})}^2 \delta(\vec{R}+\frac{m_n}{M}\vec{r}-\vec{R},\vec{r}_\text{cm}) \\
-	&= q_1 \int \text{d}^3 R \abs{r\psi(\frac{m_N}{M}\vec{r}_{cm})}^2 \\
-	&= q_1 \abs{\vec{r}\phi(\frac{m_N}{M}\vec{r}_\text{cm})}^2
-\end{align}

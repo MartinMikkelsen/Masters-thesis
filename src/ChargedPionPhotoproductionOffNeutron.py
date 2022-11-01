@@ -110,7 +110,7 @@ def diffcross(Egamma,S,b,theta):
 
     def F(S):
         func = lambda r: phi3(r)*r**3*CoulombWave(1,eta(S),S*r)
-        integral =  quad(func,0,rmax,limit=100)[0]
+        integral =  quad(func,0,rmax,limit=1000)[0]
         return integral
 
     return 10000*charge2/(4*np.pi)*dp2dEq/(m**2)*np.power(q,3)/k*np.power(np.sin(theta),2)*(4*np.pi)**2*np.power(F(s),2)
