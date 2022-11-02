@@ -34,7 +34,7 @@ where the last equality shows the coefficient $A_\ell(r)$ can be expressed in te
 	\text{e}^{i\vec{k}\cdot\vec{r}} = 4\pi \sum_{\ell,m}i^\ell j_\ell(kr)Y_\ell^{m*}(\theta,\phi)Y_\ell^{m}(\theta,\phi)
 \end{equation}
 \section{Hankel transform}
-\section{Coulomb wave functions}
+\section{Coulomb wave functions}\label{sec:Coulomb}
 The Coulomb wave equation for a charged particle with arbitrary angular momentum and charge is given by 
 \begin{equation} \label{Coulomb1}
 	\nabla^2\psi +\left( k^2-\frac{2\mu}{\hbar^2}V(r)\right)\psi = 0,
@@ -59,9 +59,9 @@ where $\Gamma$ is the gamma function. For numerical purposes, it is useful to us
 \begin{equation} \label{integralrep}
 	F_\ell(\eta,\rho) = \frac{\rho^{\ell+1}2^\ell e^{i\rho-(\pi\eta/2)}}{|\Gamma(\ell+1+i\eta)|} \int_0^1 e^{-2i\rho t}t^{\ell+i\eta}(1-t)^{\ell-i\eta} \, \text{d}t.
 \end{equation}
-For particles without charge, we can ignore the Coulomb interaction in equation \eqref{Coulomb2} and the solution becomes
+For particles without charge, we can ignore the Coulomb interaction in equation \eqref{Coulomb2} and the solution becomes \cite{Blatt}
 \begin{equation} \label{solcharge}
-	F_\ell(\eta,\rho) = \left( \frac{\pi kr}{2} \right)^{1/2} J_{\ell+1/2}(kr), \quad \text{particles without charge}
+	F_\ell(kr) = \left( \frac{\pi kr}{2} \right)^{1/2} J_{\ell+1/2}(kr), \quad \text{particles without charge}
 \end{equation}
 where $J_{\ell+1/2}$ is a Bessel function. Equation \eqref{solcharge} is nothing but a spherical Bessel function. This means in the limit where the particles become chargeless the solution must reduce to a plane wave solution. 
 

@@ -64,7 +64,7 @@ def diffcross(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = np.array(Egamma/hbarc)
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(np.square(q)+np.square(k)*np.square(m/Mpip)+2*q*k*(m/Mpip)*np.cos(theta))
+    s = np.sqrt(np.square(q)+np.square(k)*np.square(mn/Mpip)+2*q*k*(mn/Mpip)*np.cos(theta))
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
@@ -91,7 +91,7 @@ def diffcross(Egamma,S,b,theta):
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-5,max_nodes=10000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-4,max_nodes=100000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)

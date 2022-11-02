@@ -20,7 +20,7 @@ and the non-relativistic Hamiltonian of the system describing the interaction wi
 \begin{equation} \label{Rad}
 	H = \sum_i \frac{1}{2m_i}\left( \vec{p}-\frac{e_i}{c}\vec{A}(\vec{r}_i)\right)^2,
 \end{equation}
-where $\vec{A}(\vec{r}_i)$ is equation \eqref{quantized} at point $\vec{r}_i$. We assumed the interaction between particles depends on their coordinate, so the minimal inclusion of the electromagnetic field affects only the kinetic part. This is a fair approximation in the non-relativistic limit and does not account for velocity-dependant interactions such as spin-orbit\footnote{One could add a spin-orbit term to the non-relativistic approach, but this is not necessary for our calculations later}. 
+where $\vec{A}(\vec{r}_i)$ is equation \eqref{quantized} at point $\vec{r}_i$. We assumed the interaction between particles depends on their coordinates, so the minimal inclusion of the electromagnetic field affects only the kinetic part. This is a fair approximation in the non-relativistic limit and does not account for velocity-dependant interactions such as spin-orbit\footnote{One could add a spin-orbit term to the non-relativistic approach, but this is not necessary for our calculations later}. 
 The electromagnetic interaction is relatively weak, and its strength is given by the fine structure constant, $\alpha = e^2/(\hbar c)$. Generally speaking, this interaction can be taken into account in the lowest non-vanishing order of perturbation theory. We expand \eqref{Rad} and keep only the linear terms
 \begin{equation} \label{RadLin}
 	H^{(1)} = -\sum_i \frac{e_i}{2m_i c} (\vec{p}_i\cdot \vec{A}(\vec{r}_i)+\vec{A}(\vec{r}_i)\cdot \vec{p}_i),
@@ -29,13 +29,13 @@ where the $(1)$ represents the first non-vanishing order. Due to our choice of g
 \begin{equation} \label{RadiationHamil}
 	H^{(1)} = - \sum_i \frac{e_i}{m_i c} \vec{A}(\vec{r}_i,t)\vec{p}_i.
 \end{equation}
-For the type of problems we will be solving in \ref{sec:PionPhotoproduction} we will be working mainly with one charged particle, and we can ignore the sum in \eqref{RadiationHamil}.
+For the type of problems, we will be solving in \ref{sec:PionPhotoproduction}, we will be working mainly with one charged particle, and we can ignore the sum in \eqref{RadiationHamil}.
 \section{Density of States}\label{sec:densityofstates}
-As mentioned in section \ref{RadMatter} the electromagnetic interaction strength is related to the fine structure constant. In section \ref{sec:PionPhotoproduction} we want to do perturbation theory to get an expression for the total cross-section as a function of energy which the relatively weak fine structure constant allows. From perturbation theory, the transition rate is described by Fermi's golden rule given by
+As mentioned in section \ref{RadMatter} the electromagnetic interaction strength is related to the fine structure constant. In section \ref{sec:PionPhotoproduction}, we want to do perturbation theory to get an expression for the total cross-section as a function of energy which the relatively weak fine structure constant allows. From perturbation theory, the transition rate is described by Fermi's golden rule given by
 \begin{equation} \label{FermiGolden}
 	\text{d}\omega = \frac{2\pi}{\hbar}\abs{\mathcal{M}}^2 \text{d}\rho,
 \end{equation}
-where the matrix element $\mathcal{M}$ is the subject in section \ref{sec:PionPhotoproduction} and $\text{d}\rho$ is the density of states in the final states. In this section, we will derive general results of the density of states in the non-relativistic and relativistic limit. The density of states is defined by
+where the matrix element $\mathcal{M}$ is the subject in section \ref{sec:PionPhotoproduction} and $\text{d}\rho$ is the density of states in the final states. In this section, we will derive general results of the density of states in the non-relativistic and relativistic limits. The density of states is defined by
 \begin{marginfigure}
 	\centering
 	\input{Figures/diffcros}
@@ -49,11 +49,11 @@ where $n(E)$ is the number of states with energy $E$. Consider the number of sta
 \begin{equation} \label{momspace}
 	\text{d}^3\vec{p} = p^2 \text{d}p \, \text{d}\Omega_q,
 \end{equation}
-where the subscript $q$ is used to empathize momentum space. We will use this notation throughout the thesis. Equation \eqref{momspace} corresponds to the momenta with magnitude from $p$ to $p+\text{d}p$ and within a cone of solid angle $\text{d}\Omega_q$. This is illustrated on figure \ref{fig:diffcross}. We use the solutions to the Schrödinger equation for a particle confined in a large volume with periodic boundary conditions are travelling waves. This leads to the following expression
+where the subscript $q$ is used to empathize momentum space. We will use this notation throughout the thesis. Equation \eqref{momspace} corresponds to the momenta with magnitude from $p$ to $p+\text{d}p$ and within a cone of solid angle $\text{d}\Omega_q$. This is illustrated in figure \ref{fig:diffcross}. We use the solutions to the Schrödinger equation for a particle confined in a large volume with periodic boundary conditions are travelling waves. This leads to the following expression
 \begin{equation} \label{densityrho}
 	\rho(p) \, \text{d}\rho = \left( \frac{L}{2\pi\hbar}\right)^3 \text{d}^3 \vec{p} = \frac{V}{(2\pi\hbar)^3} p^2 \, \text{d}p \, \text{d}\Omega_q.
 \end{equation}
-In section \ref{sec:PionPhotoproduction} we are interested in the number of possible final states with energy in the range between $E_f$ and $E_f + \text{d}E_f$ so we express \eqref{densityrho} in terms of energy. This is given by
+In section \ref{sec:PionPhotoproduction}, we are interested in the number of possible final states with energy in the range between $E_f$ and $E_f + \text{d}E_f$ so we express \eqref{densityrho} in terms of energy. This is given by
 \begin{equation} \label{densityenergy}
 	\rho(E_f) = \frac{V p_f^2}{(2\pi \hbar)^3} \frac{\text{d}p_f}{\text{d}E_f} \, \text{d}\Omega_q.
 \end{equation}
@@ -79,7 +79,7 @@ From conservation of energy, we get the following expression for the energy of t
 	\caption{Energy diagram of the system. Here $\mu_{N\pi}$ is the reduced mass of the pion-nucleon system}
 	\label{fig:qenergy}
 \end{marginfigure}
-Looking at \eqref{densityenergy} we want to get an expression for the final state momentum in terms of the wave number. The density of states around $\vec{q}$ is given by
+Looking at \eqref{densityenergy}, we want to get an expression for the final state momentum in terms of the wave number. The density of states around $\vec{q}$ is given by
 \begin{equation} \label{DensityEQ}
 	\text{d}\rho_f = \frac{Vq}{(2\pi)^3}\frac{1}{2}\frac{\text{d}q^2}{\text{d}E_q} \text{d}\Omega_q.
 \end{equation}

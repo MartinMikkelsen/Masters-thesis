@@ -100,8 +100,9 @@ S4,b4 = 41.5,3.9
 #phifunc(69.3,4.1)
 
 #sns.lineplot(x=phifunc(86.2,3.8)[0],y=phifunc(86.2,3.8)[1]*phifunc(86.2,3.8)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(86.2,3.8)[4],phifunc(86.2,3.8)[5]),color='r')
-sns.lineplot(x=phifunc(69.3,3.6)[0],y=phifunc(69.3,3.6)[1]*phifunc(69.3,3.6)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(69.3,3.6)[4],phifunc(69.3,3.6)[5]),color='g')
-sns.lineplot(x=phifunc(58.8,4.0)[0],y=phifunc(58.8,4.0)[1]*phifunc(58.8,4.0)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(58.8,4.0)[4],phifunc(58.8,4.0)[5]),color='navy')
+sns.lineplot(x=phifunc(69.3,3.6)[0],y=phifunc(69.3,3.6)[1]*phifunc(69.3,3.6)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(69.3,3.6)[4],phifunc(69.3,3.6)[5]),color='r')
+sns.lineplot(x=phifunc(58.8,4.0)[0],y=phifunc(58.8,4.0)[1]*phifunc(58.8,4.0)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(58.8,4.0)[4],phifunc(58.8,4.0)[5]),color='g')
+sns.lineplot(x=phifunc(100.30,1.98)[0],y=phifunc(100.30,1.98)[1]*phifunc(100.30,1.98)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(100.30,1.98)[4],phifunc(100.30,1.98)[5]),color='navy')
 #sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S1,b1,phifunc(S1,b1)[4]))
 # sns.lineplot(x=phifunc(S2,b2)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
 # sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S3,b3,phifunc(S3,b3)[4]))

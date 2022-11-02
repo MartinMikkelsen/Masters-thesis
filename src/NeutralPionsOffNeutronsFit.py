@@ -107,7 +107,7 @@ def diffcross_rel(Egamma,S,b,theta):
     if Eq<0 : return 0
     k = Egamma/hbarc
     q = np.sqrt(2*mu*Eq)/(hbarc)
-    s = np.sqrt(q**2+k**2*(mn/Mpip)**2-2*q*k*(mn/Mpip)*np.cos(theta))
+    s = np.sqrt(q**2+k**2*(m/Mpip)**2+2*q*k*(m/Mpip)*np.cos(theta))
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
@@ -146,7 +146,7 @@ def diffcross_rel(Egamma,S,b,theta):
         #print(f"F took: {time.time()-start}")
         return integral
 
-    return 10000*charge2/8/np.pi*dp2dEq/m**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
+    return 10000*charge2/8/np.pi*dp2dEq/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
 
 def totalcross(x,S,b):
     tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
@@ -167,20 +167,20 @@ if __name__ == '__main__':
 
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
-    #initial = [50,3.5]
-    #popt, pcov = curve_fit(totalcross_rel,xSAID,ySAID)
-    #print("popt=",popt)
-    #print("Error=",np.sqrt(np.diag(pcov)))
+    initial = [50,3.5]
+    popt, pcov = curve_fit(totalcross_rel,xSAID,ySAID)
+    print("popt=",popt)
+    print("Error=",np.sqrt(np.diag(pcov)))
 
-    photonenergies1 = np.linspace(144.7,180,50)
+    photonenergies1 = np.linspace(140,180,50)
 
     #plt.plot(photonenergies1,totalcross_rel(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(69.33526458,3.60628741),color='r')
     #plt.plot(photonenergies1,totalcross(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(69.33526458,3.60628741),linestyle='dashed',color='r')
     #plt.plot(photonenergies1,totalcross_rel(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(57.9783878,3.97276793),color='g')
     #plt.plot(photonenergies1,totalcross(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(57.9783878,3.97276793),linestyle='dashed',color='g')
 
-    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
-    plt.plot(photonenergies1,totalcross_rel(photonenergies1,13.43211784,2.38721894),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(13.43211784,2.38721894),color='r')
+    plt.plot(photonenergies1,totalcross_rel(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
+    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,13.43211784,2.38721894),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(13.43211784,2.38721894),color='r')
     plt.scatter(xSAID,ySAID)
     plt.legend(loc='best',frameon=False)
     #save_fig("ChargedPionOffProtonExact")
