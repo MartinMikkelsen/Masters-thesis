@@ -81,7 +81,7 @@ def phifunc(S,b):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r = np.logspace(start,stop,num=50000,base=np.exp(1))
+    r = np.logspace(start,stop,num=100000,base=np.exp(1))
     E = -2
 
     u = [0*r,0*r,0*r,E*r/r[-1]]
@@ -116,4 +116,4 @@ plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
 plt.legend(loc=0,frameon=False);
 plt.xlabel("r [fm]")
 plt.tight_layout()
-save_fig("EFTradial")
+#save_fig("EFTradial")

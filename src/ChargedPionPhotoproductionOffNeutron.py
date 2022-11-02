@@ -58,6 +58,59 @@ def complex_quadrature(func, a, b, **kwargs):
     imag_integral = quad(imag_func, a, b, **kwargs)
     return (real_integral[0] + 1j*imag_integral[0], real_integral[1:], imag_integral[1:])
 
+def diffcross(Egamma,S,b):
+    diff_cross = []
+    for i in tqdm(Egamma):
+        Eq = i-m-0.5*i**2/(Mpip)
+        k = i/hbarc
+        q = np.sqrt(2*mu*Eq)/(hbarc)
+        print("lambda=",1/q)
+        def f(r):
+            return S/b*np.exp(-r**2/b**2)
+
+        def sys(r,u,E):
+            y,v,I = u
+            dy = v
+            dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+            dI = 12*np.pi*f(r)*r**4*y
+            return dy,dv,dI
+
+        def bc(ua, ub,E):
+            ya,va,Ia = ua
+            yb,vb,Ib = ub
+            return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+
+        rmax = 5*b
+        rmin = 0.01*b
+        base1 = np.exp(1)
+        start = np.log(rmin)
+        stop = np.log(rmax)
+        r2 = np.logspace(start,stop,num=20000,base=np.exp(1))
+        E = -2
+
+        u = [0*r2,0*r2,E*r2/r2[-1]]
+        res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
+
+        phi = res.y.T[:np.size(r2),0]
+        phi3 = Spline(r2,phi)
+
+        def Q(S):
+            func = lambda r: phi3(r)*r**4*spherical_jn(0,S*r)
+            integral =  quad(func,0,rmax)[0]
+            return integral
+
+        norm_func = lambda r: r**4*phi3(r)**2
+        norm_integral = 12*np.pi*quad(norm_func,0,rmax)[0]
+        N = 1/np.sqrt(1+norm_integral)
+
+        diff_cross.append(16*np.pi*N**2*alpha/9*mu**3*k*q/(m**2*hbarc)*Q(q)**2*10000)
+    return diff_cross
+
+def totalcross(Egamma,S,b):
+    pivec = 4*np.pi*np.ones(np.size(Egamma))
+    totalX = diffcross(Egamma,S,b)
+    return totalX
+
 def diffcross(Egamma,S,b,theta):
 
     Eq = np.array(Egamma-m-0.5*Egamma**2/(Mpip))
@@ -87,11 +140,11 @@ def diffcross(Egamma,S,b,theta):
     base1 = np.exp(1)
     start = np.log(rmin)
     stop = np.log(rmax)
-    r2 = np.logspace(start,stop,num=10000,base=np.exp(1))
+    r2 = np.logspace(start,stop,num=5000,base=np.exp(1))
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-4,max_nodes=100000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-4,max_nodes=10000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
@@ -122,9 +175,9 @@ def totalcross(x,S,b):
 if __name__ == '__main__':
 
     plt.figure(figsize=(9,5.5));
-    x = [149.69199178644763, 152.36139630390144, 155.03080082135523, 157.5770020533881, 158.31622176591375, 160.32854209445586, 162.4229979466119, 162.99794661190964, 168.2546201232033,175.078125, 175.8984375]
-    y = [31.942446043165468, 56.115107913669064, 71.22302158273381, 83.3093525179856, 80.28776978417265, 93.45323741007194, 100.79136690647482, 105.53956834532373, 106.61870503597122,109.82142857142857, 130.8379120879121]
-    yprime = [22.230215827338128, 46.83453237410072, 61.72661870503597, 72.73381294964028, 75.75539568345323, 83.09352517985612, 89.35251798561151, 99.92805755395683, 101.0071942446043,89.01098901098901, 121.56593406593406]
+    x = [162.99794661190964, 168.2546201232033,175.078125, 175.8984375]
+    y = [105.53956834532373, 106.61870503597122,109.82142857142857, 130.8379120879121]
+    yprime = [99.92805755395683, 101.0071942446043,89.01098901098901, 121.56593406593406]
 
     errorSchmidtmin = np.subtract(y,yprime)
     errorSchmidtmax = errorSchmidtmin
@@ -133,7 +186,7 @@ if __name__ == '__main__':
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
 
-    popt, pcov = curve_fit(totalcross,x,y,sigma=errorSchmidtmin)
+    popt, pcov = curve_fit(totalcross,x,y,p0=[50,3.9],sigma=errorSchmidtmin,bounds=(0,[100,5]))
     print("popt=",popt)
     print("Error=",np.sqrt(np.diag(pcov)))
 

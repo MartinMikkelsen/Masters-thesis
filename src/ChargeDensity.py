@@ -102,18 +102,20 @@ def chargedensity(S,b):
     plt.legend(frameon=False);
     plt.xlim([0,6])
     #save_fig("ChargeDensity")
-    return r_cm,1/integraltest1*abs(M/mn*r_cm*phi3(M/mn*r_cm))**2+1/integraltest2*abs(M/m*r_cm*phi3(M/m*r_cm))**2
 
-r_cm1 = chargedensity(45.5,3.9)[0]
-rho1 = chargedensity(45.5,3.9)[1]
-plt.figure(figsize=(9,5.5));
-#plt.plot(r_cm1,rho1,label=r'$\rho$, $S=$%0.1f MeV, $b=$%0.1f fm' %(S,b),linewidth=2.5,color='navy')
-plt.plot(r_cm1,1/integraltest1*abs(M/mn*r_cm*phi3(M/mn*r_cm))**2,label=r'$\rho_{\pi}$',linewidth=2.5,color='g')
-plt.plot(r_cm1,1/integraltest2*abs(M/m*r_cm*phi3(M/m*r_cm))**2,label=r'$\rho_p$',linewidth=2.5,color='r')
-plt.fill_between(r_cm1,rho1,y2=0,label=r'$Q$')
-plt.title("$S=%s$ MeV, $b=%s$ fm" %(S,b), x=0.5, y=0.8)
-plt.legend(frameon=False);
-plt.xlabel(r"$|r_{cm}|$ [fm]");
-plt.ylabel(r"$\rho(r_{cm})$");
-save_fig("ChargeDensity")
-plt.xlim([0,6])
+    plt.figure(figsize=(9,5.5));
+    #plt.plot(r_cm1,rho1,label=r'$\rho$, $S=$%0.1f MeV, $b=$%0.1f fm' %(S,b),linewidth=2.5,color='navy')
+    plt.plot(r_cm1,1/integraltest1*abs(M/mn*r_cm1*phi3(M/mn*r_cm1))**2,label=r'$\rho_{\pi}$',linewidth=2.5,color='darkgreen')
+    plt.plot(r_cm1,1/integraltest2*abs(M/m*r_cm1*phi3(M/m*r_cm1))**2,label=r'$\rho_p$',linewidth=2.5,color='r')
+    plt.fill_between(r_cm1,rho1,y2=0,label=r'$Q$',alpha=0.75)
+    plt.title("$S=%s$ MeV, $b=%s$ fm" %(S,b), x=0.5, y=0.8)
+    plt.legend(frameon=False);
+    plt.xlabel(r"$|r_{cm}|$ [fm]");
+    plt.ylabel(r"$\rho(r_{cm})$");
+    save_fig("ChargeDensity")
+    plt.xlim([0,6])
+
+
+    return r_cm,1/integraltest1*abs(M/mn*r_cm*phi3(M/mn*r_cm))**2+1/integraltest2*abs(M/m*r_cm*phi3(M/m*r_cm))**2, integraltest1, integraltest2
+
+chargedensity(45.5,3.9)

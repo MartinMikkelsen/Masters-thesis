@@ -5,10 +5,10 @@ In this appendix, we go through how to get expressions for the differential cros
 Considering the central potential between the proton and the neutron given by
 \[ U(r)= \begin{cases}
 	-U_0, & r \leq R \\
-	0 & r > R
+	0 & r > R,
 \end{cases}
 \]
-The radial equation is given by
+the radial equation is given by
 \begin{equation}
 	-\frac{\hbar^2}{2m} \od[2]{u(r)}{r}+\left[U(r)+\frac{\hbar^2 \ell(\ell+1)}{2mr^2} \right]u(r)=Eu(r).
 \end{equation}
@@ -112,7 +112,7 @@ where
 \begin{equation}
 	\mathcal{U}_t (r) = \mathcal{U}_{tW}(r)+\mathcal{U}_{tM}(r),
 \end{equation}
-for the space-even states we are considering with the deuteron, see table \ref{Jpi}. Considering the $d$-wave I introduce the angular momentum coupling $[Y_2(\vec{n})\chi_1]_{1M}$ of spin 1 and $\ell=1$ to the total deuteron spin $J=1$ and projection $J_z = M$. The same coupling but properly normalized can be written as
+for the space-even states we are considering with the deuteron, see table \ref{Jpi}. Considering the $d$-wave we introduce the angular momentum coupling $[Y_2(\vec{n})\chi_1]_{1M}$ of spin 1 and $\ell=1$ to the total deuteron spin $J=1$ and projection $J_z = M$. The same coupling but properly normalized can be written as
 \begin{equation}
 	\Theta_M = \frac{1}{\sqrt{32\pi}} S_{12}\chi_{1M}.
 \end{equation}
@@ -146,15 +146,15 @@ In the long wavelength limit the plane wave expression reduces to unity, which m
 \end{equation}
 where the solid angle could be the direction along the motion of the proton\footnote{Also, $V=1$ and $\alpha=e^2/\hbar c$}.
 
-When assuming an unpolarized deuteron, we can take the average over the spin states $1/3 \sum_m$ and count all final polarizations $\sum_{m'}$\footnote{Note $m$ and $m'$}. The final state is still spin triplet sincethe dipole operator does not act on the spin variable. This yields
+When assuming an unpolarized deuteron, we can take the average over the spin states $1/3 \sum_m$ and count all final polarizations $\sum_{m'}$\footnote{Note $m$ and $m'$}. The final state is still spin triplet since the dipole operator does not act on the spin variable. This yields
 \begin{equation} \label{diffcross}
 	\overline{\textrm{d}\sigma_{E1}} = \frac{1}{4}\frac{\alpha m p \omega}{\hbar^2} \frac{1}{3} \sum_{mm'}\abs{(\vec{e}\cdot \vec{r})_{fi}}^2 \frac{\textrm{d}o}{4\pi}.
 \end{equation}
 The task is now to find an expression for the dot product in the sum. After the $E1$ transition, the final spin state remains a triplet with $S=J=1$; the orbital and parity, however, are not the same. The final state corresponds to the $p$-wave, where the low-energy nuclear forces are weak, and the wavelength of the relative motion is much larger than the range of those forces. From conservation of energy, we have
 \begin{equation} \label{kq}
-	\frac{\hbar^2 k^2}{2m} = \hbar\omega - \epsilon,
+	\frac{\hbar^2 k^2}{2m} = \hbar\omega - \epsilon.
 \end{equation}
-where $\epsilon$ is the binding energy of the deuteron also in equation (\ref{SEnew}). For any direction of the relative momentum vector $\hbar \vec{k}$ the $p$-wave component must be normalized through some Legendre polynomial $P_1(\cos(\theta))$ and the spherical Bessel function $j_{\ell=1}(kr)$.\footnote{$P_1(\cos(\theta))=\cos(\theta)$ and $j_1(\rho)=\frac{\sin(\rho)-\rho\cos(\rho)}{\rho^2}.$}
+ For any direction of the relative momentum vector $\hbar \vec{k}$ the $p$-wave component must be normalized through some Legendre polynomial $P_1(\cos(\theta))$ and the spherical Bessel function $j_{\ell=1}(kr)$.\footnote{$P_1(\cos(\theta))=\cos(\theta)$ and $j_1(\rho)=\frac{\sin(\rho)-\rho\cos(\rho)}{\rho^2}.$}
 
 Here $\theta$ is the angle between the relative coordinate $\vec{r}$ and the wave vector $\vec{k}$ this yields
 \begin{equation}

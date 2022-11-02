@@ -3,8 +3,8 @@ We consider a nuclear model where the nucleus is held together by emitting and a
 
 \section{Nuclear Interacting Model with Explicit Pions }\label{sec:model}
 
-In the following, we focus on the nuclear model with explicit pions. The pion is the lightest of the strongly interacting particles with a mass of about $15\%$ of the nucleon mass. This yields a large Compton wavelength of $1.4$ fm, which means the most extended contribution to nucleon-nucleon interactions. Furthermore, the pion is a significant component of the nuclear wave function where the pion dominates meson exchange corrections to different nuclear properties. In general, the bare nucleon is surrounded by several virtual pions. 
-They are virtual in the same sense that the positron-electron pair are virtual in pair creation from a photon. It is important to stress that these are virtual since they can have properties possible for true particles. The multi-component wave function of the nucleon can be written as
+In the following, we focus on the nuclear model with explicit pions \cite{Fedorov2020}. The pion is the lightest of the strongly interacting particles with a mass of about $15\%$ of the nucleon mass. This yields a large Compton wavelength of $1.4$ fm, which provides the longest-ranged contribution to the nucleon-nucleon interaction \cite{PionBib}. Furthermore, the pion is a significant component of the nuclear wave function where the pion dominates meson exchange corrections to different nuclear properties. In general, the bare nucleon is surrounded by several virtual pions. 
+They are virtual in the same sense that the positron-electron pair are virtual in pair creation from a photon. It is important to stress that these are virtual since they can have properties impossible for real particles. The multi-component wave function of the nucleon can be written as
 \begin{marginfigure}
 	\centering
 	\input{Figures/superposition}
@@ -18,12 +18,12 @@ They are virtual in the same sense that the positron-electron pair are virtual i
 	\psi_{N\pi\pi}\\
 	\vdots],
 \end{equation}
-where $\psi_{N}$ is the bare nucleon, and the other wave functions are dressed by an arbitrary number of pions indicated by the subscripts. Assuming the nuclear interaction conserved isospin, angular momentum and parity, we can construct the following operator for the pion-nucleon operator
+where $\psi_{N}$ is the bare nucleon, and the other wave functions are dressed by an arbitrary number of pions indicated by the subscripts. Assuming the nuclear interaction conserves isospin, angular momentum and parity, we can construct the following operator for the pion-nucleon operator \cite{AkselBook}
 \begin{align} \label{W}
 	W & \equiv (\vec{\tau\cdot\vec{\pi}})(\vec{\sigma}\cdot\vec{r})f(r) \\
 	W^\dagger & \equiv  \int_V \text{d}^3 r \, (\vec{\tau\cdot\vec{\pi}})^\dagger (\vec{\sigma}\cdot\vec{r})^\dagger f(r) \label{Wdagger},
 \end{align}
-where $\vec{\tau}$ is the isovector of Pauli matrices acting on the nucleon in isospin space and $\vec{\sigma}$ is the same but for spin space and $\vec{r}$ is the relative coordinate distance between the nucleon and the pion. These operators ensure the conservation of isospin, angular momentum and parity. The isovector of pions is denoted $\vec{\pi}$ and can be combined with $\vec{\tau}$ and be represented as a 2-by-2 hermitian matrix given by
+where $\vec{\tau}$ is the isovector of Pauli matrices acting on the nucleon in isospin space and $\vec{\sigma}$ is the same but for spin space and $\vec{r}$ is the relative coordinate distance between the nucleon and the pion. Note that the $W^\dagger$ operator contains an integral to remove the coordinate of the annihilated pion. These operators ensure the conservation of isospin, angular momentum and parity. The isovector of pions is denoted $\vec{\pi}$ and can be combined with $\vec{\tau}$ and be represented as a 2-by-2 hermitian matrix \cite{ZeeGroup} given by 
 \begin{equation} \label{isocoeff}
 	\vec{\tau}\cdot \vec{\pi} = \tau_0  \pi_0+ \sqrt{2} \tau_{-}\pi^ +\sqrt{2}\tau_{+} \pi^{-} = \mqty[\pi^0 & \sqrt{2}\pi^- \\
 	\sqrt{2}\pi^+ & -\pi^0],
@@ -43,7 +43,7 @@ There is also a phenomenological, short-range form factor $f(r)$ given by
 \begin{equation}\label{formfactoreq}
 	f(r) = \frac{S}{b} \text{e}^{-r^2/b^2},
 \end{equation}
-where $S$ and $b$ are the pion-nucleon coupling strength and range, respectively--these are illustrated in figure \ref{formfactor}. The action of annihilating a pion must include the integral over coordinate space to remove the coordinate. We now have everything we need to construct a general Hamiltonian for the multi-component wave function of the nucleon in \eqref{superposition}
+where $S$ and $b$ are the pion-nucleon coupling strength and range, respectively. These are illustrated in figure \ref{formfactor}. The action of annihilating a pion must include the integral over coordinate space to remove the coordinate. We now have everything we need to construct a general Hamiltonian for the multi-component wave function of the nucleon in \eqref{superposition}
 \begin{equation} \label{multihamiltonian}
 	H = \mqty[K_N & W^\dagger & 0 &\ldots \\
 	W & K_N+K_\pi+m_\pi c^2+V_C & W^\dagger & \ldots \\
@@ -59,7 +59,7 @@ Note the different derivatives--here $\vec{R}$ is the centre-of-mass coordinate,
 \begin{equation} \label{MultiSE}
 	H \Psi_N = E \Psi_N,
 \end{equation}
-where the ground state is the bare nucleon surrounded by virtual pions. The ground state energy in the rest frame of the nucleon gives the mass of the physical nucleon. Within the framework of this model, one can generate a physical pion by supplying enough energy such that the pion is no longer virtual. The pion is trapped behind a potential barrier of height $m_\pi c^2 = 140$ MeV and cannot leave unless this or more energy is supplied to the system.  
+where the ground state is the bare nucleon surrounded by virtual pions. The ground state energy in the rest frame of the nucleon gives the mass of the physical nucleon. Within the framework of this model, one can generate a physical pion by supplying enough energy such that the pion is no longer virtual. The pion is trapped behind a potential barrier of height $m_\pi c^2 = 140$ MeV and cannot leave unless this or more energy is supplied to the system.  This is illustrated on figure \ref{fig:Underbarrier}.
 \section{Dressing of the Nucleon in the One Pion Approximation}\label{dressnuc}
 \begin{marginfigure}
 	\centering
@@ -84,15 +84,15 @@ So far we have kept the model as simple as possible by expressing the equations 
 \end{equation} 
 Furthermore, we denote the spin state of the nucleon by an arrow
 \begin{equation} \label{spinvec}
-	\uparrow = \mqty[1 \\ 0 ] \quad  \downarrow= \mqty[0 \\ 1].
+	\ket{\uparrow} = \mqty[1 \\ 0 ] \quad  \ket{\downarrow}= \mqty[0 \\ 1].
 \end{equation}
 The wave function must also be normalised to one nucleon per unit volume. This is as far as we get in general terms for the dressing of the nucleon in the one-pion approximation.
 \section{Dressing of the Proton} \label{sec:DressingofProton}
 We now focus our attention on the dressing of the proton in the spin-up state. The calculations are almost identical, remembering the definitions from section \ref{dressnuc}. The wave function of the bare proton can thus be written as
 \begin{equation} \label{bareproton}
-	\psi_p = \frac{p\uparrow}{\sqrt{V}}
+	\psi_p = \frac{p\uparrow}{\sqrt{V}},
 \end{equation}
-The Hamiltonian \eqref{HamilTwo} suggest the following expression for the wave function of the pion-nucleon system
+where we omit the kets to unclutter the notation. The Hamiltonian \eqref{HamilTwo} suggest the following expression for the wave function of the pion-nucleon system
 \begin{equation} \label{pionnuc}
 	\psi_{N\pi} = (\vec{\tau}\cdot\vec{\pi})(\vec{\sigma}\cdot\vec{r})\frac{p \uparrow}{\sqrt{V}}\phi(r),
 \end{equation}
@@ -137,9 +137,9 @@ The bracket on the right is used to empathise that \eqref{system} is a coupled s
 \section{Numerical Considerations}\label{sec:numericalconsiderations}
 To solve the system of equations \eqref{system}, one can consider two different numerical approaches. One approach gives a more intuitive picture of how to solve this equation, while the other is more robust and practical.
 
-For a given $E$, one can solve the second-order differential equation corresponding to $\phi[E]$. Conversely, for a given $\phi(r)$, one can calculate the integral to find $E[\phi]$. This leads to the fixed-point equation given by
+For a given $E$, one can solve the second-order differential equation corresponding to $\phi(E)$. Conversely, for a given $\phi(r)$, one can calculate the integral to find $E(\phi)$. This leads to the fixed-point equation given by
 \begin{equation} \label{nonlin}
-	E[\phi[\mathcal{E}]] = \mathcal{E},
+	E(\phi(\mathcal{E})) = \mathcal{E},
 \end{equation}
 which is a single variable non-linear equation. Equation \eqref{nonlin} can be solved using a root-finding algorithm. This approach is generally not as efficient since the algorithm will have to search through large parameter space to find a suitable solution.
 
@@ -147,7 +147,7 @@ The second approach consists of reformulating the system \eqref{system} as a bou
 \begin{equation}\label{diffint}
 	I'(r) = 12\pi f(r)\phi(r)r^4, \quad I(0)=0, \, I(\infty)=E,
 \end{equation}
-where $I$ is the integral in equation \eqref{system}. Essentially, the boundary conditions we require for the energy are written in equation \eqref{diffint}. The equation starts from a singular point and extends to an infinite point. We require the solution to stay finite, which means approximations are needed at both limits. At $r\rightarrow 0$, the differential equation is approximately an Euler-Cauchy equation with basis solutions $1$ and $r^{-1}$. For finite solutions, the latter is ignored which means $\phi'(a)=0$ is the requirement for $a\approx 0$.\footnote{You would end up with the same conclusion if you consider $\phi=a+r^n$ and plug this into $\phi''+4\phi'/r=0$, which yields $n=0,-1$.} For $r\rightarrow \infty$, the dominating term in the differential equation is
+where $I$ is the integral in equation \eqref{system}. Essentially, the boundary conditions we require for the energy are written in equation \eqref{diffint}. The equation starts from a singular point and extends to infinity. We require the solution to stay finite, which means approximations are needed at both limits. At $r\rightarrow 0$, the differential equation is approximately an Euler-Cauchy equation with basis solutions $1$ and $r^{-1}$. For finite solutions, the latter is ignored which means $\phi'(a)=0$ is the requirement for $a\approx 0$.\footnote{You would end up with the same conclusion if you consider $\phi=a+r^n$ and plug this into $\phi''+4\phi'/r=0$, which yields $n=0,-1$.} For $r\rightarrow \infty$, the dominating term in the differential equation is
 \begin{equation}
 	-\phi''(r)+2\mu_{N\pi}(m_\pi c^2-E)\phi(r)=0.
 \end{equation}
@@ -161,14 +161,14 @@ In the case of a positive sign, the solution diverges. For the basis solution wi
 \end{equation}
 These two conditions are suitable boundary conditions for the left and right boundaries, respectively. The algorithm converges, and a solution to \eqref{SE} is found. The solutions can be seen in figure \ref{fig:integralplot} for the parameters $S=10$ MeV and $b=1$ fm.
 \begin{figure}[H]
-	\begin{sidecaption}{Boundary value problem solutions. The plot is generated using a tolerance of $10^{-6}$. The blue line representing the energy is scaled.}[fig:integralplot]
+	\begin{sidecaption}{Boundary value problem solutions. The blue line representing the energy is scaled.}[fig:integralplot]
 		\includegraphics[width=\linewidth]{Figures/Integralplot.pdf}
 	\end{sidecaption}
 \end{figure}
-Also, note that since we expect the energy to be less than zero, it makes sense for the wave function to be negative since all other terms in the integral in equation \eqref{system} are positive. It might appear strange to have a negative wave function, $\phi(r)$, but there are two things to note. One can add an arbitrary phase to equation \eqref{2wavefunc} and flip the sign. Also, for all calculations, we are only interested in the norm-square of the wave function. The energy for the parameters shown in figure \ref{fig:integralplot} is $E = -0.626 \, \text{MeV}$ and this value is very sensitive to the parameters $S$ and $b$ since they enter in the form factor as seen in equation \eqref{formfactoreq} and as mentioned in section \ref{sec:model} this gives the physical mass of the proton--it's importance will be clear later when comparing the discussion the mass contribution from virtual pion in section \ref{sec:PionPhotoproduction}.
+Also, note that since we expect the energy to be less than zero, it makes sense for the wave function to be negative since all other terms in the integral in equation \eqref{system} are positive. It might appear strange to have a negative wave function, $\phi(r)$, but there are two things to note. One can add an arbitrary phase to equation \eqref{2wavefunc} and flip the sign. Also, for all calculations, we are only interested in the norm-square of the wave function. The energy for the parameters shown in figure \ref{fig:integralplot} is $E = -0.626 \, \text{MeV}$ and this value is very sensitive to the parameters $S$ and $b$ since they enter in the form factor as seen in equation \eqref{formfactoreq} and as mentioned in section \ref{sec:model} this gives the physical mass of the proton--it's importance will be clear later when comparing the discussion the mass contribution from virtual pion in chapter \ref{sec:PionPhotoproduction}.
 
 Since we cannot allow the wave function to extend to infinity numerically, we must introduce some cut-off. Since the wave function of the pion-nucleon system has a built-in range parameter $b$, it is natural to let the cut-off be proportional to this parameter.
-Within the regime of nuclear physics, we expect the wave function to extend up to a length within the order of magnitude of ten Fermi. Quantitatively this means a small constant of proportionality $\mathcal{O}(0.01)$ in front of $r_\text{min}$ and another constant $\mathcal{O}(1)$ in front of $r_{\text{max}}$. Numerically, a constant of proportionality for $r_{\text{max}}$ and the impact can be seen in figure \ref{fig:multiwavefunction} where the radial wave functions stop after $5r_\text{max}$.
+Within the regime of nuclear physics, we expect the wave function to extend up to a length within the order of magnitude of ten fermi. Quantitatively this means a small constant of proportionality in front of $r_\text{min}$ and another constant in front of $r_{\text{max}}$. Numerically, a constant of proportionality for $r_{\text{max}}$ and the impact can be seen in figure \ref{fig:multiwavefunction} where the radial wave functions stop after $5r_\text{max}$.
 \begin{figure}[H]
 	\begin{sidecaption}{Radial wave function for different parameters $S$ and $b$ to illustrate the behavoir on the radial function.}[fig:multiwavefunction]
 		\includegraphics[width=\linewidth]{Figures/multiwavefunction.pdf}
@@ -181,7 +181,7 @@ Figure \ref{fig:multiwavefunction} also illustrates the behaviour of the radial 
 which means the wave function $\phi(r)$ must have dimensions of fm$^{-5/2}$, and the radial wave function $r\phi(r)$ must have dimensions of fm$^{-3/2}$. Note here the two integrals come from the annihilation of a pion and the normalisation of one particle per unit volume, respectively.
 
 \subsection{Different Form Factors}
-Compared to conventional interaction models of the nucleus, this model has the advantage of having very few parameters. The phenomenological form factor $f(r)$ only consists of an interaction strength $S$ and a range parameter $b$. The form factor can take many forms, yielding different wave function solutions and changing the energy. The formalism in \ref{sec:numericalconsiderations} is very flexible, so changes in the form factor, and here we explore how different form factors impact the wave function. The form factors must all decrease as a function of $r$ since we constrain the system to short-range forces. The solutions in figure \ref{fig:multiwavefunction} assume the form factor from equation \ref{formfactoreq}, which is Gaussian. A priori, we do now know anything about the form factor, and it might as well be Yukawa like
+Compared to conventional interaction models of the nucleus, this model has the advantage of having very few parameters. The phenomenological form factor $f(r)$ only consists of an interaction strength $S$ and a range parameter $b$. The form factor can take many forms, yielding different wave function solutions and changing the energy. The formalism in section \ref{sec:numericalconsiderations} is very flexible to changes in the form factor, and here we explore how different form factors impact the wave function. The form factors must all decrease as a function of $r$ since we constrain the system to short-range forces. The solutions in figure \ref{fig:multiwavefunction} assume the form factor from equation \eqref{formfactoreq}, which is Gaussian. A priori, we do now know anything about the form factor, and it might as well be Yukawa like
 \begin{equation}\label{YukawaForm}
 	f(r) = \frac{S}{b}\frac{\exp{-\frac{r}{b}}}{r}.
 \end{equation}
@@ -191,7 +191,7 @@ Figure \ref{fig:integralplotYukawa} shows the radial wave functions if the form 
 		\includegraphics[width=\linewidth]{Figures/multiwavefunctionYukawa.pdf}
 	\end{sidecaption}
 \end{figure}
-The shapes of the radial wave functions are similar to the Gaussian case, but the energies do not match due to the $r^2/b^2$ dependency in the Gaussian case. One could argue for a Yukawa-like form factor but with a gaussian exponential, and the energies are the same within a few MeV, but this defeats the purpose of a Yukawa form. An exponential form factor would make the radial wave function too long to describe the nuclear range since we are constrained to about 15 fm.  
+The shapes of the radial wave functions are similar to the Gaussian case, but the energies do not match due to the $r^2/b^2$ dependency in the Gaussian case. One could argue for a Yukawa-like form factor but with a gaussian exponential, $\exp(r^2/b^2)/r$, and the energies are the same within a few MeV, but this defeats the purpose of a Yukawa form. An exponential form factor would make the radial wave function too long to describe the nuclear range since we are constrained to about 15 fm.  
 \subsection{Relativistic Expansion}
 As described in section \ref{sec:model}, we are using the Schrödinger equation, which hints at a non-relativistic limit of the pion-nucleon system. We also know the pion is virtual, which means under a potential barrier. An avant-garde idea is to do relativistic expansion of the kinetic term, which depends on the relative coordinate $\vec{r}$. 
 
@@ -235,9 +235,9 @@ This system is a fourth-order differential equation coupled to an integrodiffere
 \begin{equation}
 	\phi^{(4)}(r) = \frac{-8\mu_{N\pi}c^2}{\hbar^4}(E-m_\pi c^2)\phi(r)-\frac{4\mu^2_{N\pi}c^2}{\hbar^2}\phi(r)^{(2)}
 \end{equation}
-The solutions are shown in figure \ref{fig:integralplot_relativistic} where only $\phi(r)$ and $\phi(r)^{(1)}$ are included
+The solutions are shown in figure \ref{fig:integralplot_relativistic} where only $\phi(r)$ and $\phi(r)^{(1)}$ are included using the Gaussian form factor
 \begin{figure}[H]
-	\begin{sidecaption}{Boundary value problem solutions for the relativistic expansion. The plot is generated using a tolerance of $10^{-3}$. The energy convergence is scaled.}[fig:integralplot_relativistic]
+	\begin{sidecaption}{Boundary value problem solutions for the relativistic expansion using the Gaussian form factor. The energy convergence is scaled.}[fig:integralplot_relativistic]
 		\includegraphics[width=\linewidth]{Figures/Integralplot_relativistic.pdf}
 	\end{sidecaption}
 \end{figure}
@@ -262,7 +262,7 @@ We can apply the same logic to the system of equations with a Yukawa-like form f
 		\includegraphics[width=\linewidth]{Figures/bconvergenceYukawa.pdf}
 	\end{sidecaption}
 \end{figure}
-The pion is virtual and hence in a classically forbidden region, but we can still estimate which relativistic regime dominates the system. Both in terms of the radial wave function and in terms of the energy ratio, relativistic effects are negligible. This result holds for different form factors since they most all decrease a function of $r$. 
+The pion is virtual and hence in a classically forbidden region, but we can still estimate which relativistic regime dominates the system. Both in terms of the radial wave function and in terms of the energy ratio, relativistic effects are negligible. This result holds for different form factors since they must all decrease a function of $r$. 
 
 Considering figure \ref{fig:b_convergence}, we see the maximum discrepancy between the relativistic and the non-relativistic energy is about 10 per cent and decreases rapidly. This means relativistic effects vanish as we increase the range parameter $b$. A physical explanation of this could be that as we increase the spatial dimension, a virtual pion with the same kinetic energy would have a lower velocity and hence less relativistic. This analysis is supported if the same behaviour is not present when we hold $b$ fixed an increase $S$ since. This is shown in figure \ref{fig:Sconvergence} for the Gaussian form factor 
 \begin{figure}[H]

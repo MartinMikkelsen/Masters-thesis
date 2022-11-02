@@ -1,16 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.special import spherical_jn
-from scipy.integrate import solve_bvp
 from scipy.special import gamma, factorial
-from scipy.interpolate import InterpolatedUnivariateSpline as Spline
 from scipy.integrate import quad
-from numpy import angle
 import scipy as sp
 import seaborn as sns
 import os
 from pylab import plt, mpl
-
 
 mpl.rcParams['font.family'] = 'XCharter'
 custom_params = {"axes.spines.right": True, "axes.spines.top": True}
@@ -55,15 +50,24 @@ Egamma = np.linspace(145,180,100)
 Eq = Egamma-m-0.5*Egamma**2/(Mpip)
 k = Egamma/hbarc
 gamma = -2*charge2*mu*alpha/(hbarc**2*k)
-insidegamma = np.array(1+1+1.j*gamma, dtype=np.complex_)
-sigmal = angle(sp.special.gamma(insidegamma))
 
-C = 2*np.exp(-np.pi*gamma/2)*abs(sp.special.gamma(1+1+1.j*gamma))/(sp.special.factorial(2+1))
+def complex_quadrature(func, a, b, **kwargs):
+    def real_func(x):
+        return np.real(func(x))
+    def imag_func(x):
+        return np.imag(func(x))
+    real_integral = quad(real_func, a, b, **kwargs)
+    imag_integral = quad(imag_func, a, b, **kwargs)
+    return (real_integral[0] + 1j*imag_integral[0], real_integral[1:], imag_integral[1:])
 
-def F(eta,rho):
-    F = 0
-    for k in range(10):
-        result += k
+def RegularCoulomb(l,eta,rho):
+    First = rho**(l+1)*2**l*np.exp(1j*rho-(np.pi*eta/2))/(abs(gamma(l+1+1j*eta)))
+    integral = complex_quadrature(lambda t: np.exp(-2*1j*rho*t)*t**(l+1j*eta)*(1-t)**(l-1j*eta),0,1)[0]
+    return np.array(First*integral,dtype='complex_')
 
+def C(l,eta):
+    return 2**l*np.exp(-np.pi*eta/2)*(abs(gamma(l+1+1j*eta))/(factorial(2*l+1)))
+#Compare to mpmath
 
-plt.plot(gamma,C*k**2)
+xes = [149.69199178644763, 152.36139630390144, 155.03080082135523, 157.5770020533881, 158.31622176591375, 160.32854209445586, 162.4229979466119, 162.99794661190964, 168.2546201232033,175.078125, 175.8984375]
+RegularCoulomb(1,-2,2)

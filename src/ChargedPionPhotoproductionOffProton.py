@@ -136,16 +136,14 @@ def diffcross_rel(Egamma,S,b,theta):
     E = -2
 
     u = [0*r2,0*r2,E*r2/r2[-1]]
-    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-3,max_nodes=1000)
+    res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-6,max_nodes=100000)
 
     phi = res.y.T[:np.size(r2),0]
     phi3 = Spline(r2,phi)
 
     def F(S):
-        start = time.time()
         func = lambda r: phi3(r)*r**3*spherical_jn(1,S*r)
         integral =  4*np.pi/s*quad(func,0,rmax,limit=100)[0]
-        #print(f"F took: {time.time()-start}")
         return integral
 
     return 10000*charge2/4/np.pi*dp2dEq/mn**2*q**3/k*np.sin(theta)**2*s**2*F(s)**2
@@ -158,6 +156,61 @@ def totalcross(x,S,b):
 def totalcross_rel(x,S,b):
     tot = [quad(lambda theta: 2*np.pi*np.sin(theta)*diffcross_rel(i,S,b,theta),0,np.pi)[0] for i in tqdm(x)]
     return tot
+
+
+def diffcross_dipole(Egamma,S,b):
+    diff_cross = []
+    for i in tqdm(Egamma):
+        Eq = i-m-0.5*i**2/(Mpip)
+        k = i/hbarc
+        q = np.sqrt(2*mu*Eq)/(hbarc)
+
+        def f(r):
+            return S/b*np.exp(-r**2/b**2)
+
+        def sys(r,u,E):
+            y,v,I = u
+            dy = v
+            dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+            dI = 12*np.pi*f(r)*r**4*y
+            return dy,dv,dI
+
+        def bc(ua, ub,E):
+            ya,va,Ia = ua
+            yb,vb,Ib = ub
+            return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+
+        rmax = 5*b
+        rmin = 0.01*b
+        base1 = np.exp(1)
+        start = np.log(rmin)
+        stop = np.log(rmax)
+        r2 = np.logspace(start,stop,num=20000,base=np.exp(1))
+        E = -2
+
+        u = [0*r2,0*r2,E*r2/r2[-1]]
+        res = solve_bvp(sys,bc,r2,u,p=[E],tol=1e-7,max_nodes=100000)
+
+        phi = res.y.T[:np.size(r2),0]
+        phi3 = Spline(r2,phi)
+
+        def Q(S):
+            func = lambda r: phi3(r)*r**4*spherical_jn(0,S*r)
+            integral =  quad(func,0,rmax)[0]
+            return integral
+
+        norm_func = lambda r: r**4*phi3(r)**2
+        norm_integral = 12*np.pi*quad(norm_func,0,rmax)[0]
+        N = 1/np.sqrt(1+norm_integral)
+
+        diff_cross.append(16*np.pi*N**2*alpha/9*mu**3*k*q/(m**2*hbarc)*Q(q)**2*10000)
+    return diff_cross
+
+def totalcross_dipole(Egamma,S,b):
+    pivec = 4*np.pi*np.ones(np.size(Egamma))
+    totalX = diffcross_dipole(Egamma,S,b)
+    return totalX
+
 
 if __name__ == '__main__':
 
@@ -173,23 +226,19 @@ if __name__ == '__main__':
     plt.errorbar(x,y,yerr=sigmaErrorSchmidt,fmt="o");
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
-    initial = [50,3.5]
-    popt, pcov = curve_fit(totalcross_rel,x,y,initial)
-    print("popt=",popt)
-    print("Error=",np.sqrt(np.diag(pcov)))
-
     #gmodel = Model(totalcross_rel)
     #result = gmodel.fit(y, x=x, S=30,b=3.8)
     #print(result.fit_report())
 
     photonenergies1 = np.linspace(151.4,180,50)
 
-    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(69.33526458,3.60628741),color='r')
+    plt.plot(photonenergies1,totalcross_rel(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel.' %(69.33526458,3.60628741),color='r')
     #plt.plot(photonenergies1,totalcross(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(69.33526458,3.60628741),linestyle='dashed',color='r')
     #plt.plot(photonenergies1,totalcross_rel(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(57.9783878,3.97276793),color='g')
     #plt.plot(photonenergies1,totalcross(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(57.9783878,3.97276793),linestyle='dashed',color='g')
 
-    plt.plot(photonenergies1,totalcross_rel(photonenergies1,popt[0],popt[1]),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm' %(popt[0],popt[1]),color='r')
-    #plt.legend(loc='best',frameon=False)
-    #save_fig("ChargedPionOffProtonExact")
+    plt.plot(photonenergies,totalcross_dipole(photonenergies,100.30,1.98), label=r'$S=%0.2f$ MeV, $b=%0.2f$ fm, dipole' %(100.30,1.98), color='navy')
+
+    plt.legend(loc='best',frameon=False)
+    save_fig("ChargedPionOffProtonExact")
     plt.show()
