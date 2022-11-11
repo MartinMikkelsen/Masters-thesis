@@ -230,15 +230,15 @@ if __name__ == '__main__':
     #result = gmodel.fit(y, x=x, S=30,b=3.8)
     #print(result.fit_report())
 
-    photonenergies1 = np.linspace(151.4,180,50)
+    photonenergies1 = np.linspace(151.4,180,25)
 
     plt.plot(photonenergies1,totalcross_rel(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel.' %(69.33526458,3.60628741),color='r')
-    #plt.plot(photonenergies1,totalcross(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(69.33526458,3.60628741),linestyle='dashed',color='r')
-    #plt.plot(photonenergies1,totalcross_rel(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(57.9783878,3.97276793),color='g')
-    #plt.plot(photonenergies1,totalcross(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(57.9783878,3.97276793),linestyle='dashed',color='g')
+    plt.plot(photonenergies1,totalcross(photonenergies1,69.33526458,3.60628741),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(69.33526458,3.60628741),linestyle='dashed',color='r')
+    plt.plot(photonenergies1,totalcross_rel(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, rel' %(57.9783878,3.97276793),color='g')
+    plt.plot(photonenergies1,totalcross(photonenergies1,57.9783878,3.97276793),label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, non-rel' %(57.9783878,3.97276793),linestyle='dashed',color='g')
 
-    plt.plot(photonenergies,totalcross_dipole(photonenergies,100.30,1.98), label=r'$S=%0.2f$ MeV, $b=%0.2f$ fm, dipole' %(100.30,1.98), color='navy')
+    #plt.plot(photonenergies1,totalcross_dipole(photonenergies1,100.30,1.98), label=r'$S=%0.1f$ MeV, $b=%0.1f$ fm, dipole' %(100.30,1.98), color='navy')
 
     plt.legend(loc='best',frameon=False)
-    save_fig("ChargedPionOffProtonExact")
+    save_fig("ChargedPionOffProtonExact_fitted")
     plt.show()

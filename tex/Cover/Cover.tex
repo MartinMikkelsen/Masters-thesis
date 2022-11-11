@@ -1,0 +1,232 @@
+% This PhD thesis cover was made by Lars Madsen and Ole S. Sørensen.
+% Permission is granted to use this file to create similar covers.
+% Any questions regarding the construction can be sent to daleif@imf.au.dk
+
+% This version was used for the cover of the Master's thesis of Martin Mikkelsen.
+
+% Do not specify paper size here, this comes later, see the \setstocksize.
+\documentclass{memoir}
+\usepackage[rgb]{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{libertine}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{eso-pic}
+\usepackage{picture}
+\usepackage{tikz}
+\usepackage{etoolbox}
+\usepackage{microtype}
+\usepackage{fix-cm}
+\usepackage{varwidth}
+\usepackage{textpos}
+
+\frenchspacing
+
+\graphicspath{{Figures/}}
+
+\newtoggle{guidelines}
+\togglefalse{guidelines}
+
+
+\newlength\spinewidth
+\newlength\backpageindent
+\newlength\globalfrontpageindent
+\newlength\cutoff
+\newlength\facewidth
+\newlength\upperbannerheight
+\newlength\lowerbannerheight
+
+\setlength\spinewidth{4.32mm}   % CHECK THIS WITH SUNTRYK
+\setlength\backpageindent{10mm}
+\setlength\cutoff{3mm}
+\setlength\upperbannerheight{160pt}
+\setlength\lowerbannerheight{120pt}
+
+
+% Here we specify the special paper side. SUN-TRYK wanted it in 'real
+% size', i.e. not as cover printed onto A3 paper.
+%
+% The design is 3mm larger on all sides, to be cut of by SUN-TRYK,
+% otherwise printing to the edge may be difficult.
+% 
+% The height is A4 height plus two cutoff (2x3mm), the width is the
+% width of two A4s plus two cutoff plus the height of the spine.
+%
+% The height of the spine depend on the size of the document, please
+% talk to SUN-TRYK about the approximate size for your document.
+\setstocksize{297mm + 2\cutoff}{420mm + 2\cutoff + \spinewidth}
+% The trimmming then sets the page size used by LaTeX
+\settrimmedsize\stockheight\stockwidth*
+
+\setlength\globalfrontpageindent{0.5\stockwidth + 0.5\spinewidth + \backpageindent}
+\setlength\facewidth{0.5\stockwidth - 0.5\spinewidth - \cutoff}
+
+
+\definecolor{AUBlue}{RGB}{0, 61, 115}
+\checkandfixthelayout
+
+
+% Commands for the front cover.
+% Title.
+\newcommand\Title{
+	\begin{minipage}[b][\upperbannerheight][c]{\facewidth}
+		\centering
+		\HUGE\bfseries\scshape\color{white}
+		\fontsize{24}{33.6} \selectfont 
+		Threshold pion photoproduction off nucleons\\ 
+		using the nuclear model with explicit pions
+	\end{minipage}
+}
+
+% Name and project type.
+\newcommand\NAME{
+	\begin{minipage}[b][\lowerbannerheight][c]{\facewidth}
+		\centering
+		\Huge\bfseries\scshape\color{white}
+		Martin Mikkelsen\\
+		\huge\bfseries\scshape\color{white}
+		Master's Thesis
+    \end{minipage}
+}
+
+
+% Commands for the spine.
+\newcommand\SpineTitle{Threshold pion photoproduction off nucleons using the nuclear model with explicit pions}
+\newcommand\spineTitle{\large\scshape\hspace{0.5cm}\SpineTitle}
+\newcommand\spineName{\large\scshape \hspace{0.4cm}Martin Mikkelsen}
+\newcommand\spineOther{\large\scshape Master's Thesis}
+
+
+% Commands for the back cover.
+% The back side text. It is placed globally on the page, so we save it in a box.
+\newcommand\backsidetext{
+	\parbox[b]{15.25cm}{   
+	\bfseries\fontsize{11pt}{12pt}\selectfont
+This thesis investigates pion photoproduction off nucleons near the threshold using a nuclear model with explicit pions. In this model, the nucleons do not interact through a potential but emit and absorb mesons which are treated explicitly, and we limit the model to the one meson approximation. We focus on the case where the mesons are pions and calculate the total cross-section of pion photoproduction near the threshold. Specifically, we find the set of parameters for which the model quantitatively can describe the total cross section near the threshold. \\
+
+We introduce the nuclear model with explicit mesons and describe the advantages of using this model within the regime of few-body, low-energy nuclear physics. We then consider the specific case where the mesons are pion and consider a pion-nucleus system where we introduce a phenomenological form factor which depends on a strength parameter and a range parameter. We then consider a numerical approach to solving the Schrödinger equation describing the pion-nucleon system and evaluate how changing the phenomenological form factor will affect the solutions. We also discuss a relativistic expansion of the kinetic operators to deduce the importance of relativistic effects on the pion-nucleon system. We find that the relativistic effects are negligible for most sets of parameters. To further test the model, we introduce a new operator which is inspired by an effective field theory. We find that the operator is compatible with the nuclear model but is also numerically intensive, and perhaps another numerical approach is more suitable for this operator.\\
+
+We then focus on pion photoproduction and how this can be described within the framework of the nuclear model. As a first approach, we consider a dipole approximation and calculate the total cross-section for the photoproduction of charged pions off protons. We find that the dipole approximation is only valid very close to the threshold. We then consider the central challenge of this thesis: a general expression for the differential cross-section and the total cross-section near the threshold. We compute these expressions for all four pion photoproduction processes. We conclude that the model is able to describe the experimental cross-section for neutral pions off protons quantitatively, and we present the sets of parameters. At the time of writing, no experimental data exists for neutral pion photoproduction off neutrons near the threshold, but a theoretical prediction was made. In the case of charged pion photoproduction off nucleons, expressions for the total cross section and the charge density were found. The model has some problems accurately describing the behaviour of the total cross-section of charged pions, and perhaps the one-pion approximation is insufficient, and further work is needed.
+	}
+}
+
+
+% Information
+\newcommand\INFO{
+	\begin{minipage}[b][\lowerbannerheight][c]{\facewidth-2\backpageindent}
+		\flushright
+		Department of Physics and Astronomy \\
+		Natural Sciences \\
+		Aarhus University \\
+		Denmark
+	\end{minipage}
+}
+\newcommand\INFOsize{\fontsize{12pt}{14pt}\selectfont}
+
+
+% Setting up the cover.
+\newlength\tmplen
+\AddToShipoutPicture{
+	% The two blue ribbons, need them first so we can typeset ontop later on.
+	% Lower band.
+	\put(0, 0){\color{AUBlue}\rule{\stockwidth}{\lowerbannerheight + \cutoff}}
+	
+	% Upper band.
+	\put(0, \stockheight - \upperbannerheight - \cutoff){%
+		\color{AUBlue}\rule{\stockwidth}{\upperbannerheight + \cutoff}
+	}
+	
+	
+	% FRONT COVER
+	% Figure. The reference point is at the bottom center of the figure, not the lower left.
+	\put(0.5\stockwidth + 0.5\spinewidth + 105mm, 97mm){%
+		\makebox[0pt][c]{\includegraphics[width=0.5\facewidth]{Pion-NucleonSystem.png}}
+	}
+
+	% Title
+	\put(0.5\stockwidth + 0.5\spinewidth, \stockheight - \upperbannerheight - \cutoff){\Title}
+	
+	% Name  
+	\put(0.5\stockwidth + 0.5\spinewidth, \cutoff){\color{white}\bfseries\INFOsize\NAME}
+	
+	
+	% BACK COVER
+	% AU logo
+	% More info: https://medarbejdere.au.dk/en/administration/communication/guidelines/guidelinesforlogo
+	% Generator: https://medarbejdere.au.dk/en/administration/communication/guidelines/guidelinesforlogo/logo-generator/
+	\put(9.5\cutoff, 5.2\cutoff){%
+		\begin{tikzpicture}
+			\node (0,0) {\includegraphics{au_phys_logo_oneline-1.pdf}};
+		\end{tikzpicture}
+	}
+	
+	% AU seal
+	% More info: https://medarbejdere.au.dk/en/administration/communication/guidelines/seal
+	\put(8.55\cutoff, \stockheight - \cutoff - 0.76\upperbannerheight){%
+		\begin{tikzpicture}
+			\node (0,0) {\includegraphics[width=72pt]{ausegl_hvid.pdf}};
+		\end{tikzpicture}
+	}
+	
+	% Backside text
+	\put(0.5\stockwidth - 0.5\spinewidth - \backpageindent - 2.2cm, 6.7cm){%
+		\makebox[0pt][r]{\backsidetext}
+	}
+	
+	% Info
+	%\put(\backpageindent + \cutoff , \cutoff){\color{white}\bfseries\INFOsize\INFO}
+	
+	
+	% SPINE
+	\settototalheight\tmplen{\strut}
+	
+	% The placement and sizes used here depend greatly on the text being used and the
+	% available space on the spine. SUN TRYK recommend that the text should not come too
+	% close to the edges of the page.
+	
+	% Name on spine in upper band.
+	\put(0.5\stockwidth, \stockheight - 4mm - \cutoff){%
+		\kern - 0.5\tmplen\rotatebox[origin=lb]{-90}{%
+			\strut\fontsize{9pt}{9pt}\color{white}\bfseries\spineName
+		}
+	}
+	
+	% Title on spine.
+	\put(0.5\stockwidth, \stockheight - 1.09\upperbannerheight - \cutoff){%
+		\kern - 0.5\tmplen\rotatebox[origin=lb]{-90}{%
+			\strut\fontsize{9pt}{9pt}\bfseries\spineTitle
+		}
+	}
+	
+	% Project type on spine in lower band.
+	\put(0.5\stockwidth, 9mm + \cutoff){%
+		\kern - 0.5\tmplen\rotatebox[origin=rb]{-90}{%
+			\color{white}\strut\fontsize{9pt}{9pt}\bfseries\spineOther
+		}
+	}
+	
+	
+	% Guidelines
+	\iftoggle{guidelines}{%
+		% Outer edges, these mark where the cutting of the design should ideally be.
+		% SUN TRYK's decision may differ slightly.
+		\put(0, \cutoff){\color{red}\rule{\stockwidth}{0.4pt}}
+		\put(0, \stockheight - \cutoff){\color{red}\rule{\stockwidth}{0.4pt}}
+		\put(\cutoff, 0){\color{red}\rule{0.4pt}{\stockheight}}
+		\put(\stockwidth - \cutoff, 0){\color{red}\rule{0.4pt}{\stockheight}}
+		% Left and right edge of the approx spine.
+		\put(\cutoff + 210mm, 0){\color{red}\rule{0.4pt}{\stockheight}}
+		\put(\cutoff + 210mm + \spinewidth, 0){\color{red}\rule{0.4pt}{\stockheight}}
+		% Vertival center through the spine.
+		\put(0.5\stockwidth, 0){\color{red}\rule{0.4pt}{\stockheight}}
+	}{}
+}
+
+
+\pagestyle{empty}
+\begin{document}
+~ % just to force a shipout
+\end{document}

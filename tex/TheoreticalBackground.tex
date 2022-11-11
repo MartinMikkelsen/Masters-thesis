@@ -1,10 +1,12 @@
-\chapter{Theoretical background}\label{sec:background}
+\chapter{Theoretical Background}\label{sec:background}
 \section{Interaction of Radiation with Matter}\label{RadMatter}
-In the following, we will derive the necessary equations describing how a quantized vector field interacts with matter within the framework of the second quantization. We will assume the final quantized form of the vector potential given by
-\begin{equation} \label{quantized}
-	\vec{A}(\vec{r},t) = \sum_{\vec{k},\lambda} \sqrt{\frac{2\pi\hbar c^2}{\omega_k V}} \bigg(a_{k,\lambda}\vec{e}_{\vec{k},\lambda}\text{e}^{i(\vec{k}\cdot \vec{r})-i\omega_k t}+a_{\vec{k,\lambda}}^\dagger\vec{e}_{\vec{k},\lambda}^*\text{e}^{-i(\vec{k}\cdot \vec{r})+i\omega_k t}\bigg).
+In the following, we will derive the necessary equations describing how a quantised vector field interacts with matter within the framework of the second quantisation. We will assume the final quantised form of the vector potential given by
+\begin{equation} \label{quantised}
+	\vec{A}(\vec{r},t) = \sum_{\vec{k},\lambda} \sqrt{\frac{2\pi\hbar c^2}{\omega_{\vec{k}} V}} \bigg(a_{\vec{k},\lambda}\vec{e}_{\vec{k},\lambda}\text{e}^{i(\vec{k}\cdot \vec{r})-i\omega_k t}+a_{\vec{k,\lambda}}^\dagger\vec{e}_{\vec{k},\lambda}^*\text{e}^{-i(\vec{k}\cdot \vec{r})+i\omega_k t}\bigg),
 \end{equation}
-We now consider a non-relativistic system of charged particles interacting with the electromagnetic field. In this thesis, we will consider a two-particle system, but in this section, we generalize the results to any integer of particles denoted by the subscript $i$. The interaction will enable the system to emit and absorb photons. We start with the Hamiltonian describing the many-body system given by $H_0(\vec{r}_i,\vec{p_i})$ with no field. We introduce a field and do the following substitution 
+where $\vec{k}$ is a wave vector related to the frequency by the dispersion law $\omega=ck$ and the wave polarisation is described by $\vec{e}_{\vec{k},\lambda}$. The operators $a_{\vec{k},\lambda}$ and $a_{\vec{k},\lambda}^\dagger$ are the annihilation and creation operators, respectively. The normalisation of these operators yields the factor in front. 
+
+We now consider a non-relativistic system of charged particles interacting with the electromagnetic field. In this thesis, we will consider a two-particle system, but in this section, we generalise the results to any number of particles denoted by the subscript $i$. The interaction will enable the system to emit and absorb photons. We start with the Hamiltonian describing the many-body system given by $H_0(\vec{r}_i,\vec{p}_i)$ with no field, where $\vec{r}_i$ and $\vec{p}_i$ is the position and momentum of the $i$'th particle, respectively. We introduce a field and do the following gauge transform 
 \begin{equation} \label{substi}
 	\vec{p}_i \rightarrow \vec{p}_i - \frac{e_i}{c}\vec{A}(\vec{r}_i),
 \end{equation}
@@ -20,7 +22,7 @@ and the non-relativistic Hamiltonian of the system describing the interaction wi
 \begin{equation} \label{Rad}
 	H = \sum_i \frac{1}{2m_i}\left( \vec{p}-\frac{e_i}{c}\vec{A}(\vec{r}_i)\right)^2,
 \end{equation}
-where $\vec{A}(\vec{r}_i)$ is equation \eqref{quantized} at point $\vec{r}_i$ and $m_i$ is the mass of the $i$'th particle. We assumed the interaction between particles depends on their coordinates, so the minimal inclusion of the electromagnetic field affects only the kinetic part. This is a fair approximation in the non-relativistic limit and does not account for velocity-dependant interactions such as spin-orbit\footnote{One could add a spin-orbit term to the non-relativistic approach, but this is not necessary for our calculations later.}. 
+where $\vec{A}(\vec{r}_i)$ is equation \eqref{quantised} at point $\vec{r}_i$ and $m_i$ is the mass of the $i$'th particle. We assumed the interaction between particles depends on their coordinates, so the minimal inclusion of the electromagnetic field affects only the kinetic part. This is a fair approximation in the non-relativistic limit and does not account for velocity-dependant interactions such as spin-orbit.
 The electromagnetic interaction is relatively weak, and its strength is given by the fine structure constant, $\alpha = e^2/(\hbar c)$. Generally speaking, this interaction can be taken into account in the lowest non-vanishing order of perturbation theory. We expand \eqref{Rad} and keep only the linear terms
 \begin{equation} \label{RadLin}
 	H^{(1)} = -\sum_i \frac{e_i}{2m_i c} (\vec{p}_i\cdot \vec{A}(\vec{r}_i)+\vec{A}(\vec{r}_i)\cdot \vec{p}_i),
@@ -29,13 +31,13 @@ where the $(1)$ represents the first non-vanishing order. Due to our choice of g
 \begin{equation} \label{RadiationHamil}
 	H^{(1)} = - \sum_i \frac{e_i}{m_i c} \vec{A}(\vec{r}_i,t)\cdot\vec{p}_i.
 \end{equation}
-For the type of problems, we will be solving in chapter \ref{sec:PionPhotoproduction}, we will be working mainly with a single charged particle, and we can ignore the sum in \eqref{RadiationHamil}.
+For the type of problems we will be solving in chapter \ref{sec:PionPhotoproduction}, we will be working mainly with a single charged particle, and we can ignore the sum in \eqref{RadiationHamil}.
 \section{Density of States}\label{sec:densityofstates}
-As mentioned in section \ref{RadMatter} the electromagnetic interaction strength is related to the fine structure constant. In chapter \ref{sec:PionPhotoproduction}, we want to do perturbation theory to get an expression for the total cross-section as a function of energy which the relatively weak fine structure constant allows. From perturbation theory, the transition rate is described by Fermi's golden rule given by
+As mentioned in section \ref{RadMatter}, the electromagnetic interaction strength is related to the fine structure constant. In chapter \ref{sec:PionPhotoproduction}, we want to do perturbation theory to get an expression for the total cross-section as a function of energy which the relatively weak fine structure constant allows. From perturbation theory, the transition rate is described by Fermi's golden rule given by
 \begin{equation} \label{FermiGolden}
 	\text{d}\omega = \frac{2\pi}{\hbar}\abs{\mathcal{M}}^2 \text{d}\rho,
 \end{equation}
-where the matrix element $\mathcal{M}$ is the subject in chapter \ref{sec:PionPhotoproduction} and $\text{d}\rho$ is the density of states in the final states. In this section, we will derive general results of the density of states in the non-relativistic and relativistic limits. The density of states is defined by
+where the matrix element $\mathcal{M}$ is the subject of chapter \ref{sec:PionPhotoproduction} and $\text{d}\rho$ is the density of states after the interaction. In this section, we will derive general results of the density of states in the non-relativistic and relativistic limits. The density of states is defined by
 \begin{marginfigure}
 	\centering
 	\input{Figures/diffcros}
@@ -49,15 +51,15 @@ where $n(E)$ is the number of states with energy $E$. Consider the number of sta
 \begin{equation} \label{momspace}
 	\text{d}^3\vec{p} = p^2 \text{d}p \, \text{d}\Omega_q,
 \end{equation}
-where the subscript $q$ is used to empathize momentum space. We will use this notation throughout the thesis\footnote{The $q$ might seem odd but in chapter \ref{sec:PionPhotoproduction} we will write the momentum as $\hbar \vec{q}$, where $\vec{q}$ is a wave number.}. Equation \eqref{momspace} corresponds to the momenta with magnitude from $p$ to $p+\text{d}p$ and within a cone of solid angle $\text{d}\Omega_q$. This is illustrated in figure \ref{fig:diffcross}. We use that the solutions to the Schrödinger equation for a particle confined in a large volume with periodic boundary conditions are travelling waves. This leads to the following expression
+where the subscript $q$ is used to emphasize momentum space. We will use this notation throughout the thesis\footnote{We will write the momentum as $\hbar \vec{q}$, where $\vec{q}$ is a wave number in chapter \ref{sec:PionPhotoproduction} so to keep the notation consistent we also use $q$ here. }. Equation \eqref{momspace} corresponds to the momenta with magnitude from $p$ to $p+\text{d}p$ and within a cone of solid angle $\text{d}\Omega_q$. This is illustrated in figure \ref{fig:diffcross}. We use the solutions to the Schrödinger equation for a particle confined in a large volume with periodic boundary conditions are travelling waves. This leads to the following expression
 \begin{equation} \label{densityrho}
 	\rho(p) \, \text{d}\rho = \left( \frac{L}{2\pi\hbar}\right)^3 \text{d}^3 \vec{p} = \frac{V}{(2\pi\hbar)^3} p^2 \, \text{d}p \, \text{d}\Omega_q.
 \end{equation}
-In chapter \ref{sec:PionPhotoproduction}, we are interested in the number of possible final states with energy in the range between $E_f$ and $E_f + \text{d}E_f$ so we express \eqref{densityrho} in terms of energy. This is given by
+In chapter \ref{sec:PionPhotoproduction}, we are interested in the number of possible final states with energy in the range between $E_f$ and $E_f + \text{d}E_f$ so we express \eqref{densityrho} in terms of energy, where the subscript $f$ denotes final state. This is given by
 \begin{equation} \label{densityenergy}
 	\rho(E_f) = \frac{V p_f^2}{(2\pi \hbar)^3} \frac{\text{d}p_f}{\text{d}E_f} \, \text{d}\Omega_q.
 \end{equation}
-This is the final non-relativistic expression. However, we want to generalize this result to account for relativistic effects. For a general pion photoproduction process, we can write
+This is the final non-relativistic expression. However, we want to generalise this result to account for relativistic effects. For a general pion photoproduction process, we can write
 \begin{equation} \label{twobody}
 	N + \gamma \rightarrow N+\pi,
 \end{equation}
@@ -72,22 +74,25 @@ From conservation of energy, we get the following expression for the energy of t
 \begin{equation} \label{Eq}
 	E_q = \sqrt{m_N^2 c^4+(\hbar c)^2q^2} + \sqrt{m_\pi c^4+(\hbar c)^2 q^2}-m_N c^2-m_\pi c^2.
 \end{equation}
-Looking at \eqref{densityenergy}, we want to get an expression for the final state momentum in terms of the wave number. The density of states around $\vec{q}$ is given by
+Examining \eqref{densityenergy}, we want an expression for the final state momentum in terms of the wave number. The density of states around $\vec{q}$ is given by
 \begin{equation} \label{DensityEQ}
 	\text{d}\rho_f = \frac{Vq}{(2\pi)^3}\frac{1}{2}\frac{\text{d}q^2}{\text{d}E_q} \text{d}\Omega_q.
 \end{equation}
-We now solve for $(\hbar c)^2q^2$ in \eqref{Eq}, which yields the following result\footnote{It is also possible to use the approximation that $\sqrt{x^2+y^2}\simeq 0.96x+0.4y$ giving an error of only $4\%$.}
+We now solve for $(\hbar c)^2q^2$ in \eqref{Eq}, which yields the following result\footnote{It is also possible to use the approximation that $\sqrt{x^2+y^2}\simeq 0.96x+0.4y$ yielding an error of only $4\%$.}
 \begin{equation} \label{hbarc-q}
 	(\hbar c)^2 q^2 = \frac{E_q(E_q+2m_N c^2)(E_q+2m\pi c^2)(E_q+2m_N c^2+2m_\pi c^2)}{4(E_q+m_N c^2+m_\pi c^2)^2},
 \end{equation}
 and we are now able to calculate the derivative of equation \eqref{hbarc-q}
 \begin{equation}\begin{split} \label{derivative}
 		(\hbar c)^2\frac{\text{d}q^2}{\text{d}E_q} &= \frac{(E_q^2+2E_q m_N c^2+2m_N^2 c^4+2E_q m_\pi c^2+2m_N m_\pi c^4)}{2(E_q+m_N c^2+m_\pi c^2)^3} \\
-		& \, \times \frac{(E_q^2+2E_q m_N c^2 +2m_\pi^2 c^4 +2E_q m_\pi c^2+2m_N m_\pi c^4)}{2(E_q+m_N c^2+m_\pi c^2)^3},
+		& \, \times (E_q^2+2E_q m_N c^2 +2m_\pi^2 c^4 +2E_q m_\pi c^2+2m_N m_\pi c^4),
 	\end{split}
 \end{equation} 
-which yields the final expression for the relativistic density of states by plugging equation \eqref{derivative} into equation \eqref{DensityEQ}. Non-relativistically, the density of states in terms of $E_q$ and $q$ is given by the following using 
+which yields the final expression for the relativistic density of states by substituting equation \eqref{derivative} into equation \eqref{DensityEQ}. Non-relativistically, the density of states in terms of $E_q$ and $q$ is given by the following 
 \begin{equation}\label{nonreladensity}
-	\text{d}\rho_f = \frac{Vq\mu_{N_\pi}}{(2\pi)^3\hbar^2} \text{d}\,\Omega_q.
+	\text{d}\rho_f = \frac{Vq\mu_{N\pi}}{(2\pi)^3\hbar^2} \text{d}\,\Omega_q,
 \end{equation}
-We now have to expressions for the density of states to use in conjunction with equation \eqref{FermiGolden}. In chapter \ref{sec:PionPhotoproduction} we will refer to equation \eqref{derivative} as the relativistic density of states and equation \eqref{nonreladensity} as the non-relativistic density of states.
+where $\mu_{N\pi}$ is the reduced mass of the pion-nucleon system. We now have two expressions for the density of states to use in conjunction with equation \eqref{FermiGolden}. In chapter \ref{sec:PionPhotoproduction}, we will refer to equation \eqref{derivative} as the relativistic density of states and equation \eqref{nonreladensity} as the non-relativistic density of states.
+\clearpage
+\thispagestyle{empty}\mbox{}
+\clearpage

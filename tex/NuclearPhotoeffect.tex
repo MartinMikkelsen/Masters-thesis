@@ -1,6 +1,57 @@
 \appendix
+\chapter{Three Component Wave Function}\label{ThreeComponentWavefunction}
+In this appendix we cover the calculations similar to what is done in section \ref{dressnuc} but for a three component wave function. In particular, we cover the dressing of the neutron and how this differs from the dressing of the proton. 
+\section{Dressing of the Neutron}\label{sec:dressingofneutron}
+The dressing of the neutron differs from the dressing of the proton in the sense that Coulomb interactions are also needed in the $p\pi^-$ channel of pion photoproduction off neutrons. The three component wave function will still consists of a bare neutron and a dressed particle state but here we take the difference in particle mass and Coulomb interactions into account. Analogously to equation \eqref{bareproton} and equation \eqref{bareproton} we have
+\begin{equation} \label{bareneutron}
+	\psi_n = n \uparrow \frac{1}{\sqrt{V}},
+\end{equation}
+  \begin{marginfigure}
+	\centering
+	\input{Figures/DressingOfNeutron}
+	\caption{Feynman diagram showing the dressing of the neutron.}
+	\label{DressingOfNeutron}
+\end{marginfigure} 
+and for the pion-nucleon system where we distinguish between $N\pi^0$ and $N\pi^-$ wave functions denoted $\phi_0(r)$ and $\phi_{-}(r)$, respectively
+\begin{equation} \label{neutronpionnuc}
+	\psi_{N\pi^0}=(\vec{\tau\cdot\vec{\pi}})(\vec{\sigma}\cdot\vec{r})\phi_0(r) n\uparrow\frac{1}{\sqrt{V}}, \quad \psi_{N\pi^+}=(\vec{\tau\cdot\vec{\pi}})(\vec{\sigma}\cdot\vec{r})\phi_+(r) n\uparrow\frac{1}{\sqrt{V}},
+\end{equation}
+where we omit the kets to unclutter the notation. The construction of the Hamiltonian as in equation \eqref{multihamiltonian} but here we do not want to create multipion states and apply the operator twice. We want to create a separate pion channel and hence the Hamiltonian can be written as
+\begin{equation}
+	\mqty[K_{N} & W^\dagger & W^\dagger \\ W & K_{N}+K_{\pi^0}+m_{\pi^0}c^2 & 0 \\ W & 0 & K_{N}+K_{\pi^-}+m_{\pi^-}c^2+V(r)]\mqty[\psi_n \\ \psi_{N\pi^0} \\ \psi_{N\pi^-}] = E \mqty[\psi_n \\ \psi_{N\pi^0} \\ \psi_{N\pi^-}],
+\end{equation}
+where the kinetic operators are given by
+\begin{align} \label{multiNNeutron}
+	K_N &= \frac{-\hbar^2}{2 m_N c^2} \frac{\partial^2}{\partial \vec{R}^2} \\
+	K_{\pi^0} &= \frac{-\hbar^2}{2 m_{\pi^0} c^2} \frac{\partial^2}{\partial \vec{r}^2} \label{kinpiNeutron1}. \\
+	K_{\pi^-}&= \frac{-\hbar^2}{2 m_{\pi^{-}} c^2} \frac{\partial^2}{\partial \vec{r}^2} \label{kinpiNeutron2},
+\end{align} 
+and $W$, $W^\dagger$ are the creation and annihilation of a pion, respectively. The most noticable differnce compared to equation \eqref{SE} is the Coulomb interaction between charged particles. This leads to three coupled equations 
+\begin{align}
+	W^\dagger \psi_{N\pi^0}+W^\dagger \psi_{N\pi^-} & = E\psi_n \\    
+	W\psi_n + K_{\pi^0}\psi_{N\pi^0} &=(E-m_{\pi^0})\psi_{N\pi^0} \\
+	W\psi_n + K_{\pi^-}\psi_{N\pi^-}+V(r)\psi_{N\pi^0} &=(E-m_{\pi^-})\psi_{N\pi^-}
+\end{align}
+The calculations are completely analogous to what is done in chapter \ref{Decsofmodel} and the final set of equations are given by
+\begin{equation} \label{system3}
+	\left.
+	\begin{array}{ll}
+		12\pi \int_0^\infty  \text{d}r \, f(r) \phi_0(r) r^4 + 12\pi \int_0^\infty  \text{d}r \, f(r) \phi_-(r) r^4 = E \\
+		f(r) -\frac{\hbar^2}{2\mu_{N{\pi^0}}}\Big(\frac{\text{d}^2 \phi_0(r)}{\text{d}r^2}+\frac{4}{r}\frac{\text{d}\phi_0(r)}{\text{d}r}\Big)+ = (E-m_{\pi^0} c^2)\phi_0(r) \\
+		f(r) -\frac{\hbar^2}{2\mu_{N\pi^{-}}}\Big(\frac{\text{d}^2 \phi_{-}(r)}{\text{d}r^2}+\frac{4}{r}\frac{\text{d}\phi_{-}(r)}{\text{d}r}\Big) +\frac{e^2}{r}\phi_{-}(r)= (E-m_{\pi^-} c^2 )\phi_-(r)
+	\end{array}
+	\right \} 
+\end{equation}
+This system of equations can be solved using the method described in section \ref{sec:numericalconsiderations}. The motivation for expanding the system to a three component wave function is to include Coulomb effects for section \ref{sec:chargedofneutron}. This is the solution $\phi_{-}$ in equation \eqref{system3}.
 
-\chapter{Nuclear photoeffect and the deuteron}\label{app:deuteron}
+
+In section \ref{dressnuc} we claimed that the mass difference between $\pi^0$ and $\pi^\pm$ did not affect the solutions considerably and that the two component wave function is sufficient when considering the dressing of the proton. To justify this claim consider figure \ref{fig:coupledsystem} a system of equations similar to \eqref{system3} is solved without the Coulomb interaction. This means the only difference is the masses. Here the energy $E$ corresponding to the energy solution is twice the amount in figure \ref{fig:multiwavefunction} since the coupled system now contains two pions. 
+\begin{figure}[H]
+	\begin{sidecaption}{Solutions to \eqref{system3} with no Coulomb interaction. This corresponds to a three component wave function for the dressed proton. The difference in the wave function is minimal compared to the two-component wave function. The energy is equal to the sum of the two individual systems.}[fig:coupledsystem]
+		\includegraphics[width=\linewidth]{Figures/Integralplot_CoupledSystem.pdf}
+	\end{sidecaption}
+\end{figure}
+\chapter{Nuclear Photoeffect and the Deuteron}\label{app:deuteron}
 In this appendix, we go through how to get expressions for the differential cross-section and the total cross-section from the wave function. The wave function can be obtained analytically or numerically. In this appendix, we will sketch an analytical approach to $s$-wave calculations. 
 Considering the central potential between the proton and the neutron given by
 \[ U(r)= \begin{cases}

@@ -43,7 +43,7 @@ def data_path(dat_id):
 def save_fig(fig_id):
     plt.savefig(image_path(fig_id) + ".pdf", format='pdf',bbox_inches="tight")
 
-b = 1     #fm
+b = 1.5    #fm
 S = 10    #MeV
 m0 = 135.57  #MeV
 mplus = 139.97
@@ -54,6 +54,8 @@ muplus = mplus*mn/(mn+mplus) #Reduced mass
 g0 = (2*mu0)
 gplus = (2*muplus)
 hbarc = 197.3 #MeV fm
+alpha = 1/137
+charge2 = hbarc/(137)
 
 def f(r): #form factor
     return S/b*np.exp(-r**2/b**2)
@@ -77,7 +79,7 @@ rmin = 0.01*b
 base1 = np.exp(1)
 start = np.log(rmin)
 stop = np.log(rmax)
-r = np.logspace(start,stop,num=2*rmax,base=np.exp(1))
+r = np.logspace(start,stop,num=50000,base=np.exp(1))
 E = -2
 
 u = [0*r,0*r,0*r,0*r,E*r/r[-1]]
@@ -87,48 +89,51 @@ res = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
 def plot():
     plt.figure(figsize=(9,5.5));
     #sns.lineplot(x=res.x,y=res.y.T[:,4]/(24*np.pi),linewidth=3.5)
-    sns.lineplot(x=res.x,y=res.y.T[:,3],linewidth=3.5,linestyle='--');
-    sns.lineplot(x=res.x,y=res.y.T[:,2],linewidth=3.5,linestyle='--');
-    sns.lineplot(x=res.x,y=res.y.T[:,1],linewidth=3.5);
-    sns.lineplot(x=res.x,y=res.y.T[:,0],linewidth=3.5);
+    #plt.plot(res.x,res.y.T[:,3],linewidth=3.5,linestyle='--');
+    plt.plot(res.x,abs(res.y.T[:,2]*res.x),linewidth=2.5,label=r'$\phi_0(r)$',color='navy');
+    #plt.plot(res.x,res.y.T[:,1],linewidth=3.5);
+    plt.plot(res.x,abs(res.y.T[:,0]*res.x),linewidth=3.5,linestyle='--',label=r'$\phi_+(r)$',color='r');
     plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res.p[0]), x=0.5, y=0.8);
-    plt.legend(r"$\phi_0'$ $\phi_0$ $\phi_+'$ $\phi_+$" .split(),loc=0,frameon=False);
+    plt.legend(loc=0,frameon=False);
+
     plt.xlabel("r [fm]");
+    plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
+
     plt.tight_layout();
-    #save_fig("Integralplot_CoupledSystem");
+    save_fig("Integralplot_CoupledSystem");
     plt.show()
 
 plot()
 
-def wavefunction(m,mn):
-    def sys(r,u,E):
-        y,v,I = u
-        dy = v
-        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
-        dI = 12*np.pi*f(r)*r**4*y
-        return dy,dv,dI
-
-    def bc(ua, ub,E):
-        ya,va,Ia = ua
-        yb,vb,Ib = ub
-        return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
-
-    rmax = 5*b
-    rmin = 0.01*b
-    base1 = np.exp(1)
-    start = np.log(rmin)
-    stop = np.log(rmax)
-    r = np.logspace(start,stop,num=2*rmax,base=np.exp(1))
-    E = -2
-
-    u = [0*r,0*r,E*r/r[-1]]
-    res2 = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=100000)
-    #print(res.message,", E: ",res.p[0])
-
-    sns.lineplot(x=res2.x,y=res2.y.T[:,2]/(12*np.pi),linewidth=3.5)
-    sns.lineplot(x=res2.x,y=res2.y.T[:,1],linewidth=3.5)
-    sns.lineplot(x=res2.x,y=res2.y.T[:,0],linewidth=3.5)
-    plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res1.p[0]), x=0.5, y=0.8)
-    plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
-    plt.xlabel("r [fm]")
-    plt.tight_layout()
+# def wavefunction(m,mn):
+#     def sys(r,u,E):
+#         y,v,I = u
+#         dy = v
+#         dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+#         dI = 12*np.pi*f(r)*r**4*y
+#         return dy,dv,dI
+#
+#     def bc(ua, ub,E):
+#         ya,va,Ia = ua
+#         yb,vb,Ib = ub
+#         return va, vb+(g*(m+abs(E)))**0.5*yb, Ia, Ib-E
+#
+#     rmax = 5*b
+#     rmin = 0.01*b
+#     base1 = np.exp(1)
+#     start = np.log(rmin)
+#     stop = np.log(rmax)
+#     r = np.logspace(start,stop,num=2*rmax,base=np.exp(1))
+#     E = -2
+#
+#     u = [0*r,0*r,E*r/r[-1]]
+#     res2 = solve_bvp(sys,bc,r,u,p=[E],tol=1e-7,max_nodes=10000)
+#     #print(res.message,", E: ",res.p[0])
+#
+#     sns.lineplot(x=res2.x,y=res2.y.T[:,2]/(12*np.pi),linewidth=3.5)
+#     sns.lineplot(x=res2.x,y=res2.y.T[:,1],linewidth=3.5)
+#     sns.lineplot(x=res2.x,y=res2.y.T[:,0],linewidth=3.5)
+#     plt.title("$S=%s$ MeV, $b=%s$ fm, \n E = %.3f" %(S,b,res1.p[0]), x=0.5, y=0.8)
+#     plt.legend(r"$\frac{E}{12\pi}$ $\phi'$ $\phi$".split(),loc=0,frameon=False);
+#     plt.xlabel("r [fm]")
+#     plt.tight_layout()

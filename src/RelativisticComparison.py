@@ -108,54 +108,54 @@ def nonrelativistic(S,b):
     return res.x, res.y.T[:,0], res.y.T[:,1],res.y.T[:,2],res.p[0]
 
 plt.figure(figsize=(9,5.5));
-[a1,a2,a3,a4,a5] = relativistic(41.5,3.9)
-[b1,b2,b3,b4,b5] = nonrelativistic(41.5,3.9)
-S_values = [15,30,45]
-b_values = [2.5,3.5,4.5]
-print('The energy ratio is:', a5/b5)
-plt.plot(relativistic(S_values[0],b_values[0])[0], -relativistic(S_values[0],b_values[0])[0]*relativistic(S_values[0],b_values[0])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[0],b_values[0]),color='r')
-plt.plot(nonrelativistic(S_values[0],b_values[0])[0], -nonrelativistic(S_values[0],b_values[0])[0]*nonrelativistic(S_values[0],b_values[0])[1],linewidth=3.5,label=r'non-relativistic',color='r')
-
-plt.plot(relativistic(S_values[1],b_values[1])[0], -relativistic(S_values[1],b_values[1])[0]*relativistic(S_values[1],b_values[1])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[1],b_values[1]),color='g')
-plt.plot(nonrelativistic(S_values[1],b_values[1])[0], -nonrelativistic(S_values[1],b_values[1])[0]*nonrelativistic(S_values[1],b_values[1])[1],linewidth=3.5,label=r'non-relativistic',color='g')
-
-plt.plot(relativistic(S_values[2],b_values[2])[0], -relativistic(S_values[2],b_values[2])[0]*relativistic(S_values[2],b_values[2])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[2],b_values[2]),color='navy')
-plt.plot(nonrelativistic(S_values[2],b_values[2])[0], -nonrelativistic(S_values[2],b_values[2])[0]*nonrelativistic(S_values[2],b_values[2])[1],linewidth=3.5,label=r'non-relativistic',color='navy')
-plt.legend(loc='best',frameon=False)
-plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
-plt.xlabel("r [fm]")
-save_fig("rela_vs_nonrela_radial")
+# [a1,a2,a3,a4,a5] = relativistic(41.5,3.9)
+# [b1,b2,b3,b4,b5] = nonrelativistic(41.5,3.9)
+# S_values = [15,30,45]
+# b_values = [2.5,3.5,4.5]
+# print('The energy ratio is:', a5/b5)
+# plt.plot(relativistic(S_values[0],b_values[0])[0], -relativistic(S_values[0],b_values[0])[0]*relativistic(S_values[0],b_values[0])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[0],b_values[0]),color='r')
+# plt.plot(nonrelativistic(S_values[0],b_values[0])[0], -nonrelativistic(S_values[0],b_values[0])[0]*nonrelativistic(S_values[0],b_values[0])[1],linewidth=3.5,label=r'non-relativistic',color='r')
+#
+# plt.plot(relativistic(S_values[1],b_values[1])[0], -relativistic(S_values[1],b_values[1])[0]*relativistic(S_values[1],b_values[1])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[1],b_values[1]),color='g')
+# plt.plot(nonrelativistic(S_values[1],b_values[1])[0], -nonrelativistic(S_values[1],b_values[1])[0]*nonrelativistic(S_values[1],b_values[1])[1],linewidth=3.5,label=r'non-relativistic',color='g')
+#
+# plt.plot(relativistic(S_values[2],b_values[2])[0], -relativistic(S_values[2],b_values[2])[0]*relativistic(S_values[2],b_values[2])[1],linewidth=3.5,linestyle='dashed',label=r'relativistic, $S=$%0.1f MeV, $b=$%0.1f fm' %(S_values[2],b_values[2]),color='navy')
+# plt.plot(nonrelativistic(S_values[2],b_values[2])[0], -nonrelativistic(S_values[2],b_values[2])[0]*nonrelativistic(S_values[2],b_values[2])[1],linewidth=3.5,label=r'non-relativistic',color='navy')
+# plt.legend(loc='best',frameon=False)
+# plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
+# plt.xlabel("r [fm]")
+#save_fig("rela_vs_nonrela_radial")
 
 #plt.plot(a1, a3,linewidth=3.5,linestyle='dashed', color='b')
 #plt.plot(b1, b3,linewidth=3.5, color='b')
 
 
-#
-# Ss = np.linspace(10,100,50)
-# bs = np.linspace(1,5,50)
-#
-# S_energy1 = [relativistic(i,2.5)[4]/nonrelativistic(i,2.5)[4] for i in tqdm(Ss)]
-# b_energy1 = [relativistic(15,i)[4]/nonrelativistic(15,i)[4] for i in tqdm(bs)]
-# S_energy2 = [relativistic(i,3.5)[4]/nonrelativistic(i,3.5)[4] for i in tqdm(Ss)]
-# b_energy2 = [relativistic(30,i)[4]/nonrelativistic(30,i)[4] for i in tqdm(bs)]
-# S_energy3 = [relativistic(i,4.5)[4]/nonrelativistic(i,4.5)[4] for i in tqdm(Ss)]
-# b_energy3 = [relativistic(45,i)[4]/nonrelativistic(45,i)[4] for i in tqdm(bs)]
-#
-# plt.figure(figsize=(9,5.5));
-# plt.scatter(bs,b_energy1,label=r'$S=15$')
-# plt.scatter(bs,b_energy2,label=r'$S=30$')
-# plt.scatter(bs,b_energy3,label=r'$S=45$')
-# plt.legend(loc='best',frameon=False)
-# plt.hlines(1,1,5,linestyle='dashed',color='r')
-# plt.xlabel(r'$b$ [fm]')
-# plt.ylabel(r'$E_R$')
-# #save_fig("bconvergenceYukawa")
-# plt.figure(figsize=(9,5.5));
-# plt.scatter(Ss,S_energy1,label=r'$b=2.5$')
-# plt.scatter(Ss,S_energy2,label=r'$b=3.5$')
-# plt.scatter(Ss,S_energy3,label=r'$b=4.5$')
-# plt.xlabel(r'$S$ [MeV]')
-# plt.ylabel(r'$E_R$')
-# plt.legend(loc='best',frameon=False)
-# plt.hlines(1,10,100,linestyle='dashed',color='r')
+
+Ss = np.linspace(10,100,50)
+bs = np.linspace(1,5,50)
+
+S_energy1 = [relativistic(i,2.5)[4]/nonrelativistic(i,2.5)[4] for i in tqdm(Ss)]
+b_energy1 = [relativistic(15,i)[4]/nonrelativistic(15,i)[4] for i in tqdm(bs)]
+S_energy2 = [relativistic(i,3.5)[4]/nonrelativistic(i,3.5)[4] for i in tqdm(Ss)]
+b_energy2 = [relativistic(30,i)[4]/nonrelativistic(30,i)[4] for i in tqdm(bs)]
+S_energy3 = [relativistic(i,4.5)[4]/nonrelativistic(i,4.5)[4] for i in tqdm(Ss)]
+b_energy3 = [relativistic(45,i)[4]/nonrelativistic(45,i)[4] for i in tqdm(bs)]
+
+plt.figure(figsize=(9,5.5));
+plt.plot(bs,b_energy1,label=r'$S=15$',linewidth=2.5)
+plt.plot(bs,b_energy2,label=r'$S=30$',linewidth=2.5)
+plt.plot(bs,b_energy3,label=r'$S=45$',linewidth=2.5)
+plt.legend(loc='best',frameon=False)
+plt.hlines(1,1,5,linestyle='dashed',color='r',linewidth=2.5)
+plt.xlabel(r'$b$ [fm]')
+plt.ylabel(r'$E_R$')
+#save_fig("bconvergenceYukawa")
+plt.figure(figsize=(9,5.5));
+plt.plot(Ss,S_energy1,label=r'$b=2.5$',linewidth=2.5)
+plt.plot(Ss,S_energy2,label=r'$b=3.5$',linewidth=2.5)
+plt.plot(Ss,S_energy3,label=r'$b=4.5$',linewidth=2.5)
+plt.xlabel(r'$S$ [MeV]')
+plt.ylabel(r'$E_R$')
+plt.legend(loc='best',frameon=False)
+plt.hlines(1,10,100,linestyle='dashed',color='r')
 # # save_fig("SconvergenceYukawa")

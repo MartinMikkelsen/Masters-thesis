@@ -6,8 +6,8 @@
 % GEOMETRY
 \settrims{0pt}{0pt}
 \settypeblocksize{49\baselineskip}{107mm}{*}
-\setlrmargins{24.8mm}{*}{*}
-\setulmargins{27.4mm}{*}{*}
+\setlrmargins{30mm}{*}{10mm}
+\setulmargins{30mm}{*}{4cm}
 \setheadfoot{\baselineskip}{\baselineskip}
 \setheaderspaces{*}{2\baselineskip}{*}
 \setmarginnotes{8.2mm}{49.4mm}{\onelineskip}
@@ -70,9 +70,10 @@
 \makeatletter
 \renewcommand{\fnum@figure}[1]{\textbf{\figurename~\thefigure:} }
 \makeatother
-\fancyhf{} % clear all header and footer fields
-\fancyfoot[C]{\footnotesize Page \thepage\ of \pageref{LastPage}}
+%\fancyhf{} % clear all header and footer fields
+%\fancyfoot[C]{\footnotesize Page \thepage\ of \pageref{LastPage}}
 \renewcommand{\headrulewidth}{0pt}
+
 
 \chapterstyle{madsen}
 \setsecnumdepth{subsection}
@@ -80,8 +81,46 @@
 %\usepackage{natbib}
 %\bibliographystyle{apalike}
 
-\usepackage[square,numbers]{natbib}
-\bibliographystyle{abbrvnat}
+%%% HEADER AND FOOTER 
+
+\makepagestyle{standard} %Make standard pagestyle
+
+\makeatletter                 %Define standard pagestyle
+\makeevenfoot{standard}{}{}{} %
+\makeoddfoot{standard}{}{}{}  %
+\makeevenhead{standard}{\leftmark}{}{\thepage}
+\makeoddhead{standard}{\thepage}{}{\rightmark}
+\makeheadrule{standard}{\textwidth}{\normalrulethickness}
+\makeatother                  %
+
+\makepagestyle{mychapter}
+\makeoddfoot{mychapter}{}{}{\thepage}
+\makeevenfoot{mychapter}{\thepage}{}{}
+% replace the std chapter alias
+\aliaspagestyle{chapter}{mychapter}
+
+\makeatletter
+\makepsmarks{standard}{
+	\createmark{chapter}{both}{shownumber}{\@chapapp\ }{ \quad }
+	\createmark{section}{right}{shownumber}{}{ \quad }
+	\createplainmark{toc}{both}{\contentsname}
+	\createplainmark{lof}{both}{\listfigurename}
+	\createplainmark{lot}{both}{\listtablename}
+	\createplainmark{bib}{both}{\bibname}
+	\createplainmark{index}{both}{\indexname}
+	\createplainmark{glossary}{both}{\glossaryname}
+}
+\makeatother                               %
+
+\nouppercaseheads
+\pagestyle{standard}               %Choosing pagestyle and chapter pagestyle
+\aliaspagestyle{chapter}{mychapter}    %Change plain to standard if you want the header on pages with chapter headings 
+
+\setlength{\cftbeforechapterskip}{0.6em}% Change to suit your needs...
+
+
+\usepackage[square,sort,numbers]{natbib}
+\bibliographystyle{unsrtnat}
 
 \newcommand{\MATLAB}{\textsc{Matlab}\xspace}
 \renewcommand{\vec}[1]{\bm{\mathrm{#1}}}						% Standard vektor.

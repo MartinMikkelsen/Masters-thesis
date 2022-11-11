@@ -47,11 +47,12 @@ def save_fig(fig_id):
 
 
 m = 139.57  #MeV
-mn = 938.272  #MeV
+mn = 939.565378  #MeV
 mu = m*mn/(mn+m) #Reduced mass
 M = m+mn
 g = (2*mu)
 hbarc = 197.3 #MeV fm
+charge2 = hbarc/(137)
 
 def phifunc(S,b):
     def f(r):
@@ -60,7 +61,7 @@ def phifunc(S,b):
     def sys(r,u,E):
         y,v,I = u
         dy = v
-        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)
+        dv = g/(hbarc**2)*(-E+m)*y-4/r*v+g/(hbarc**2)*f(r)+charge2/r*y
         dI = 12*np.pi*f(r)*r**4*y
         return dy,dv,dI
 
@@ -91,18 +92,12 @@ def phifunc(S,b):
 
 plt.figure(figsize=(9,5.5))
 
-S1,b1 = 79.1,3.9
-S2,b2 = 79.7,3.8
-S3,b3 = 29.4,4.0
-S4,b4 = 41.5,3.9
-
-
 #phifunc(69.3,4.1)
 
-#sns.lineplot(x=phifunc(86.2,3.8)[0],y=phifunc(86.2,3.8)[1]*phifunc(86.2,3.8)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(86.2,3.8)[4],phifunc(86.2,3.8)[5]),color='r')
-sns.lineplot(x=phifunc(69.3,3.6)[0],y=phifunc(69.3,3.6)[1]*phifunc(69.3,3.6)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(69.3,3.6)[4],phifunc(69.3,3.6)[5]),color='r')
-sns.lineplot(x=phifunc(58.8,4.0)[0],y=phifunc(58.8,4.0)[1]*phifunc(58.8,4.0)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(58.8,4.0)[4],phifunc(58.8,4.0)[5]),color='g')
-sns.lineplot(x=phifunc(100.30,1.98)[0],y=phifunc(100.30,1.98)[1]*phifunc(100.30,1.98)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^0})=$%0.2f' %(phifunc(100.30,1.98)[4],phifunc(100.30,1.98)[5]),color='navy')
+sns.lineplot(x=phifunc(19.4,3.44)[0],y=phifunc(19.4,3.44)[1]*phifunc(19.4,3.44)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^-})=$%0.2f' %(phifunc(19.4,3.44)[4],phifunc(19.4,3.44)[5]),color='r')
+#sns.lineplot(x=phifunc(69.3,3.6)[0],y=phifunc(69.3,3.6)[1]*phifunc(69.3,3.6)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^+})=$%0.2f' %(phifunc(69.3,3.6)[4],phifunc(69.3,3.6)[5]),color='r')
+#sns.lineplot(x=phifunc(58.8,4.0)[0],y=phifunc(58.8,4.0)[1]*phifunc(58.8,4.0)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^+})=$%0.2f' %(phifunc(58.8,4.0)[4],phifunc(58.8,4.0)[5]),color='g')
+#sns.lineplot(x=phifunc(100.30,1.98)[0],y=phifunc(100.30,1.98)[1]*phifunc(100.30,1.98)[0],linewidth=3.5,label=r'$\Pi=$%0.1f MeV, $C(\psi_{N\pi^+})=$%0.2f' %(phifunc(100.30,1.98)[4],phifunc(100.30,1.98)[5]),color='navy')
 #sns.lineplot(x=phifunc(S1,b1)[0],y=-phifunc(S1,b1)[1]*phifunc(S1,b1)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S1,b1,phifunc(S1,b1)[4]))
 # sns.lineplot(x=phifunc(S2,b2)[0],y=-phifunc(S2,b2)[1]*phifunc(S2,b2)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S2,b2,phifunc(S2,b2)[4]))
 # sns.lineplot(x=phifunc(S3,b3)[0],y=-phifunc(S3,b3)[1]*phifunc(S3,b3)[0],linewidth=3.5,label=r'$S=$%0.1f MeV, $b=$%0.1f fm, $E=$%0.1f MeV' %(S3,b3,phifunc(S3,b3)[4]))
@@ -113,7 +108,7 @@ plt.ylabel(r"$r\phi(r)$ [fm$^{-3/2}$]")
 plt.legend(loc=0,frameon=False);
 plt.xlabel("r [fm]")
 plt.tight_layout()
-save_fig("ContributionPlotPiPlus")
+save_fig("ContributionPlotPiMinus")
 #plt.show()
 
 # phi_func = lambda r: phi3(r)**2*r**4
