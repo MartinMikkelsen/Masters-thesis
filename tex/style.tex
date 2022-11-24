@@ -1,4 +1,4 @@
-\documentclass[openany,twoside,a4paper,oldfontcommands]{memoir}
+\documentclass[twoside,a4paper,oldfontcommands]{memoir}
 % MEMOIR LAYOUT
 \setlength{\baselineskip}{14pt}
 \setlength{\normalbaselineskip}{14pt}
@@ -63,6 +63,7 @@
 \usepackage{physics}
 \usepackage{commath}
 \usepackage{simpler-wick}
+\usepackage{pdfpages}
 \pagestyle{fancy}
 \sidecapmargin{outer}
 \strictpagechecktrue
@@ -116,7 +117,7 @@
 \pagestyle{standard}               %Choosing pagestyle and chapter pagestyle
 \aliaspagestyle{chapter}{mychapter}    %Change plain to standard if you want the header on pages with chapter headings 
 
-\setlength{\cftbeforechapterskip}{0.6em}% Change to suit your needs...
+%\setlength{\cftbeforechapterskip}{0.6em}% Change to suit your needs...
 
 
 \usepackage[square,sort,numbers]{natbib}

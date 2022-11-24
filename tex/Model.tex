@@ -183,7 +183,7 @@ Figure \ref{fig:multiwavefunction} also illustrates the behaviour of the radial 
 	\int_V \text{d}^3R \int_V \text{d}^3r \, \abs{ \psi_{N\pi}}^2,
 \end{equation}
 which means the wave function $\phi(r)$ must have dimensions of fm$^{-5/2}$, and the radial wave function $r\phi(r)$ must have dimensions of fm$^{-3/2}$. Note that the two integrals come from the annihilation of a pion and the normalisation of one particle per unit volume, respectively.
-
+\newpage
 \subsection{Different Form Factors}\label{sec:formfactors}
 Compared to conventional interaction models of the nucleus, this model has the advantage of having very few parameters. The phenomenological form factor $f(r)$ only consists of an interaction strength $S$ and a range parameter $b$. The form factor can take many forms, yielding different wave function solutions and changing the energy. The formalism in section \ref{sec:numericalconsiderations} is very flexible to changes in the form factor, and here we explore how different form factors impact the wave function. The form factors must all decrease as a function of $r$ since we constrain the system to short-range forces. The solutions in figure \ref{fig:multiwavefunction} assume the form factor from equation \eqref{formfactoreq}, which is Gaussian. A priori, we do now know anything about the form factor, and it might as well be Yukawa-like.
 \begin{equation}\label{YukawaForm}
@@ -335,7 +335,4 @@ The radial wave function solution is shown on figure \ref{fig:EFTplot} for diffe
 	\end{sidecaption}
 \end{figure}
 The parameters $S$ and $b$ in the radial wave functions are not the same as in figure \ref{fig:multiwavefunction} and figure \ref{fig:integralplotYukawa} but should better represent actual parameter values when performing the fit to the total cross-section data. This is done better to highlight this model's validity and some disadvantages. The energies are within the same order of magnitude as when using the model described in section \ref{sec:DressingofProton}. There is a difference in energy, and this model could be investigated further -- however, using the nuclear effective field theory's operator is a lot more numerically intensive. Due to the derivative in equation \eqref{EFT1}, \eqref{EFT2} and \eqref{EFT3}, we got many more terms as seen in \eqref{manyterms}, which all have to be integrated numerically. Perhaps another numerical method is better suited for this operator type.
-\clearpage
-\thispagestyle{empty}\mbox{}
-\clearpage
 
