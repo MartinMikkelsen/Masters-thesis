@@ -124,7 +124,7 @@ def diffcross_rel(Egamma,S,b,theta):
     dp2dEq = ((Eq**2+2*Eq*mn+2*mn**2+2*Eq*m+2*mn*m)*(Eq**2+2*Eq*mn+2*m**2+2*Eq*m+2*mn*m))/(2*(Eq+mn+m)**3)
 
     def f(r):
-        return (S/b)*np.exp(-r/b)/r
+        return S/b*np.exp(-r**2/b**2)
 
     def sys(r,u,E):
         y,v,I = u
@@ -193,9 +193,9 @@ if __name__ == '__main__':
     plt.xlabel(r"$E_\gamma$ [MeV]");
     plt.ylabel(r"$\sigma [\mu b]$");
 
-    popt, pcov = curve_fit(totalcross_rel,x,y,p0=[50,3.9],sigma=errorSchmidtmin,bounds=(0,[150,5]))
+    popt, pcov = curve_fit(totalcross_rel,x,y,p0=[50,3.9],sigma=errorSchmidtmin,bounds=(0,[100,5]))
     print("popt=",popt)
-    print("Error=",np.sqrt(np.diag(pcov)))
+    #print("Error=",np.sqrt(np.diag(pcov)))
 
     # x = [149.69199178644763, 152.36139630390144, 155.03080082135523, 157.5770020533881, 158.31622176591375, 160.32854209445586, 162.4229979466119, 162.99794661190964, 168.2546201232033,175.078125, 175.8984375]
     # y = [31.942446043165468, 56.115107913669064, 71.22302158273381, 83.3093525179856, 80.28776978417265, 93.45323741007194, 100.79136690647482, 105.53956834532373, 106.61870503597122,109.82142857142857, 130.8379120879121]
